@@ -1,11 +1,51 @@
 import { Link, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 
 const Header = () => {
   const navigate = useNavigate();
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token"),
+  );
+  const [user, setUser] = useState<{ name?: string; email?: string } | null>(
+    () => {
+      try {
+        return JSON.parse(localStorage.getItem("user") ?? "null");
+      } catch {
+        return null;
+      }
+    },
+  );
+
+  useEffect(() => {
+    const onStorage = () => {
+      setToken(localStorage.getItem("token"));
+      try {
+        setUser(JSON.parse(localStorage.getItem("user") ?? "null"));
+      } catch {
+        setUser(null);
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
   const handleCart = () => {
     navigate("/cart");
   };
+
+  const handleAvatarClick = () => {
+    navigate("/profile");
+  };
+
+  const initials = user?.name
+    ? user.name
+        .split(" ")
+        .map((s) => s[0])
+        .join("")
+    : user?.email
+      ? user.email.charAt(0).toUpperCase()
+      : "U";
+
   return (
     <nav className="fixed top-0 w-full z-[100] glass border-b border-black/5">
       <div className="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-5 max-w-container-max mx-auto">
@@ -17,7 +57,6 @@ const Header = () => {
             <span className="w-8 h-8 bg-primary rounded flex items-center justify-center text-white text-xs">
               SV
             </span>
-
             <span className="hidden sm:inline">SNEAKER VAULT</span>
           </Link>
 
@@ -28,18 +67,15 @@ const Header = () => {
             >
               Home
             </Link>
-
             <Link
               to="shop"
               className="nav-link font-medium text-[11px] uppercase tracking-[0.2em] text-secondary hover:text-primary smooth-transition"
             >
               Shop
             </Link>
-
             <a className="nav-link font-medium text-[11px] uppercase tracking-[0.2em] text-secondary hover:text-primary smooth-transition">
               Brands
             </a>
-
             <a className="nav-link font-medium text-[11px] uppercase tracking-[0.2em] text-secondary hover:text-primary smooth-transition">
               About
             </a>
@@ -51,11 +87,6 @@ const Header = () => {
             search
           </button>
 
-          <button className="material-symbols-outlined p-2 hover:bg-black/5 rounded-full smooth-transition relative">
-            favorite
-            <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-tertiary rounded-full"></span>
-          </button>
-
           <button
             onClick={handleCart}
             className="material-symbols-outlined p-2 hover:bg-black/5 rounded-full smooth-transition"
@@ -63,9 +94,30 @@ const Header = () => {
             shopping_bag
           </button>
 
-          <button className="material-symbols-outlined p-2 hover:bg-black/5 rounded-full smooth-transition hidden md:block">
-            person
-          </button>
+          {!token ? (
+            <>
+              <Link
+                to="/login"
+                className="hidden md:inline px-3 py-2 rounded-md bg-transparent border border-outline-variant/30 hover:bg-surface-container-low"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="hidden md:inline px-3 py-2 rounded-md bg-primary text-white hover:opacity-95 ml-2"
+              >
+                Register
+              </Link>
+            </>
+          ) : (
+            <button
+              onClick={handleAvatarClick}
+              title={user?.email ?? "User"}
+              className="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-medium"
+            >
+              {initials}
+            </button>
+          )}
 
           <button className="material-symbols-outlined p-2 lg:hidden">
             menu

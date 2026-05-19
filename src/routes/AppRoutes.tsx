@@ -2,9 +2,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "../components/layout/client/MainLayout";
 import HomePage from "../pages/home/HomePage";
 import ShopPage from "../pages/shop/ShopPage";
-import LoginPage from "../pages/auth/LoginPage";
-import RegisterPage from "../pages/auth/RegisterPage";
 import CartPage from "../pages/cart/CartPage";
+import Login from "../pages/auth/Login";
+import Register from "../pages/auth/Register";
 
 const routes = createBrowserRouter([
   {
@@ -28,11 +28,11 @@ const routes = createBrowserRouter([
 
   {
     path: "/login",
-    element: <LoginPage />,
+    element: <Login />,
   },
   {
     path: "/register",
-    element: <RegisterPage />,
+    element: <Register />,
   },
 
   // Not Found
