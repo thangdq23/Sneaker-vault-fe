@@ -30,7 +30,7 @@ const ProductDetailPage = () => {
             </div>
           </div>
           {/* <!-- Main Image --> */}
-          <div className="flex-grow aspect-square bg-surface-container rounded-xl overflow-hidden shadow-lg border border-outline-variant/10 relative">
+          <div className="grow aspect-square bg-surface-container rounded-xl overflow-hidden shadow-lg border border-outline-variant/10 relative">
             <img
               className="w-full h-full object-cover"
               data-alt="A large, central hero image of the Nike Air Jordan 1 Retro High floating in a minimalist white void. Soft ambient shadows beneath the shoe give it a sense of weightlessness and premium quality. The photography is sharp and cinematic, capturing the classNameic streetwear essence with high-fashion lighting and vast whitespace for a breathable UI feel."
@@ -312,7 +312,7 @@ const ProductDetailPage = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-gutter">
           {/* <!-- Product 1 --> */}
           <div className="group cursor-pointer">
-            <div className="aspect-[4/5] bg-surface-container rounded-lg overflow-hidden mb-4 relative shadow-sm transition-all group-hover:shadow-xl group-hover:-translate-y-1">
+            <div className="aspect-4/5 bg-surface-container rounded-lg overflow-hidden mb-4 relative shadow-sm transition-all group-hover:shadow-xl group-hover:-translate-y-1">
               <img
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 data-alt="A professional product shot of a high-top Nike sneaker in a contrasting colorway, positioned at a dynamic angle on a crisp white background. The lighting is diffused and modern, highlighting the sleek design and premium texture. The image perfectly aligns with a high-end streetwear retail aesthetic."
@@ -334,7 +334,7 @@ const ProductDetailPage = () => {
           </div>
           {/* <!-- Product 2 --> */}
           <div className="group cursor-pointer">
-            <div className="aspect-[4/5] bg-surface-container rounded-lg overflow-hidden mb-4 relative shadow-sm transition-all group-hover:shadow-xl group-hover:-translate-y-1">
+            <div className="aspect-4/5 bg-surface-container rounded-lg overflow-hidden mb-4 relative shadow-sm transition-all group-hover:shadow-xl group-hover:-translate-y-1">
               <img
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 data-alt="An editorial image of a minimalist designer sneaker presented in a bright, clean environment. The lighting emphasizes the silhouette and material quality against a pure white background. The composition is elegant and focused, reflecting the exclusive and professional nature of the Sneaker Vault brand."
@@ -356,7 +356,7 @@ const ProductDetailPage = () => {
           </div>
           {/* <!-- Product 3 --> */}
           <div className="group cursor-pointer">
-            <div className="aspect-[4/5] bg-surface-container rounded-lg overflow-hidden mb-4 relative shadow-sm transition-all group-hover:shadow-xl group-hover:-translate-y-1">
+            <div className="aspect-4/5 bg-surface-container rounded-lg overflow-hidden mb-4 relative shadow-sm transition-all group-hover:shadow-xl group-hover:-translate-y-1">
               <img
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 data-alt="A clean, studio-lit photograph of a classNameic Nike Jordan sneaker in a blue and white colorway. The setting is a bright, high-key minimalist space that highlights the premium footwear's details. The lighting is soft yet descriptive, capturing the essence of luxury streetwear photography."
@@ -378,7 +378,7 @@ const ProductDetailPage = () => {
           </div>
           {/* <!-- Product 4 --> */}
           <div className="group cursor-pointer">
-            <div className="aspect-[4/5] bg-surface-container rounded-lg overflow-hidden mb-4 relative shadow-sm transition-all group-hover:shadow-xl group-hover:-translate-y-1">
+            <div className="aspect-4/5 bg-surface-container rounded-lg overflow-hidden mb-4 relative shadow-sm transition-all group-hover:shadow-xl group-hover:-translate-y-1">
               <img
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 data-alt="A professional commerce photo of a sleek sneaker model on a minimalist gray surface. The light is diffused, creating soft shadows and highlighting the premium textures of the leather and mesh. The mood is modern and high-velocity, matching the energetic pulse of the sneaker culture ecosystem."

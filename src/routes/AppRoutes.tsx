@@ -2,6 +2,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "../components/layout/client/MainLayout";
 import HomePage from "../pages/home/HomePage";
 import ShopPage from "../pages/shop/ShopPage";
+import LoginPage from "../pages/auth/LoginPage";
+import RegisterPage from "../pages/auth/RegisterPage";
+import CartPage from "../pages/cart/CartPage";
 
 const routes = createBrowserRouter([
   {
@@ -16,7 +19,20 @@ const routes = createBrowserRouter([
         path: "shop",
         element: <ShopPage />,
       },
+      {
+        path: "cart",
+        element: <CartPage />,
+      },
     ],
+  },
+
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
   },
 
   // Not Found

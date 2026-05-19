@@ -1,6 +1,11 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const Header = () => {
+  const navigate = useNavigate();
+
+  const handleCart = () => {
+    navigate("/cart");
+  };
   return (
     <nav className="fixed top-0 w-full z-[100] glass border-b border-black/5">
       <div className="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-5 max-w-container-max mx-auto">
@@ -51,7 +56,10 @@ const Header = () => {
             <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-tertiary rounded-full"></span>
           </button>
 
-          <button className="material-symbols-outlined p-2 hover:bg-black/5 rounded-full smooth-transition">
+          <button
+            onClick={handleCart}
+            className="material-symbols-outlined p-2 hover:bg-black/5 rounded-full smooth-transition"
+          >
             shopping_bag
           </button>
 
