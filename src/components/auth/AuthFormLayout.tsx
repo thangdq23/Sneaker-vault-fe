@@ -12,8 +12,6 @@ interface Props {
 }
 
 const AuthFormLayout = ({
-  title,
-  subtitle,
   error,
   loading = false,
   submitLabel = "Continue",
@@ -22,15 +20,6 @@ const AuthFormLayout = ({
 }: Props) => {
   return (
     <div className="w-full max-w-md">
-      <div className="space-y-2 mb-8">
-        <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">
-          {title}
-        </h1>
-        {subtitle ? (
-          <p className="text-on-surface-variant">{subtitle}</p>
-        ) : null}
-      </div>
-
       <form className="space-y-6" onSubmit={onSubmit}>
         {error ? (
           <div className="rounded-xl bg-red-50 border border-red-200 p-4 text-red-700">
@@ -54,7 +43,7 @@ const AuthFormLayout = ({
         </div>
         <div className="relative flex justify-center text-label-sm uppercase">
           <span className="bg-background px-4 text-on-surface-variant">
-            Or continue with
+            Hoặc tiếp tục với
           </span>
         </div>
       </div>

@@ -25,7 +25,7 @@ const AuthToggle = ({ active, onSwitch }: Props) => {
             : "text-on-surface-variant hover:text-on-surface"
         }`}
       >
-        Login
+        Đăng Nhập
       </button>
       <button
         onClick={handleClick("register")}
@@ -35,7 +35,7 @@ const AuthToggle = ({ active, onSwitch }: Props) => {
             : "text-on-surface-variant hover:text-on-surface"
         }`}
       >
-        Register
+        Tạo Tài Khoản
       </button>
     </div>
   );

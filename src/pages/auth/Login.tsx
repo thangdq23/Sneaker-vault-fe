@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../services/authApi";
 import type { LoginRequest } from "../../types/auth.type";
 import AuthHero from "../../components/auth/AuthHero";
@@ -15,6 +15,7 @@ const Login = () => {
   const [error, setError] = useState<string | null>(null);
 
   const isValidEmail = (value: string) => /\S+@\S+\.\S+/.test(value);
+  const isValidPassword = (value: string) => value.trim().length >= 6;
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [event.target.name]: event.target.value }));
@@ -29,8 +30,8 @@ const Login = () => {
       return;
     }
 
-    if (!form.password.trim()) {
-      setError("Mật khẩu không được để trống.");
+    if (!isValidPassword(form.password)) {
+      setError("Mật khẩu phải có ít nhất 6 kí tự.");
       return;
     }
 
@@ -42,11 +43,26 @@ const Login = () => {
       navigate("/");
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
-        setError(
-          (err.response?.data as { message?: string })?.message ??
-            err.message ??
-            "Đã có lỗi xảy ra. Vui lòng thử lại.",
-        );
+        const response = err.response;
+        const serverMessage = (response?.data as { message?: string })?.message;
+
+        if (response?.status === 404) {
+          setError("Tài khoản không tồn tại.");
+        } else if (response?.status === 401) {
+          setError("Sai email hoặc mật khẩu.");
+        } else if (
+          serverMessage?.toLowerCase().includes("not found") ||
+          serverMessage?.toLowerCase().includes("invalid credentials") ||
+          serverMessage?.toLowerCase().includes("wrong password")
+        ) {
+          setError("Sai email hoặc mật khẩu.");
+        } else {
+          setError(
+            serverMessage ??
+              err.message ??
+              "Đã có lỗi xảy ra. Vui lòng thử lại.",
+          );
+        }
       } else if (err instanceof Error) {
         setError(err.message);
       } else {
@@ -74,20 +90,20 @@ const Login = () => {
           subtitle="Enter your credentials to access your vault."
           error={error}
           loading={loading}
-          submitLabel="Continue to Vault"
+          submitLabel="Đăng Nhập"
           onSubmit={handleSubmit}
         >
           <AuthInput
             name="email"
-            label="Email Address"
-            type="email"
+            label="Email"
+            type="text"
             value={form.email}
             onChange={handleChange}
-            placeholder="name@example.com"
+            placeholder="abc@gmail.com"
           />
           <AuthInput
             name="password"
-            label="Password"
+            label="Mật Khẩu"
             type="password"
             value={form.password}
             onChange={handleChange}
@@ -95,15 +111,24 @@ const Login = () => {
           />
         </AuthFormLayout>
 
-        <p className="mt-12 text-center font-label-sm text-label-sm text-on-surface-variant">
-          Having trouble?{" "}
+        <div className="mt-12 flex flex-col items-center gap-2 text-center">
           <a
-            className="text-on-surface underline hover:text-primary transition-colors"
+            className="text-on-surface underline hover:text-primary transition-colors font-label-sm"
             href="#"
           >
-            Contact Concierge
+            Quên mật khẩu?
           </a>
-        </p>
+
+          <p className="font-label-sm text-label-sm text-on-surface-variant">
+            Chưa có tài khoản?{" "}
+            <Link
+              className="text-on-surface underline hover:text-primary transition-colors"
+              to="/register"
+            >
+              Đăng ký
+            </Link>
+          </p>
+        </div>
       </section>
     </main>
   );

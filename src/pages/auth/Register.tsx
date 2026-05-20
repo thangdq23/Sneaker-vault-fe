@@ -20,6 +20,8 @@ const Register = () => {
   const [error, setError] = useState<string | null>(null);
 
   const isValidEmail = (value: string) => /\S+@\S+\.\S+/.test(value);
+  const isValidName = (value: string) => value.trim().length >= 3;
+  const isValidPassword = (value: string) => value.trim().length >= 6;
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -34,8 +36,8 @@ const Register = () => {
     event.preventDefault();
     setError(null);
 
-    if (!form.name.trim()) {
-      setError("Vui lòng nhập tên.");
+    if (!isValidName(form.name)) {
+      setError("Tên phải có ít nhất 3 kí tự.");
       return;
     }
 
@@ -44,29 +46,50 @@ const Register = () => {
       return;
     }
 
-    if (!form.password.trim()) {
-      setError("Mật khẩu không được để trống.");
+    if (!isValidPassword(form.password)) {
+      setError(
+        "Mật khẩu phải có ít nhất 6 kí tự, chứa chữ hoa, chữ thường và số.",
+      );
       return;
     }
 
     if (form.password !== confirmPassword) {
-      setError("Confirm password phải khớp.");
+      setError("Mật khẩu xác nhận phải khớp.");
       return;
     }
 
     try {
       setLoading(true);
-      const response = await register(form);
+      const response = await register({
+        ...form,
+        confirmPassword,
+      });
       localStorage.setItem("token", response.token);
       localStorage.setItem("user", JSON.stringify(response.user ?? {}));
       navigate("/");
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
-        setError(
-          (err.response?.data as { message?: string })?.message ??
-            err.message ??
-            "Đã có lỗi xảy ra. Vui lòng thử lại.",
-        );
+        const response = err.response;
+        const serverData = response?.data as
+          | { message?: string; error?: string }
+          | undefined;
+        const serverMessage = serverData?.message ?? serverData?.error;
+
+        if (response?.status === 409) {
+          setError("Tài khoản đã tồn tại.");
+        } else if (
+          serverMessage?.toLowerCase().includes("duplicate") ||
+          serverMessage?.toLowerCase().includes("already exists") ||
+          serverMessage?.toLowerCase().includes("đã tồn tại")
+        ) {
+          setError("Tài khoản đã tồn tại.");
+        } else {
+          setError(
+            serverMessage ??
+              err.message ??
+              "Đã có lỗi xảy ra. Vui lòng thử lại.",
+          );
+        }
       } else if (err instanceof Error) {
         setError(err.message);
       } else {
@@ -88,32 +111,31 @@ const Register = () => {
         />
 
         <AuthFormLayout
-          title="Create Your Vault"
-          subtitle="Join our exclusive community of collectors."
+          title="Create account"
           error={error}
           loading={loading}
-          submitLabel="CREATE ACCOUNT"
+          submitLabel="Đăng Ký"
           onSubmit={handleSubmit}
         >
           <AuthInput
             name="name"
-            label="Full Name"
+            label="Họ và tên"
             type="text"
             value={form.name}
             onChange={handleChange}
-            placeholder="John Doe"
+            placeholder="Nguyen Van A"
           />
           <AuthInput
             name="email"
-            label="Email Address"
-            type="email"
+            label="Email"
+            type="text"
             value={form.email}
             onChange={handleChange}
-            placeholder="name@example.com"
+            placeholder="abc@gmail.com"
           />
           <AuthInput
             name="password"
-            label="Password"
+            label="Mật Khẩu"
             type="password"
             value={form.password}
             onChange={handleChange}
@@ -121,7 +143,7 @@ const Register = () => {
           />
           <AuthInput
             name="confirmPassword"
-            label="Confirm Password"
+            label="Xác Nhận Mật Khẩu"
             type="password"
             value={confirmPassword}
             onChange={handleChange}
@@ -130,12 +152,12 @@ const Register = () => {
         </AuthFormLayout>
 
         <p className="mt-12 text-center font-label-sm text-label-sm text-on-surface-variant">
-          Already have an account?{" "}
+          Bạn đã có tài khoản?{" "}
           <span
             onClick={() => navigate("/login")}
             className="cursor-pointer text-on-surface underline hover:text-primary transition-colors"
           >
-            Login here
+            Đăng Nhập<p></p>
           </span>
         </p>
       </section>
