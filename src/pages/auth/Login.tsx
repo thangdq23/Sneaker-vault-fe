@@ -77,7 +77,7 @@ const Login = () => {
     <main className="pt-24 md:pt-0 min-h-screen flex flex-col md:flex-row">
       <AuthHero />
 
-      <section className="flex-1 flex flex-col justify-center items-center px-margin-mobile md:px-margin-desktop py-12 bg-background">
+      <section className="flex flex-1 flex-col items-center justify-center bg-background px-margin-mobile py-10 md:px-margin-desktop md:py-12">
         <AuthToggle
           active="login"
           onSwitch={(tab) =>
@@ -86,11 +86,11 @@ const Login = () => {
         />
 
         <AuthFormLayout
-          title="Welcome Back"
-          subtitle="Enter your credentials to access your vault."
+          title="Chào mừng trở lại"
+          subtitle="Nhập thông tin đăng nhập để truy cập tài khoản của bạn."
           error={error}
           loading={loading}
-          submitLabel="Đăng Nhập"
+          submitLabel="Đăng nhập"
           onSubmit={handleSubmit}
         >
           <AuthInput
@@ -103,7 +103,7 @@ const Login = () => {
           />
           <AuthInput
             name="password"
-            label="Mật Khẩu"
+            label="Mật khẩu"
             type="password"
             value={form.password}
             onChange={handleChange}

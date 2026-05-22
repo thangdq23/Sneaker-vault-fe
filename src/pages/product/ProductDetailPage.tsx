@@ -2,11 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getProductById } from "../../services/productApi";
 import type { Product } from "../../types/product.type";
-
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
+import { formatVnd } from "../../utils/formatCurrency";
 
 const ProductDetailPage = (): React.JSX.Element => {
   const { id } = useParams<{ id: string }>();
@@ -18,7 +14,7 @@ const ProductDetailPage = (): React.JSX.Element => {
   useEffect(() => {
     const loadProduct = async () => {
       if (!id) {
-        setError("Product ID is missing.");
+        setError("Thiếu mã sản phẩm.");
         setIsLoading(false);
         return;
       }
@@ -34,7 +30,7 @@ const ProductDetailPage = (): React.JSX.Element => {
         const message =
           error_ instanceof Error
             ? error_.message
-            : "Cannot load product details.";
+            : "Không thể tải chi tiết sản phẩm.";
         setError(message);
       } finally {
         setIsLoading(false);
@@ -46,19 +42,19 @@ const ProductDetailPage = (): React.JSX.Element => {
 
   const priceLabel = useMemo(() => {
     if (!product) return "";
-    return currencyFormatter.format(product.price);
+    return formatVnd(product.price);
   }, [product]);
 
   const saleLabel = useMemo(() => {
     if (!product || !product.isSale || product.salePrice == null) return null;
-    return currencyFormatter.format(product.salePrice);
+    return formatVnd(product.salePrice);
   }, [product]);
 
   if (isLoading) {
     return (
       <main className="pt-24 pb-16">
-        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-20 text-center text-on-surface-variant">
-          Loading product details...
+        <div className="mx-auto max-w-container-max px-margin-mobile py-20 text-center text-on-surface-variant md:px-margin-desktop">
+          Đang tải chi tiết sản phẩm...
         </div>
       </main>
     );
@@ -67,7 +63,7 @@ const ProductDetailPage = (): React.JSX.Element => {
   if (error) {
     return (
       <main className="pt-24 pb-16">
-        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-20 rounded-3xl bg-rose-50 text-rose-700 text-center">
+        <div className="mx-auto max-w-container-max rounded-3xl bg-rose-50 px-margin-mobile py-20 text-center text-rose-700 md:px-margin-desktop">
           {error}
         </div>
       </main>
@@ -77,8 +73,8 @@ const ProductDetailPage = (): React.JSX.Element => {
   if (!product) {
     return (
       <main className="pt-24 pb-16">
-        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-20 text-center text-on-surface-variant">
-          Product not found.
+        <div className="mx-auto max-w-container-max px-margin-mobile py-20 text-center text-on-surface-variant md:px-margin-desktop">
+          Không tìm thấy sản phẩm.
         </div>
       </main>
     );
@@ -86,32 +82,32 @@ const ProductDetailPage = (): React.JSX.Element => {
 
   return (
     <main className="pt-24 pb-16">
-      <section className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-gutter lg:gap-16">
-        <div className="md:col-span-7 flex flex-col md:flex-row gap-4">
-          <div className="flex md:flex-col gap-4 overflow-x-auto md:overflow-visible no-scrollbar shrink-0">
+      <section className="mx-auto grid max-w-container-max grid-cols-1 gap-gutter px-margin-mobile md:grid-cols-12 md:px-margin-desktop lg:gap-16">
+        <div className="flex flex-col gap-4 md:col-span-7 md:flex-row">
+          <div className="no-scrollbar flex shrink-0 gap-3 overflow-x-auto md:flex-col md:overflow-visible">
             {product.images.map((image) => (
               <button
                 key={image}
                 type="button"
                 onClick={() => setSelectedImage(image)}
-                className={`w-20 h-20 md:w-24 md:h-24 rounded-lg overflow-hidden border ${
+                className={`h-20 w-20 shrink-0 overflow-hidden rounded-lg border md:h-24 md:w-24 ${
                   selectedImage === image
                     ? "border-primary"
                     : "border-surface-container"
-                } transition-shadow shadow-sm`}
+                } shadow-sm transition-shadow`}
               >
                 <img
                   src={image}
                   alt={product.name}
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover"
                 />
               </button>
             ))}
           </div>
 
-          <div className="grow aspect-square bg-surface-container rounded-xl overflow-hidden shadow-lg border border-outline-variant/10 relative">
+          <div className="relative aspect-square grow overflow-hidden rounded-xl border border-outline-variant/10 bg-surface-container shadow-lg">
             <img
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
               src={
                 selectedImage ||
                 product.images[0] ||
@@ -122,34 +118,34 @@ const ProductDetailPage = (): React.JSX.Element => {
           </div>
         </div>
 
-        <div className="md:col-span-5 flex flex-col space-y-8">
+        <div className="flex flex-col gap-6 md:col-span-5 lg:gap-8">
           <div className="space-y-4">
-            <div className="flex flex-col gap-3">
-              <p className="text-sm uppercase tracking-[0.3em] text-on-surface-variant">
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-medium text-on-surface-variant">
                 {product.brand}
               </p>
-              <h1 className="font-display text-4xl md:text-[3rem] font-bold text-on-surface tracking-tight">
+              <h1 className="font-display text-3xl font-bold leading-tight tracking-tight text-on-surface text-balance sm:text-4xl md:text-[2.75rem]">
                 {product.name}
               </h1>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-baseline gap-3">
               {saleLabel ? (
                 <>
-                  <span className="text-3xl font-bold text-on-surface">
+                  <span className="price-vnd text-2xl font-bold text-on-surface sm:text-3xl">
                     {saleLabel}
                   </span>
-                  <span className="text-base text-on-surface-variant line-through">
+                  <span className="price-vnd text-base text-on-surface-variant line-through">
                     {priceLabel}
                   </span>
                 </>
               ) : (
-                <span className="text-3xl font-bold text-on-surface">
+                <span className="price-vnd text-2xl font-bold text-on-surface sm:text-3xl">
                   {priceLabel}
                 </span>
               )}
               {product.discountPercent ? (
-                <span className="text-sm uppercase tracking-[0.2em] text-white bg-rose-600 rounded-full px-3 py-1">
+                <span className="rounded-full bg-rose-600 px-3 py-1 text-xs font-bold text-white">
                   -{product.discountPercent}%
                 </span>
               ) : null}
@@ -157,63 +153,69 @@ const ProductDetailPage = (): React.JSX.Element => {
 
             <div className="flex flex-wrap gap-2">
               {product.isNewProduct ? (
-                <span className="bg-tertiary text-white px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.24em]">
-                  NEW
+                <span className="rounded-full bg-tertiary px-3 py-1 text-xs font-bold text-white">
+                  Mới
                 </span>
               ) : null}
               {product.isSale ? (
-                <span className="bg-rose-600 text-white px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.24em]">
-                  SALE
+                <span className="rounded-full bg-rose-600 px-3 py-1 text-xs font-bold text-white">
+                  Giảm giá
                 </span>
               ) : null}
             </div>
           </div>
 
-          <div className="rounded-3xl bg-surface-container p-6">
-            <h2 className="font-label-md text-label-md uppercase tracking-[0.3em] text-on-surface-variant mb-3">
-              Description
+          <div className="rounded-3xl bg-surface-container p-5 sm:p-6">
+            <h2 className="mb-3 text-sm font-bold text-on-surface-variant">
+              Mô tả
             </h2>
-            <p className="text-body-md text-on-surface-variant leading-relaxed">
+            <p className="text-sm leading-relaxed text-on-surface-variant sm:text-base">
               {product.description}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="rounded-3xl bg-surface-container p-6">
-              <p className="font-label-md text-label-md uppercase tracking-[0.3em] text-on-surface-variant mb-3">
-                Sizes
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="rounded-3xl bg-surface-container p-5 sm:p-6">
+              <p className="mb-3 text-sm font-bold text-on-surface-variant">
+                Kích cỡ
               </p>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                 {product.sizes.map((size) => (
                   <span
                     key={size}
-                    className="py-3 rounded-lg border border-outline-variant text-center text-sm text-on-surface"
+                    className="rounded-lg border border-outline-variant py-2.5 text-center text-sm text-on-surface"
                   >
                     {size}
                   </span>
                 ))}
               </div>
             </div>
-            <div className="rounded-3xl bg-surface-container p-6">
-              <p className="font-label-md text-label-md uppercase tracking-[0.3em] text-on-surface-variant mb-3">
-                Stock
+            <div className="rounded-3xl bg-surface-container p-5 sm:p-6">
+              <p className="mb-3 text-sm font-bold text-on-surface-variant">
+                Tồn kho
               </p>
               <p
-                className={`text-lg font-semibold ${product.stock > 0 ? "text-emerald-600" : "text-rose-600"}`}
+                className={`text-base font-semibold leading-relaxed sm:text-lg ${product.stock > 0 ? "text-emerald-600" : "text-rose-600"}`}
               >
                 {product.stock > 0
-                  ? `In stock (${product.stock})`
-                  : "Out of stock"}
+                  ? `Còn hàng (${product.stock})`
+                  : "Hết hàng"}
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 sm:flex-row">
-            <button className="w-full sm:w-auto px-8 py-4 bg-primary text-on-primary rounded-full font-semibold uppercase tracking-[0.2em] hover:bg-tertiary transition">
-              Add to Cart
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <button
+              type="button"
+              className="btn btn-primary btn-pill w-full sm:w-auto sm:min-w-[11rem]"
+            >
+              Thêm vào giỏ
             </button>
-            <button className="w-full sm:w-auto px-8 py-4 border border-outline-variant rounded-full font-semibold uppercase tracking-[0.2em] hover:bg-surface-container transition">
-              Buy Now
+            <button
+              type="button"
+              className="btn btn-secondary btn-pill w-full sm:w-auto sm:min-w-[9rem]"
+            >
+              Mua ngay
             </button>
           </div>
         </div>

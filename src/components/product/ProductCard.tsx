@@ -1,28 +1,24 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Product } from "../../types/product.type";
+import { formatVnd } from "../../utils/formatCurrency";
 
 interface ProductCardProps {
   product: Product;
 }
 
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
-
 const ProductCard = ({ product }: ProductCardProps): React.JSX.Element => {
   const navigate = useNavigate();
   const productId = product._id ?? product.id ?? "";
 
-  const priceLabel = useMemo(() => {
-    const priceValue = product.price ?? 0;
-    return currencyFormatter.format(priceValue);
-  }, [product.price]);
+  const priceLabel = useMemo(
+    () => formatVnd(product.price ?? 0),
+    [product.price],
+  );
 
   const saleLabel = useMemo(() => {
     if (!product.isSale || product.salePrice == null) return null;
-    return currencyFormatter.format(product.salePrice);
+    return formatVnd(product.salePrice);
   }, [product.isSale, product.salePrice]);
 
   const thumbnail =
@@ -32,40 +28,40 @@ const ProductCard = ({ product }: ProductCardProps): React.JSX.Element => {
     <button
       type="button"
       onClick={() => navigate(`/products/${productId}`)}
-      className="group w-full text-left bg-white rounded-3xl border border-outline-variant/80 shadow-sm overflow-hidden transition duration-300 hover:shadow-xl hover:-translate-y-1"
+      className="product-card group w-full overflow-hidden rounded-3xl border border-outline-variant/80 bg-white text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
     >
-      <div className="relative overflow-hidden bg-slate-50 aspect-4/5">
+      <div className="relative aspect-4/5 overflow-hidden bg-slate-50">
         <img
           src={thumbnail}
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute inset-x-4 top-4 flex flex-wrap gap-2">
+        <div className="absolute inset-x-3 top-3 flex flex-wrap gap-1.5">
           {product.isNewProduct ? (
-            <span className="bg-tertiary text-white text-[10px] uppercase font-bold px-2 py-1 rounded-full">
-              NEW
+            <span className="rounded-full bg-tertiary px-2 py-0.5 text-[10px] font-bold text-white">
+              Mới
             </span>
           ) : null}
           {product.isSale ? (
-            <span className="bg-rose-600 text-white text-[10px] uppercase font-bold px-2 py-1 rounded-full">
-              SALE
+            <span className="rounded-full bg-rose-600 px-2 py-0.5 text-[10px] font-bold text-white">
+              Giảm giá
             </span>
           ) : null}
         </div>
       </div>
-      <div className="p-5">
-        <p className="text-[11px] uppercase tracking-[0.24em] text-on-surface-variant mb-2">
+      <div className="product-card-body">
+        <p className="mb-1 line-clamp-1 text-xs text-on-surface-variant">
           {product.brand}
         </p>
-        <h3 className="font-display font-semibold text-lg text-on-surface leading-tight mb-3">
+        <h3 className="mb-auto line-clamp-2 min-h-[2.5rem] font-display text-base font-semibold leading-snug text-on-surface sm:min-h-[2.75rem] sm:text-lg">
           {product.name}
         </h3>
-        <div className="flex items-center gap-2">
-          <p className="text-base font-bold text-on-surface">
+        <div className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1 border-t border-outline-variant/15 pt-3">
+          <p className="price-vnd text-sm font-bold text-on-surface sm:text-base">
             {saleLabel ?? priceLabel}
           </p>
           {saleLabel ? (
-            <p className="text-sm text-on-surface-variant line-through">
+            <p className="price-vnd text-xs text-on-surface-variant line-through sm:text-sm">
               {priceLabel}
             </p>
           ) : null}

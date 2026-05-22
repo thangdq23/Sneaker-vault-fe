@@ -1,40 +1,43 @@
+import { Link } from "react-router-dom";
+
 const Footer = () => {
   return (
-    <footer className="bg-white pt-32 pb-16 border-t border-black/5">
-      <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
-          <div className="flex flex-col gap-10">
-            <a
-              className="font-display text-2xl font-bold tracking-tight text-primary flex items-center gap-2"
-              href="#"
+    <footer className="border-t border-black/5 bg-white pb-16 pt-20 md:pt-24">
+      <div className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop">
+        <div className="mb-16 grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
+          <div className="flex flex-col gap-6 sm:col-span-2 lg:col-span-1">
+            <Link
+              to="/"
+              className="flex items-center gap-2 font-display text-xl font-bold tracking-tight text-primary"
             >
-              <span className="w-8 h-8 bg-primary rounded flex items-center justify-center text-white text-xs">
+              <span className="flex h-8 w-8 items-center justify-center rounded bg-primary text-xs text-white">
                 SV
               </span>
               <span>SNEAKER VAULT</span>
-            </a>
-            <p className="text-secondary text-sm leading-relaxed max-w-xs font-light">
-              Elevating the global sneaker culture through a premium curation of
-              limited editions and classNameic essentials.
+            </Link>
+            <p className="max-w-sm text-sm leading-relaxed text-secondary">
+              Nâng tầm văn hóa sneaker toàn cầu với bộ sưu tập phiên bản giới
+              hạn và những mẫu kinh điển được tuyển chọn kỹ lưỡng.
             </p>
             <div className="flex gap-3">
               <a
-                className="w-12 h-12 rounded-full border border-black/5 flex items-center justify-center text-primary hover:bg-primary hover:text-white hover:scale-110 smooth-transition"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-black/5 text-primary smooth-transition hover:scale-110 hover:bg-primary hover:text-white"
                 href="#"
+                aria-label="Mạng xã hội"
               >
-                <span className="material-symbols-outlined text-xl">
-                  public
-                </span>
+                <span className="material-symbols-outlined text-xl">public</span>
               </a>
               <a
-                className="w-12 h-12 rounded-full border border-black/5 flex items-center justify-center text-primary hover:bg-primary hover:text-white hover:scale-110 smooth-transition"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-black/5 text-primary smooth-transition hover:scale-110 hover:bg-primary hover:text-white"
                 href="#"
+                aria-label="Chia sẻ"
               >
                 <span className="material-symbols-outlined text-xl">share</span>
               </a>
               <a
-                className="w-12 h-12 rounded-full border border-black/5 flex items-center justify-center text-primary hover:bg-primary hover:text-white hover:scale-110 smooth-transition"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-black/5 text-primary smooth-transition hover:scale-110 hover:bg-primary hover:text-white"
                 href="#"
+                aria-label="Website"
               >
                 <span className="material-symbols-outlined text-xl">
                   language
@@ -42,126 +45,92 @@ const Footer = () => {
               </a>
             </div>
           </div>
-          <div className="flex flex-col gap-8">
-            <h4 className="font-display font-bold text-[10px] uppercase tracking-[0.4em] text-primary">
-              Quick Links
+          <div className="flex flex-col gap-5">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-primary">
+              Liên kết nhanh
             </h4>
-            <ul className="flex flex-col gap-5">
-              <li>
-                <a
-                  className="text-sm text-secondary hover:text-primary hover:translate-x-2 inline-block smooth-transition font-light"
-                  href="#"
-                >
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-sm text-secondary hover:text-primary hover:translate-x-2 inline-block smooth-transition font-light"
-                  href="#"
-                >
-                  Size Guide
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-sm text-secondary hover:text-primary hover:translate-x-2 inline-block smooth-transition font-light"
-                  href="#"
-                >
-                  Returns
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-sm text-secondary hover:text-primary hover:translate-x-2 inline-block smooth-transition font-light"
-                  href="#"
-                >
-                  Store Locator
-                </a>
-              </li>
+            <ul className="flex flex-col gap-3">
+              {[
+                { label: "Về chúng tôi", href: "#" },
+                { label: "Hướng dẫn chọn size", href: "#" },
+                { label: "Đổi trả hàng", href: "#" },
+                { label: "Hệ thống cửa hàng", href: "#" },
+              ].map((item) => (
+                <li key={item.label}>
+                  <a
+                    className="inline-block text-sm leading-relaxed text-secondary smooth-transition hover:translate-x-1 hover:text-primary"
+                    href={item.href}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
-          <div className="flex flex-col gap-8">
-            <h4 className="font-display font-bold text-[10px] uppercase tracking-[0.4em] text-primary">
-              Categories
+          <div className="flex flex-col gap-5">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-primary">
+              Danh mục
             </h4>
-            <ul className="flex flex-col gap-5">
-              <li>
-                <a
-                  className="text-sm text-secondary hover:text-primary hover:translate-x-2 inline-block smooth-transition font-light"
-                  href="#"
-                >
-                  Men's Sneakers
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-sm text-secondary hover:text-primary hover:translate-x-2 inline-block smooth-transition font-light"
-                  href="#"
-                >
-                  Women's Sneakers
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-sm text-secondary hover:text-primary hover:translate-x-2 inline-block smooth-transition font-light"
-                  href="#"
-                >
-                  Limited Edition
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-sm text-secondary hover:text-primary hover:translate-x-2 inline-block smooth-transition font-light"
-                  href="#"
-                >
-                  Release Calendar
-                </a>
-              </li>
+            <ul className="flex flex-col gap-3">
+              {[
+                "Sneaker nam",
+                "Sneaker nữ",
+                "Phiên bản giới hạn",
+                "Lịch phát hành",
+              ].map((label) => (
+                <li key={label}>
+                  <Link
+                    to="/shop"
+                    className="inline-block text-sm leading-relaxed text-secondary smooth-transition hover:translate-x-1 hover:text-primary"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
-          <div className="flex flex-col gap-8">
-            <h4 className="font-display font-bold text-[10px] uppercase tracking-[0.4em] text-primary">
-              Contact
+          <div className="flex flex-col gap-5">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-primary">
+              Liên hệ
             </h4>
-            <div className="flex flex-col gap-6 text-sm text-secondary font-light">
-              <p className="flex items-center gap-4 group cursor-pointer">
-                <span className="w-8 h-8 rounded-lg bg-surface-alt flex items-center justify-center material-symbols-outlined text-base group-hover:bg-primary group-hover:text-white smooth-transition">
+            <div className="flex flex-col gap-4 text-sm leading-relaxed text-secondary">
+              <p className="flex cursor-pointer items-start gap-3 group">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-surface-alt material-symbols-outlined text-base group-hover:bg-primary group-hover:text-white smooth-transition">
                   mail
                 </span>
-                support@sneakervault.com
+                <span className="break-all pt-1">support@sneakervault.com</span>
               </p>
-              <p className="flex items-center gap-4 group cursor-pointer">
-                <span className="w-8 h-8 rounded-lg bg-surface-alt flex items-center justify-center material-symbols-outlined text-base group-hover:bg-primary group-hover:text-white smooth-transition">
+              <p className="flex cursor-pointer items-start gap-3 group">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-surface-alt material-symbols-outlined text-base group-hover:bg-primary group-hover:text-white smooth-transition">
                   call
                 </span>
-                +1 (555) 012-3456
+                <span className="pt-1">1900 1234</span>
               </p>
-              <p className="flex items-center gap-4">
-                <span className="w-8 h-8 rounded-lg bg-surface-alt flex items-center justify-center material-symbols-outlined text-base">
+              <p className="flex items-start gap-3">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-surface-alt material-symbols-outlined text-base">
                   schedule
                 </span>
-                Mon - Fri: 9AM - 6PM EST
+                <span className="pt-1">Thứ 2 – Thứ 6: 9:00 – 18:00</span>
               </p>
             </div>
           </div>
         </div>
-        <div className="pt-10 border-t border-black/5 flex flex-col md:flex-row justify-between items-center gap-8">
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-secondary/40">
-            © 2024 SNEAKER VAULT. ALL RIGHTS RESERVED.
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-black/5 pt-8 text-center md:flex-row md:text-left">
+          <p className="text-xs leading-relaxed text-secondary/70">
+            © 2024 SNEAKER VAULT. Bảo lưu mọi quyền.
           </p>
-          <div className="flex gap-10">
+          <div className="flex flex-wrap justify-center gap-6 md:justify-end">
             <a
-              className="text-[10px] font-bold uppercase tracking-[0.3em] text-secondary/40 hover:text-primary smooth-transition"
+              className="text-xs text-secondary/70 smooth-transition hover:text-primary"
               href="#"
             >
-              Privacy Policy
+              Chính sách bảo mật
             </a>
             <a
-              className="text-[10px] font-bold uppercase tracking-[0.3em] text-secondary/40 hover:text-primary smooth-transition"
+              className="text-xs text-secondary/70 smooth-transition hover:text-primary"
               href="#"
             >
-              Terms of Service
+              Điều khoản dịch vụ
             </a>
           </div>
         </div>

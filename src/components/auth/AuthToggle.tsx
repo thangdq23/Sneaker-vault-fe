@@ -16,26 +16,28 @@ const AuthToggle = ({ active, onSwitch }: Props) => {
     };
 
   return (
-    <div className="flex gap-8 mb-12 border-b border-outline-variant/30">
+    <div className="mb-8 flex w-full max-w-md gap-4 border-b border-outline-variant/30 sm:gap-8">
       <button
+        type="button"
         onClick={handleClick("login")}
-        className={`font-label-md text-label-md uppercase tracking-widest pb-4 ${
+        className={`shrink-0 pb-3 text-sm font-semibold leading-snug transition-colors sm:text-base ${
           active === "login"
-            ? "text-on-surface border-b-2 border-on-surface"
+            ? "border-b-2 border-on-surface text-on-surface"
             : "text-on-surface-variant hover:text-on-surface"
         }`}
       >
-        Đăng Nhập
+        Đăng nhập
       </button>
       <button
+        type="button"
         onClick={handleClick("register")}
-        className={`font-label-md text-label-md uppercase tracking-widest pb-4 ${
+        className={`shrink-0 pb-3 text-sm font-semibold leading-snug transition-colors sm:text-base ${
           active === "register"
-            ? "text-on-surface border-b-2 border-on-surface"
+            ? "border-b-2 border-on-surface text-on-surface"
             : "text-on-surface-variant hover:text-on-surface"
         }`}
       >
-        Tạo Tài Khoản
+        Tạo tài khoản
       </button>
     </div>
   );

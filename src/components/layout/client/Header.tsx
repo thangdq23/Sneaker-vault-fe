@@ -42,54 +42,64 @@ const Header = () => {
         .split(" ")
         .map((s) => s[0])
         .join("")
+        .slice(0, 2)
     : user?.email
       ? user.email.charAt(0).toUpperCase()
       : "U";
 
   return (
-    <nav className="fixed top-0 w-full z-[100] glass border-b border-black/5">
-      <div className="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-5 max-w-container-max mx-auto">
-        <div className="flex items-center gap-16">
+    <nav className="fixed top-0 z-[100] w-full glass border-b border-black/5">
+      <div className="mx-auto flex w-full max-w-container-max items-center justify-between gap-3 px-margin-mobile py-3 md:gap-4 md:px-margin-desktop md:py-4">
+        <div className="flex min-w-0 flex-1 items-center gap-3 md:gap-6 lg:gap-10">
           <Link
             to="/"
-            className="font-display text-2xl md:text-2xl font-bold tracking-tight text-primary flex items-center gap-2"
+            className="flex shrink-0 items-center gap-2 font-display text-lg font-bold tracking-tight text-primary md:text-xl"
           >
-            <span className="w-8 h-8 bg-primary rounded flex items-center justify-center text-white text-xs">
+            <span className="flex h-8 w-8 items-center justify-center rounded bg-primary text-xs text-white">
               SV
             </span>
-            <span className="hidden sm:inline">SNEAKER VAULT</span>
+            <span className="hidden truncate sm:inline">SNEAKER VAULT</span>
           </Link>
 
-          <div className="hidden lg:flex gap-10 items-center">
-            <Link
-              to="/"
-              className="nav-link font-medium text-[11px] uppercase tracking-[0.2em] text-primary"
-            >
-              Home
+          <div className="hidden min-w-0 items-center gap-4 overflow-x-auto no-scrollbar lg:flex lg:gap-6 xl:gap-8">
+            <Link to="/" className="nav-link nav-link-vi text-primary">
+              Trang chủ
             </Link>
             <Link
-              to="shop"
-              className="nav-link font-medium text-[11px] uppercase tracking-[0.2em] text-secondary hover:text-primary smooth-transition"
+              to="/shop"
+              className="nav-link nav-link-vi text-secondary hover:text-primary"
             >
-              Shop
+              Cửa hàng
             </Link>
-            <a className="nav-link font-medium text-[11px] uppercase tracking-[0.2em] text-secondary hover:text-primary smooth-transition">
-              Brands
+            <a
+              href="#"
+              className="nav-link nav-link-vi text-secondary hover:text-primary"
+            >
+              Thương hiệu
             </a>
-            <a className="nav-link font-medium text-[11px] uppercase tracking-[0.2em] text-secondary hover:text-primary smooth-transition">
-              About
+            <a
+              href="#"
+              className="nav-link nav-link-vi text-secondary hover:text-primary"
+            >
+              Giới thiệu
             </a>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 md:gap-5">
-          <button className="material-symbols-outlined p-2 hover:bg-black/5 rounded-full smooth-transition">
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2 md:gap-3">
+          <button
+            type="button"
+            aria-label="Tìm kiếm"
+            className="material-symbols-outlined rounded-full p-2 hover:bg-black/5 smooth-transition"
+          >
             search
           </button>
 
           <button
+            type="button"
+            aria-label="Giỏ hàng"
             onClick={handleCart}
-            className="material-symbols-outlined p-2 hover:bg-black/5 rounded-full smooth-transition"
+            className="material-symbols-outlined rounded-full p-2 hover:bg-black/5 smooth-transition"
           >
             shopping_bag
           </button>
@@ -98,28 +108,33 @@ const Header = () => {
             <>
               <Link
                 to="/login"
-                className="hidden md:inline px-3 py-2 rounded-md bg-transparent border border-outline-variant/30 hover:bg-surface-container-low"
+                className="hidden items-center justify-center whitespace-nowrap rounded-md border border-outline-variant/30 px-3 py-2 text-sm font-medium hover:bg-surface-container md:inline-flex lg:px-4"
               >
-                Login
+                Đăng nhập
               </Link>
               <Link
                 to="/register"
-                className="hidden md:inline px-3 py-2 rounded-md bg-primary text-white hover:opacity-95 ml-2"
+                className="hidden items-center justify-center whitespace-nowrap rounded-md bg-primary px-3 py-2 text-sm font-medium text-white hover:opacity-95 md:inline-flex lg:px-4"
               >
-                Register
+                Đăng ký
               </Link>
             </>
           ) : (
             <button
+              type="button"
               onClick={handleAvatarClick}
-              title={user?.email ?? "User"}
-              className="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center font-medium"
+              title={user?.email ?? "Tài khoản"}
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-medium text-white"
             >
               {initials}
             </button>
           )}
 
-          <button className="material-symbols-outlined p-2 lg:hidden">
+          <button
+            type="button"
+            aria-label="Mở menu"
+            className="material-symbols-outlined rounded-full p-2 lg:hidden"
+          >
             menu
           </button>
         </div>

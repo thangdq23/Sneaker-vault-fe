@@ -104,17 +104,18 @@ const Register = () => {
     <main className="pt-24 md:pt-0 min-h-screen flex flex-col md:flex-row">
       <AuthHero />
 
-      <section className="flex-1 flex flex-col justify-center items-center px-margin-mobile md:px-margin-desktop py-12 bg-background">
+      <section className="flex flex-1 flex-col items-center justify-center bg-background px-margin-mobile py-10 md:px-margin-desktop md:py-12">
         <AuthToggle
           active="register"
           onSwitch={(tab) => navigate(tab === "login" ? "/login" : "/register")}
         />
 
         <AuthFormLayout
-          title="Create account"
+          title="Tạo tài khoản"
+          subtitle="Điền thông tin bên dưới để bắt đầu mua sắm tại Sneaker Vault."
           error={error}
           loading={loading}
-          submitLabel="Đăng Ký"
+          submitLabel="Đăng ký"
           onSubmit={handleSubmit}
         >
           <AuthInput
@@ -123,7 +124,7 @@ const Register = () => {
             type="text"
             value={form.name}
             onChange={handleChange}
-            placeholder="Nguyen Van A"
+            placeholder="Nguyễn Văn A"
           />
           <AuthInput
             name="email"
@@ -135,7 +136,7 @@ const Register = () => {
           />
           <AuthInput
             name="password"
-            label="Mật Khẩu"
+            label="Mật khẩu"
             type="password"
             value={form.password}
             onChange={handleChange}
@@ -143,7 +144,7 @@ const Register = () => {
           />
           <AuthInput
             name="confirmPassword"
-            label="Xác Nhận Mật Khẩu"
+            label="Xác nhận mật khẩu"
             type="password"
             value={confirmPassword}
             onChange={handleChange}
@@ -157,7 +158,7 @@ const Register = () => {
             onClick={() => navigate("/login")}
             className="cursor-pointer text-on-surface underline hover:text-primary transition-colors"
           >
-            Đăng Nhập<p></p>
+            Đăng nhập
           </span>
         </p>
       </section>

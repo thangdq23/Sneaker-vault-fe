@@ -22,12 +22,9 @@ const AuthInput = ({
   className = "",
 }: Props) => {
   return (
-    <div className="space-y-1">
+    <div className="space-y-1.5">
       {label ? (
-        <label
-          className="font-label-sm text-label-sm uppercase text-on-surface-variant"
-          htmlFor={id ?? name}
-        >
+        <label className="form-label" htmlFor={id ?? name}>
           {label}
         </label>
       ) : null}
@@ -38,7 +35,7 @@ const AuthInput = ({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`w-full bg-surface-container-lowest border-0 border-b border-outline-variant focus:ring-0 focus:border-on-surface transition-all py-3 px-0 font-body-md placeholder:text-outline-variant ${className}`}
+        className={`form-input bg-surface-container-lowest border-0 border-b border-outline-variant rounded-none px-0 focus:ring-0 focus:border-on-surface ${className}`}
       />
     </div>
   );

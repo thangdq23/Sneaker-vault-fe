@@ -41,7 +41,7 @@ const HomePage = (): React.JSX.Element => {
         setProducts(data);
       } catch (error_) {
         const message =
-          error_ instanceof Error ? error_.message : "Cannot load products.";
+          error_ instanceof Error ? error_.message : "Không thể tải sản phẩm.";
         setError(message);
       } finally {
         setIsLoading(false);
@@ -53,53 +53,50 @@ const HomePage = (): React.JSX.Element => {
 
   return (
     <main>
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden pt-20 bg-background">
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden">
-          <span className="font-display font-black text-[30vw] leading-none text-faded-bg uppercase tracking-tighter opacity-60 transform translate-y-12">
+      <section className="relative flex min-h-[85vh] items-center overflow-hidden bg-background pt-20 md:min-h-[90vh]">
+        <div className="pointer-events-none absolute inset-0 z-0 flex select-none items-center justify-center overflow-hidden">
+          <span className="translate-y-12 font-display text-[28vw] font-black uppercase leading-none tracking-tighter text-faded-bg opacity-60">
             VAULT
           </span>
         </div>
-        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full grid grid-cols-1 lg:grid-cols-2 items-center gap-16 relative z-10 py-12">
-          <div className="order-2 lg:order-1 animate-fade-in-up">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="w-8 h-px bg-tertiary"></span>
-              <span className="text-tertiary font-bold text-[10px] uppercase tracking-[0.4em]">
-                Premium Streetwear Collection
+        <div className="relative z-10 mx-auto grid w-full max-w-container-max grid-cols-1 items-center gap-12 px-margin-mobile py-10 md:px-margin-desktop lg:grid-cols-2 lg:gap-16 lg:py-12">
+          <div className="order-2 animate-fade-in-up lg:order-1">
+            <div className="mb-5 flex items-center gap-3">
+              <span className="h-px w-8 bg-tertiary" />
+              <span className="text-xs font-semibold leading-snug text-tertiary sm:text-sm">
+                Bộ sưu tập streetwear cao cấp
               </span>
             </div>
-            <h1 className="font-display text-7xl md:text-[7rem] font-bold text-primary mb-8 leading-[0.85] tracking-tighter">
-              ELEVATE
+            <h1 className="mb-6 font-display text-5xl font-bold leading-[1.05] tracking-tight text-primary sm:text-6xl md:text-7xl lg:text-[5.5rem]">
+              Nâng tầm
               <br />
-              THE STEP
+              bước đi
             </h1>
-            <p className="text-secondary text-lg mb-12 max-w-sm font-light leading-relaxed">
-              Limited Edition Drops. Experience the fusion of high-fashion
-              aesthetics and technical performance.
+            <p className="mb-10 max-w-md text-base leading-relaxed text-secondary sm:text-lg">
+              Phiên bản giới hạn. Trải nghiệm sự giao thoa giữa thẩm mỹ thời
+              trang cao cấp và hiệu năng kỹ thuật.
             </p>
-            <div className="flex flex-col sm:flex-row gap-5">
-              <Link
-                to="/shop"
-                className="inline-flex items-center justify-center bg-primary text-on-primary px-12 py-5 font-bold text-[10px] uppercase tracking-[0.25em] smooth-transition glow-hover border border-primary rounded-sm shadow-xl"
-              >
-                Shop Now
+            <div className="flex flex-col flex-wrap gap-3 sm:flex-row sm:gap-4">
+              <Link to="/shop" className="btn btn-primary min-w-[9rem] shadow-xl">
+                Mua ngay
               </Link>
               <Link
                 to="/shop"
-                className="inline-flex items-center justify-center bg-transparent text-primary px-12 py-5 font-bold text-[10px] uppercase tracking-[0.25em] smooth-transition border border-black/10 hover:bg-black/5 rounded-sm"
+                className="btn btn-secondary min-w-[9rem] sm:max-w-[14rem]"
               >
-                Explore Archive
+                Khám phá bộ sưu tập
               </Link>
             </div>
           </div>
           <div
-            className="order-1 lg:order-2 flex justify-center lg:justify-end relative animate-fade-in-up"
+            className="relative order-1 flex animate-fade-in-up justify-center lg:order-2 lg:justify-end"
             style={{ animationDelay: "0.2s" }}
           >
-            <div className="relative group perspective-1000">
-              <div className="absolute -inset-10 bg-linear-to-tr from-tertiary/10 to-transparent rounded-full blur-[100px] opacity-40 group-hover:opacity-70 smooth-transition"></div>
+            <div className="group perspective-1000 relative">
+              <div className="absolute -inset-10 rounded-full bg-linear-to-tr from-tertiary/10 to-transparent opacity-40 blur-[100px] smooth-transition group-hover:opacity-70" />
               <img
-                alt="Premium Sneaker"
-                className="w-full max-w-xl relative z-10 floating-shadow smooth-transition group-hover:-translate-y-6 group-hover:rotate-2"
+                alt="Giày sneaker cao cấp"
+                className="relative z-10 w-full max-w-xl floating-shadow smooth-transition group-hover:-translate-y-6 group-hover:rotate-2"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2_Do6tMPHvRMra5nYhv6l2eHUTo66nZ1k2wt4h7VmrWeMSWO8ikV1LNagsdPzRdxxVtGA1V2X2wlxE7-IqEFnVoTqSSXUbVBB8VRR4_HXg_FcIdqOr-rGsea5lUDALhys46thrIlhtXP81MqA-47LEfTGJ7qHU49H6JU99_Qoygz7-nkIEmic-oYXhleHdc5ArYKKrLkXRby7lv7Dojyq1xmNSbtgx6-Vg_SzmhHhnHgama0QjzTS7J8ya9vVabnzaPAyAsPPgIW_"
               />
             </div>
@@ -107,68 +104,58 @@ const HomePage = (): React.JSX.Element => {
         </div>
       </section>
 
-      <section className="pb-20 bg-surface-alt">
-        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
-            <div>
-              <p className="font-display text-3xl md:text-4xl font-bold text-primary tracking-tight">
-                Sale Picks
-              </p>
-              <p className="text-secondary max-w-xl mt-3">
-                Tổng hợp các mẫu giảm giá tốt nhất, giá sốc cho mùa này.
-              </p>
-            </div>
+      <section className="bg-surface-alt pb-20">
+        <div className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop">
+          <div className="mb-8">
+            <h2 className="section-title text-primary">Ưu đãi nổi bật</h2>
+            <p className="section-desc">
+              Tổng hợp các mẫu giảm giá tốt nhất, giá sốc cho mùa này.
+            </p>
           </div>
 
           {isLoading ? (
             <div className="rounded-3xl bg-white p-12 text-center text-on-surface-variant">
-              Loading products...
+              Đang tải sản phẩm...
             </div>
           ) : error ? (
-            <div className="rounded-3xl bg-rose-50 text-rose-700 p-8 text-center">
+            <div className="rounded-3xl bg-rose-50 p-8 text-center text-rose-700">
               {error}
             </div>
           ) : saleProducts.length === 0 ? (
             <div className="rounded-3xl bg-white p-12 text-center text-on-surface-variant">
-              No sale products available.
+              Chưa có sản phẩm giảm giá.
             </div>
           ) : (
-            <div className="relative">
-              <SaleProductSlider products={saleProducts} />
-            </div>
+            <SaleProductSlider products={saleProducts} />
           )}
         </div>
       </section>
 
-      <section className="py-14 bg-background">
-        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
-            <div>
-              <p className="font-display text-3xl md:text-4xl font-bold text-primary tracking-tight">
-                New Arrival
-              </p>
-              <p className="text-secondary max-w-xl mt-3">
-                Khám phá những mẫu sneaker vừa mới ra mắt, sẵn sàng cho mọi
-                phong cách.
-              </p>
-            </div>
+      <section className="bg-background py-14">
+        <div className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop">
+          <div className="mb-8">
+            <h2 className="section-title text-primary">Hàng mới về</h2>
+            <p className="section-desc">
+              Khám phá những mẫu sneaker vừa mới ra mắt, sẵn sàng cho mọi phong
+              cách.
+            </p>
           </div>
 
           {isLoading ? (
             <div className="rounded-3xl bg-white p-12 text-center text-on-surface-variant">
-              Loading products...
+              Đang tải sản phẩm...
             </div>
           ) : error ? (
-            <div className="rounded-3xl bg-rose-50 text-rose-700 p-8 text-center">
+            <div className="rounded-3xl bg-rose-50 p-8 text-center text-rose-700">
               {error}
             </div>
           ) : newProducts.length === 0 ? (
             <div className="rounded-3xl bg-white p-12 text-center text-on-surface-variant">
-              No new products available.
+              Chưa có sản phẩm mới.
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
                 {newProducts.map((product) => (
                   <ProductCard
                     key={product._id ?? product.id ?? product.name}
@@ -178,10 +165,7 @@ const HomePage = (): React.JSX.Element => {
               </div>
               {hasMoreNewProducts ? (
                 <div className="mt-8 flex justify-center">
-                  <Link
-                    to="/shop"
-                    className="px-8 py-4 bg-primary text-on-primary rounded-full text-sm font-bold uppercase tracking-[0.15em] hover:bg-tertiary smooth-transition"
-                  >
+                  <Link to="/shop" className="btn btn-primary btn-pill">
                     Xem thêm
                   </Link>
                 </div>
@@ -191,21 +175,19 @@ const HomePage = (): React.JSX.Element => {
         </div>
       </section>
 
-      <section className="py-14 bg-surface-alt">
-        <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
+      <section className="bg-surface-alt py-14">
+        <div className="mx-auto max-w-container-max px-margin-mobile md:px-margin-desktop">
+          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="font-display text-3xl md:text-4xl font-bold text-primary tracking-tight">
-                All Products
-              </p>
-              <p className="text-secondary max-w-xl mt-3">
+              <h2 className="section-title text-primary">Tất cả sản phẩm</h2>
+              <p className="section-desc">
                 Duyệt toàn bộ bộ sưu tập sneaker của chúng tôi với nhiều phong
                 cách khác nhau.
               </p>
             </div>
             <Link
               to="/shop"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-full border border-outline-variant text-sm font-semibold text-on-surface hover:bg-surface-container transition"
+              className="btn btn-secondary btn-pill shrink-0 self-start sm:self-auto"
             >
               Xem thêm
             </Link>
@@ -213,19 +195,19 @@ const HomePage = (): React.JSX.Element => {
 
           {isLoading ? (
             <div className="rounded-3xl bg-white p-12 text-center text-on-surface-variant">
-              Loading products...
+              Đang tải sản phẩm...
             </div>
           ) : error ? (
-            <div className="rounded-3xl bg-rose-50 text-rose-700 p-8 text-center">
+            <div className="rounded-3xl bg-rose-50 p-8 text-center text-rose-700">
               {error}
             </div>
           ) : allProducts.length === 0 ? (
             <div className="rounded-3xl bg-white p-12 text-center text-on-surface-variant">
-              No products available.
+              Chưa có sản phẩm.
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
                 {allProductsPreview.map((product) => (
                   <ProductCard
                     key={product._id ?? product.id ?? product.name}
@@ -235,10 +217,7 @@ const HomePage = (): React.JSX.Element => {
               </div>
               {hasMoreAllProducts ? (
                 <div className="mt-8 flex justify-center">
-                  <Link
-                    to="/shop"
-                    className="px-8 py-4 bg-primary text-on-primary rounded-full text-sm font-bold uppercase tracking-[0.15em] hover:bg-tertiary smooth-transition"
-                  >
+                  <Link to="/shop" className="btn btn-primary btn-pill">
                     Xem thêm
                   </Link>
                 </div>
