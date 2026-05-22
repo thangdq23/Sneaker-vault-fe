@@ -1,24 +1,45 @@
-# Logs
-logs
-*.log
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+
+test.js
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+*.venv
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Node.js
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Logs
+*.log
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Environment files
+.env
+.env.*
+
+# Coverage
+coverage/
+*.cover
+*.coverage
+*.lcov
+
+# Others
+*.swp
+*.swo
+.idea/
+*.bak

@@ -5,7 +5,7 @@ import type {
   RegisterRequest,
 } from "../types/auth.type";
 
-const BASE_URL = "http://localhost:3000/api/auth";
+const BASE_URL = `${import.meta.env.VITE_API_URL}/auth`;
 
 export const login = async (data: LoginRequest): Promise<AuthResponse> => {
   const response = await axios.post<AuthResponse>(`${BASE_URL}/login`, data);
