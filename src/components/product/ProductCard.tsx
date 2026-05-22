@@ -34,7 +34,7 @@ const ProductCard = ({ product }: ProductCardProps): React.JSX.Element => {
       onClick={() => navigate(`/products/${productId}`)}
       className="group w-full text-left bg-white rounded-3xl border border-outline-variant/80 shadow-sm overflow-hidden transition duration-300 hover:shadow-xl hover:-translate-y-1"
     >
-      <div className="relative overflow-hidden bg-slate-50 aspect-[4/5]">
+      <div className="relative overflow-hidden bg-slate-50 aspect-4/5">
         <img
           src={thumbnail}
           alt={product.name}

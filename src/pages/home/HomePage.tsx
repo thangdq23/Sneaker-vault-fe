@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "../../components/product/ProductCard";
+import SaleProductSlider from "../../components/product/SaleProductSlider";
 import { getProducts } from "../../services/productApi";
 import type { Product } from "../../types/product.type";
 
@@ -132,13 +133,8 @@ const HomePage = (): React.JSX.Element => {
               No sale products available.
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              {saleProducts.map((product) => (
-                <ProductCard
-                  key={product._id ?? product.id ?? product.name}
-                  product={product}
-                />
-              ))}
+            <div className="relative">
+              <SaleProductSlider products={saleProducts} />
             </div>
           )}
         </div>
