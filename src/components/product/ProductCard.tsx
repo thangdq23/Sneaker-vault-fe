@@ -2,10 +2,29 @@ import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Product } from "../../types/product.type";
 import { formatVnd } from "../../utils/formatCurrency";
+import ProductRating from "./ProductRating";
 
 interface ProductCardProps {
   product: Product;
 }
+
+const getDiscountPercent = (product: Product): number | null => {
+  if (!product.isSale) return null;
+
+  if (product.discountPercent != null && product.discountPercent > 0) {
+    return Math.round(product.discountPercent);
+  }
+
+  if (
+    product.salePrice != null &&
+    product.price > 0 &&
+    product.salePrice < product.price
+  ) {
+    return Math.round((1 - product.salePrice / product.price) * 100);
+  }
+
+  return null;
+};
 
 const ProductCard = ({ product }: ProductCardProps): React.JSX.Element => {
   const navigate = useNavigate();
@@ -20,6 +39,8 @@ const ProductCard = ({ product }: ProductCardProps): React.JSX.Element => {
     if (!product.isSale || product.salePrice == null) return null;
     return formatVnd(product.salePrice);
   }, [product.isSale, product.salePrice]);
+
+  const discountPercent = useMemo(() => getDiscountPercent(product), [product]);
 
   const thumbnail =
     product.images?.[0] ?? "https://via.placeholder.com/520x520?text=No+Image";
@@ -42,29 +63,38 @@ const ProductCard = ({ product }: ProductCardProps): React.JSX.Element => {
               Mới
             </span>
           ) : null}
-          {product.isSale ? (
+          {discountPercent != null ? (
             <span className="rounded-full bg-rose-600 px-2 py-0.5 text-[10px] font-bold text-white">
-              Giảm giá
+              -{discountPercent}%
             </span>
           ) : null}
         </div>
       </div>
       <div className="product-card-body">
-        <p className="mb-1 line-clamp-1 text-xs text-on-surface-variant">
+        <p className="mb-0.5 line-clamp-1 text-xs text-on-surface-variant">
           {product.brand}
         </p>
-        <h3 className="mb-auto line-clamp-2 min-h-[2.5rem] font-display text-base font-semibold leading-snug text-on-surface sm:min-h-[2.75rem] sm:text-lg">
+        <h3 className="line-clamp-2 font-display text-[15px] font-semibold leading-snug text-on-surface sm:text-base">
           {product.name}
         </h3>
-        <div className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1 border-t border-outline-variant/15 pt-3">
-          <p className="price-vnd text-sm font-bold text-on-surface sm:text-base">
-            {saleLabel ?? priceLabel}
-          </p>
+        <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
           {saleLabel ? (
-            <p className="price-vnd text-xs text-on-surface-variant line-through sm:text-sm">
+            <>
+              <p className="price-vnd text-sm font-bold text-red-600 sm:text-base">
+                {saleLabel}
+              </p>
+              <p className="price-vnd text-xs text-gray-400 line-through sm:text-sm">
+                {priceLabel}
+              </p>
+            </>
+          ) : (
+            <p className="price-vnd text-sm font-bold text-on-surface sm:text-base">
               {priceLabel}
             </p>
-          ) : null}
+          )}
+        </div>
+        <div className="mt-2">
+          <ProductRating rating={5} />
         </div>
       </div>
     </button>
