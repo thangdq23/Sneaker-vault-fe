@@ -2,8 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import Breadcrumb from "../../components/navigation/Breadcrumb";
 import ProductCard from "../../components/product/ProductCard";
+import ProductImageGallery from "../../components/product/ProductImageGallery";
 import ProductRating from "../../components/product/ProductRating";
+import ProductSizeSelector from "../../components/product/ProductSizeSelector";
 import QuantitySelector from "../../components/product/QuantitySelector";
+import SizeGuideModal from "../../components/product/SizeGuideModal";
 import { getProductById, getProducts } from "../../services/productApi";
 import type { Product } from "../../types/product.type";
 import { formatVnd } from "../../utils/formatCurrency";
@@ -36,6 +39,7 @@ const ProductDetailPage = (): React.JSX.Element => {
     null,
   );
   const [quantity, setQuantity] = useState(1);
+  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -147,40 +151,13 @@ const ProductDetailPage = (): React.JSX.Element => {
         />
 
         <section className="grid grid-cols-1 gap-gutter md:grid-cols-12 lg:gap-16">
-          <div className="flex flex-col gap-4 md:col-span-7 md:flex-row">
-            <div className="no-scrollbar flex shrink-0 gap-3 overflow-x-auto md:flex-col md:overflow-visible">
-              {product.images.map((image) => (
-                <button
-                  key={image}
-                  type="button"
-                  onClick={() => setSelectedImage(image)}
-                  className={`h-20 w-20 shrink-0 overflow-hidden rounded-lg border md:h-24 md:w-24 ${
-                    selectedImage === image
-                      ? "border-primary"
-                      : "border-surface-container"
-                  } shadow-sm transition-shadow`}
-                >
-                  <img
-                    src={image}
-                    alt={product.name}
-                    className="h-full w-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-
-            <div className="relative aspect-square grow overflow-hidden rounded-xl border border-outline-variant/10 bg-surface-container shadow-lg">
-              <img
-                className="h-full w-full object-cover"
-                src={
-                  selectedImage ||
-                  product.images[0] ||
-                  "https://via.placeholder.com/720"
-                }
-                alt={product.name}
-              />
-            </div>
-          </div>
+          <ProductImageGallery
+            images={product.images}
+            selectedImage={selectedImage}
+            onSelectImage={setSelectedImage}
+            isNewProduct={product.isNewProduct}
+            productName={product.name}
+          />
 
           <div className="flex flex-col gap-5 md:col-span-5 lg:gap-6">
             <div className="space-y-3">
@@ -215,46 +192,20 @@ const ProductDetailPage = (): React.JSX.Element => {
               ) : null}
             </div>
 
-            <div className="flex flex-wrap gap-2">
-              {product.isNewProduct ? (
-                <span className="rounded-full bg-tertiary px-3 py-1 text-xs font-bold text-white">
-                  Mới
-                </span>
-              ) : null}
-            </div>
+            <div className="flex flex-wrap gap-2"></div>
 
-            <div className="rounded-3xl bg-surface-container p-5 sm:p-6">
-              <p className="mb-3 text-sm font-bold text-on-surface-variant">
-                Kích cỡ
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {product.sizes.map((size) => {
-                  const isSelected = selectedSize === size;
-                  return (
-                    <button
-                      key={size}
-                      type="button"
-                      onClick={() => setSelectedSize(size)}
-                      className={`min-w-[3rem] rounded-lg border px-3 py-2.5 text-sm font-medium transition ${
-                        isSelected
-                          ? "border-primary bg-primary text-on-primary"
-                          : "border-outline-variant text-on-surface hover:border-primary"
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            <ProductSizeSelector
+              sizes={product.sizes}
+              selectedSize={selectedSize}
+              onSelectSize={setSelectedSize}
+              onOpenSizeGuide={() => setIsSizeGuideOpen(true)}
+            />
 
             <div className="rounded-3xl bg-surface-container p-5 sm:p-6">
               <p
                 className={`mb-3 text-base font-semibold sm:text-lg ${product.stock > 0 ? "text-emerald-600" : "text-rose-600"}`}
               >
-                {product.stock > 0
-                  ? `Còn hàng (${product.stock})`
-                  : "Hết hàng"}
+                {product.stock > 0 ? "Còn hàng" : "Hết hàng"}
               </p>
               <QuantitySelector
                 value={quantity}
@@ -267,14 +218,14 @@ const ProductDetailPage = (): React.JSX.Element => {
               <button
                 type="button"
                 disabled={isOutOfStock}
-                className="btn btn-primary btn-pill w-full sm:w-auto sm:min-w-[11rem] disabled:cursor-not-allowed disabled:opacity-50"
+                className="btn btn-primary btn-pill w-full sm:w-auto sm:min-w-44 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Thêm vào giỏ
               </button>
               <button
                 type="button"
                 disabled={isOutOfStock}
-                className="btn btn-secondary btn-pill w-full sm:w-auto sm:min-w-[9rem] disabled:cursor-not-allowed disabled:opacity-50"
+                className="btn btn-secondary btn-pill w-full sm:w-auto sm:min-w-36 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Mua ngay
               </button>
@@ -307,6 +258,11 @@ const ProductDetailPage = (): React.JSX.Element => {
             </div>
           </section>
         ) : null}
+
+        <SizeGuideModal
+          isOpen={isSizeGuideOpen}
+          onClose={() => setIsSizeGuideOpen(false)}
+        />
       </div>
     </main>
   );
