@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../../services/authApi";
+import { useAppDispatch } from "../../store/hooks";
+import { loginUser } from "../../store/authSlice";
 import type { LoginRequest } from "../../types/auth.type";
 import AuthHero from "../../components/auth/AuthHero";
 import AuthToggle from "../../components/auth/AuthToggle";
@@ -10,6 +10,7 @@ import AuthFormLayout from "../../components/auth/AuthFormLayout";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [form, setForm] = useState<LoginRequest>({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,33 +38,16 @@ const Login = () => {
 
     try {
       setLoading(true);
-      const response = await login(form);
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response.user ?? {}));
-      navigate("/");
+      const resultAction = await dispatch(loginUser(form));
+      if (loginUser.fulfilled.match(resultAction)) {
+        const searchParams = new URLSearchParams(window.location.search);
+        const redirectUrl = searchParams.get("redirect");
+        navigate(redirectUrl || "/");
+      } else {
+        setError((resultAction.payload as string) || "Sai email hoặc mật khẩu.");
+      }
     } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
-        const response = err.response;
-        const serverMessage = (response?.data as { message?: string })?.message;
-
-        if (response?.status === 404) {
-          setError("Tài khoản không tồn tại.");
-        } else if (response?.status === 401) {
-          setError("Sai email hoặc mật khẩu.");
-        } else if (
-          serverMessage?.toLowerCase().includes("not found") ||
-          serverMessage?.toLowerCase().includes("invalid credentials") ||
-          serverMessage?.toLowerCase().includes("wrong password")
-        ) {
-          setError("Sai email hoặc mật khẩu.");
-        } else {
-          setError(
-            serverMessage ??
-              err.message ??
-              "Đã có lỗi xảy ra. Vui lòng thử lại.",
-          );
-        }
-      } else if (err instanceof Error) {
+      if (err instanceof Error) {
         setError(err.message);
       } else {
         setError("Đã có lỗi xảy ra. Vui lòng thử lại.");

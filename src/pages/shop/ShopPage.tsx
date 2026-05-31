@@ -2,157 +2,226 @@ import { useEffect, useState } from "react";
 import ProductCard from "../../components/product/ProductCard";
 import { getProducts } from "../../services/productApi";
 import type { Product } from "../../types/product.type";
+import { formatVnd } from "../../utils/formatCurrency";
 
 const ShopPage = (): React.JSX.Element => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const loadProducts = async () => {
-      setIsLoading(true);
-      setError(null);
+  // Filter States
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState<string>("");
+  const [brand, setBrand] = useState<string>("");
+  const [maxPrice, setMaxPrice] = useState<number>(10000000);
+  const [sort, setSort] = useState("createdAt");
+  const [order, setOrder] = useState<"asc" | "desc">("desc");
 
-      try {
-        const data = await getProducts();
-        setProducts(data);
-      } catch (error_) {
-        const message =
-          error_ instanceof Error
-            ? error_.message
-            : "Không thể tải sản phẩm cửa hàng.";
-        setError(message);
-      } finally {
-        setIsLoading(false);
+  // Pagination States
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
+
+  const fetchFilteredProducts = async (currentPage: number, append: boolean = false) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await getProducts({
+        search: search.trim() || undefined,
+        category: category || undefined,
+        brand: brand || undefined,
+        maxPrice: maxPrice || undefined,
+        sort,
+        order,
+        page: currentPage,
+        limit: 9,
+      });
+
+      if (append) {
+        setProducts((prev) => [...prev, ...res.products]);
+      } else {
+        setProducts(res.products);
       }
-    };
+      setTotalPages(res.totalPages);
+      setTotalProducts(res.total);
+    } catch (err: any) {
+      setError(err.message || "Không thể tải sản phẩm.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    void loadProducts();
-  }, []);
+  // Reset page to 1 and reload when filters change
+  useEffect(() => {
+    setPage(1);
+    void fetchFilteredProducts(1, false);
+  }, [search, category, brand, maxPrice, sort, order]);
+
+  // Load more when page changes
+  useEffect(() => {
+    if (page > 1) {
+      void fetchFilteredProducts(page, true);
+    }
+  }, [page]);
+
+  const handleLoadMore = () => {
+    if (page < totalPages) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const handleSortChange = (value: string) => {
+    if (value === "priceAsc") {
+      setSort("price");
+      setOrder("asc");
+    } else if (value === "priceDesc") {
+      setSort("price");
+      setOrder("desc");
+    } else {
+      setSort("createdAt");
+      setOrder("desc");
+    }
+  };
 
   return (
     <main className="mx-auto max-w-container-max px-margin-mobile pb-16 pt-28 md:px-margin-desktop">
       <div className="flex flex-col gap-gutter lg:flex-row">
+        {/* Sidebar Filters */}
         <aside className="w-full shrink-0 space-y-8 lg:w-72">
+          {/* Search */}
           <section>
             <h3 className="mb-3 text-sm font-bold text-on-surface">Tìm kiếm</h3>
             <div className="relative">
               <input
                 aria-label="Tìm kiếm sản phẩm"
-                className="form-input pr-10"
+                className="form-input pr-10 bg-surface-container"
                 placeholder="Tìm mẫu giày..."
                 type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
               <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant">
                 search
               </span>
             </div>
           </section>
+
+          {/* Gender / Category */}
           <section>
-            <h3 className="mb-3 text-sm font-bold text-on-surface">Giới tính</h3>
-            <div className="space-y-2.5">
-              {["Nam — Hiệu năng", "Nữ — Phong cách", "Unisex"].map((label) => (
-                <label
-                  key={label}
-                  className="group flex cursor-pointer items-start gap-3"
-                >
-                  <input
-                    className="mt-1 rounded-sm border-outline text-primary focus:ring-0"
-                    type="checkbox"
-                  />
-                  <span className="text-sm leading-relaxed group-hover:text-primary">
-                    {label}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </section>
-          <section>
-            <h3 className="mb-3 text-sm font-bold text-on-surface">
-              Thương hiệu
-            </h3>
+            <h3 className="mb-3 text-sm font-bold text-on-surface">Danh mục</h3>
             <div className="space-y-2.5">
               {[
-                "Nike Archive",
-                "Adidas Originals",
-                "New Balance",
-                "Asics Tiger",
-              ].map((brand, index) => (
+                { label: "Tất cả", value: "" },
+                { label: "Giày Sneaker", value: "sneakers" },
+                { label: "Chạy bộ", value: "running" },
+                { label: "Bóng rổ", value: "basketball" },
+              ].map((item) => (
                 <label
-                  key={brand}
-                  className="group flex cursor-pointer items-start gap-3"
+                  key={item.label}
+                  className="group flex cursor-pointer items-center gap-3"
                 >
                   <input
-                    className="mt-1 rounded-sm border-outline text-primary focus:ring-0"
-                    type="checkbox"
-                    defaultChecked={index === 0}
+                    className="rounded-full border-outline text-primary focus:ring-0 cursor-pointer h-4 w-4"
+                    type="radio"
+                    name="category"
+                    checked={category === item.value}
+                    onChange={() => setCategory(item.value)}
                   />
-                  <span className="text-sm leading-relaxed group-hover:text-primary">
-                    {brand}
+                  <span className={`text-sm leading-relaxed group-hover:text-primary ${category === item.value ? "font-semibold text-primary" : ""}`}>
+                    {item.label}
                   </span>
                 </label>
               ))}
             </div>
           </section>
+
+          {/* Brand */}
           <section>
-            <h3 className="mb-3 text-sm font-bold text-on-surface">Size (UK)</h3>
-            <div className="grid grid-cols-4 gap-2 sm:grid-cols-3 lg:grid-cols-3">
-              {["7", "8", "8.5", "9", "10", "11", "12"].map((size) => (
-                <button
-                  key={size}
-                  type="button"
-                  className="rounded-lg border border-outline-variant/30 py-2.5 text-sm font-medium hover:bg-on-surface hover:text-surface"
+            <h3 className="mb-3 text-sm font-bold text-on-surface">Thương hiệu</h3>
+            <div className="space-y-2.5">
+              {[
+                { label: "Tất cả thương hiệu", value: "" },
+                { label: "Nike", value: "Nike" },
+                { label: "Adidas", value: "Adidas" },
+                { label: "New Balance", value: "New Balance" },
+                { label: "Asics", value: "Asics" },
+              ].map((item) => (
+                <label
+                  key={item.label}
+                  className="group flex cursor-pointer items-center gap-3"
                 >
-                  {size}
-                </button>
+                  <input
+                    className="rounded-full border-outline text-primary focus:ring-0 cursor-pointer h-4 w-4"
+                    type="radio"
+                    name="brand"
+                    checked={brand === item.value}
+                    onChange={() => setBrand(item.value)}
+                  />
+                  <span className={`text-sm leading-relaxed group-hover:text-primary ${brand === item.value ? "font-semibold text-primary" : ""}`}>
+                    {item.label}
+                  </span>
+                </label>
               ))}
             </div>
           </section>
+
+          {/* Price Range */}
           <section>
-            <h3 className="mb-3 text-sm font-bold text-on-surface">Bảng màu</h3>
-            <div className="flex flex-wrap gap-3">
-              <span className="h-8 w-8 rounded-full bg-on-surface ring-2 ring-primary ring-offset-2" />
-              <span className="h-8 w-8 rounded-full border border-outline-variant bg-surface-container-highest" />
-              <span className="h-8 w-8 rounded-full bg-[#1A4B84]" />
-              <span className="h-8 w-8 rounded-full bg-[#D12D2D]" />
-              <span className="h-8 w-8 rounded-full bg-[#E6B100]" />
-              <span className="h-8 w-8 rounded-full bg-[#2D7A4D]" />
-            </div>
-          </section>
-          <section>
-            <h3 className="mb-3 text-sm font-bold text-on-surface">Khoảng giá</h3>
+            <h3 className="mb-3 text-sm font-bold text-on-surface">Khoảng giá tối đa</h3>
             <input
               className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-surface-container-highest accent-primary"
               type="range"
+              min="500000"
+              max="15000000"
+              step="50000"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(Number(e.target.value))}
             />
             <div className="mt-3 flex justify-between text-xs text-on-surface-variant sm:text-sm">
               <span>500.000 ₫</span>
-              <span>5.000.000+ ₫</span>
+              <span className="font-semibold text-primary">{formatVnd(maxPrice)}</span>
             </div>
           </section>
         </aside>
 
+        {/* Product Grid Area */}
         <div className="min-w-0 grow">
           <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h1 className="section-title text-primary">Cửa hàng sneaker</h1>
               <p className="section-desc">
-                Tìm kiếm và lựa chọn sneaker mới nhất với nhiều lựa chọn phong
-                cách.
+                Tìm kiếm và lựa chọn sneaker mới nhất với nhiều lựa chọn phong cách.
               </p>
             </div>
-            <p className="shrink-0 text-sm text-on-surface-variant">
-              {products.length} sản phẩm
-            </p>
+            
+            {/* Sort Filter & Product Count */}
+            <div className="flex items-center justify-between sm:justify-end gap-6">
+              <p className="text-sm text-on-surface-variant whitespace-nowrap">
+                {totalProducts} sản phẩm
+              </p>
+              <select
+                aria-label="Sắp xếp sản phẩm"
+                onChange={(e) => handleSortChange(e.target.value)}
+                className="bg-surface-container border border-outline-variant/30 rounded-lg px-3 py-1.5 text-sm font-semibold focus:outline-none cursor-pointer"
+              >
+                <option value="newest">Mới nhất</option>
+                <option value="priceAsc">Giá: Thấp đến Cao</option>
+                <option value="priceDesc">Giá: Cao đến Thấp</option>
+              </select>
+            </div>
           </div>
 
-          {isLoading ? (
-            <div className="rounded-3xl bg-white p-12 text-center text-on-surface-variant">
+          {isLoading && products.length === 0 ? (
+            <div className="rounded-3xl bg-white p-12 text-center text-on-surface-variant shadow-sm border border-outline-variant/10">
               Đang tải sản phẩm...
             </div>
           ) : error ? (
             <div className="rounded-3xl bg-rose-50 p-8 text-center text-rose-700">
               {error}
+            </div>
+          ) : products.length === 0 ? (
+            <div className="rounded-3xl bg-white p-12 text-center text-on-surface-variant shadow-sm border border-outline-variant/10">
+              Không tìm thấy sản phẩm nào khớp với bộ lọc của bạn.
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-gutter lg:grid-cols-3">
@@ -165,11 +234,18 @@ const ShopPage = (): React.JSX.Element => {
             </div>
           )}
 
-          <div className="mt-12 flex justify-center">
-            <button type="button" className="btn btn-primary btn-pill">
-              Xem thêm
-            </button>
-          </div>
+          {page < totalPages && (
+            <div className="mt-12 flex justify-center">
+              <button
+                type="button"
+                onClick={handleLoadMore}
+                disabled={isLoading}
+                className="btn btn-primary btn-pill px-8"
+              >
+                {isLoading ? "Đang tải..." : "Xem thêm"}
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </main>

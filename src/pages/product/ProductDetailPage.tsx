@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Breadcrumb from "../../components/navigation/Breadcrumb";
 import ProductCard from "../../components/product/ProductCard";
 import ProductImageGallery from "../../components/product/ProductImageGallery";
@@ -11,6 +11,8 @@ import { getProductById, getProducts } from "../../services/productApi";
 import type { Product } from "../../types/product.type";
 import { formatVnd } from "../../utils/formatCurrency";
 import { getRelatedProducts } from "../../utils/getRelatedProducts";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { addCartItem } from "../../store/cartSlice";
 
 const getDiscountPercent = (product: Product): number | null => {
   if (!product.isSale) return null;
@@ -32,6 +34,10 @@ const getDiscountPercent = (product: Product): number | null => {
 
 const ProductDetailPage = (): React.JSX.Element => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const token = useAppSelector((state) => state.auth.token);
+
   const [product, setProduct] = useState<Product | null>(null);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [selectedImage, setSelectedImage] = useState<string>("");
@@ -42,6 +48,7 @@ const ProductDetailPage = (): React.JSX.Element => {
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -55,12 +62,12 @@ const ProductDetailPage = (): React.JSX.Element => {
       setError(null);
 
       try {
-        const [data, products] = await Promise.all([
+        const [data, productsRes] = await Promise.all([
           getProductById(id),
           getProducts(),
         ]);
         setProduct(data);
-        setAllProducts(products);
+        setAllProducts(productsRes.products);
         setSelectedImage(data.images?.[0] ?? "");
         setSelectedSize(data.sizes?.[0] ?? null);
         setQuantity(1);
@@ -76,7 +83,47 @@ const ProductDetailPage = (): React.JSX.Element => {
     };
 
     void loadProduct();
-  }, [id]);
+  }, [id, dispatch]);
+
+  const handleAddToCart = async () => {
+    if (!token) {
+      navigate(`/login?redirect=/products/${id}`);
+      return;
+    }
+    if (selectedSize === null) {
+      alert("Vui lòng chọn size giày.");
+      return;
+    }
+    try {
+      setIsAdding(true);
+      await dispatch(addCartItem({ productId: id!, size: selectedSize, quantity })).unwrap();
+      alert("Đã thêm sản phẩm vào giỏ hàng!");
+    } catch (err: any) {
+      alert(err || "Lỗi khi thêm vào giỏ hàng.");
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  const handleBuyNow = async () => {
+    if (!token) {
+      navigate(`/login?redirect=/products/${id}`);
+      return;
+    }
+    if (selectedSize === null) {
+      alert("Vui lòng chọn size giày.");
+      return;
+    }
+    try {
+      setIsAdding(true);
+      await dispatch(addCartItem({ productId: id!, size: selectedSize, quantity })).unwrap();
+      navigate("/cart");
+    } catch (err: any) {
+      alert(err || "Lỗi khi mua sản phẩm.");
+    } finally {
+      setIsAdding(false);
+    }
+  };
 
   const maxQuantity = useMemo(() => {
     if (!product) return 1;
@@ -217,17 +264,19 @@ const ProductDetailPage = (): React.JSX.Element => {
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <button
                 type="button"
-                disabled={isOutOfStock}
+                disabled={isOutOfStock || isAdding}
+                onClick={handleAddToCart}
                 className="btn btn-primary btn-pill w-full sm:w-auto sm:min-w-44 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Thêm vào giỏ
+                {isAdding ? "Đang xử lý..." : "Thêm vào giỏ"}
               </button>
               <button
                 type="button"
-                disabled={isOutOfStock}
+                disabled={isOutOfStock || isAdding}
+                onClick={handleBuyNow}
                 className="btn btn-secondary btn-pill w-full sm:w-auto sm:min-w-36 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Mua ngay
+                {isAdding ? "Đang xử lý..." : "Mua ngay"}
               </button>
             </div>
           </div>

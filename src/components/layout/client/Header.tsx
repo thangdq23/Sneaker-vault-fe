@@ -1,36 +1,27 @@
-import { Link, useNavigate } from "react-router";
-import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { fetchCartItems } from "../../../store/cartSlice";
 
 const Header = () => {
   const navigate = useNavigate();
-  const [token, setToken] = useState<string | null>(
-    localStorage.getItem("token"),
-  );
-  const [user, setUser] = useState<{ name?: string; email?: string } | null>(
-    () => {
-      try {
-        return JSON.parse(localStorage.getItem("user") ?? "null");
-      } catch {
-        return null;
-      }
-    },
-  );
+  const dispatch = useAppDispatch();
+
+  const { token, user } = useAppSelector((state) => state.auth);
+  const { cart } = useAppSelector((state) => state.cart);
 
   useEffect(() => {
-    const onStorage = () => {
-      setToken(localStorage.getItem("token"));
-      try {
-        setUser(JSON.parse(localStorage.getItem("user") ?? "null"));
-      } catch {
-        setUser(null);
-      }
-    };
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
-  }, []);
+    if (token) {
+      void dispatch(fetchCartItems());
+    }
+  }, [token, dispatch]);
 
   const handleCart = () => {
-    navigate("/cart");
+    if (!token) {
+      navigate("/login");
+    } else {
+      navigate("/cart");
+    }
   };
 
   const handleAvatarClick = () => {
@@ -46,6 +37,8 @@ const Header = () => {
     : user?.email
       ? user.email.charAt(0).toUpperCase()
       : "U";
+
+  const cartCount = cart?.items?.reduce((acc, item) => acc + item.quantity, 0) ?? 0;
 
   return (
     <nav className="fixed top-0 z-[100] w-full glass border-b border-black/5">
@@ -99,9 +92,14 @@ const Header = () => {
             type="button"
             aria-label="Giỏ hàng"
             onClick={handleCart}
-            className="material-symbols-outlined rounded-full p-2 hover:bg-black/5 smooth-transition"
+            className="material-symbols-outlined relative rounded-full p-2 hover:bg-black/5 smooth-transition"
           >
             shopping_bag
+            {token && cartCount > 0 ? (
+              <span className="absolute -top-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white">
+                {cartCount}
+              </span>
+            ) : null}
           </button>
 
           {!token ? (
@@ -124,7 +122,7 @@ const Header = () => {
               type="button"
               onClick={handleAvatarClick}
               title={user?.email ?? "Tài khoản"}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-medium text-white"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-medium text-white cursor-pointer hover:opacity-90"
             >
               {initials}
             </button>

@@ -16,7 +16,7 @@ export const useHomeProducts = () => {
 
       try {
         const data = await getProducts();
-        setProducts(data);
+        setProducts(data.products);
       } catch (error_) {
         const message =
           error_ instanceof Error ? error_.message : "Không thể tải sản phẩm.";

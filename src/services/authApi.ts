@@ -1,20 +1,18 @@
-import axios from "axios";
+import apiClient from "./apiClient";
 import type {
   AuthResponse,
   LoginRequest,
   RegisterRequest,
 } from "../types/auth.type";
 
-const BASE_URL = `${import.meta.env.VITE_API_URL}/auth`;
-
 export const login = async (data: LoginRequest): Promise<AuthResponse> => {
-  const response = await axios.post<AuthResponse>(`${BASE_URL}/login`, data);
+  const response = await apiClient.post<AuthResponse>("/auth/login", data);
   return response.data;
 };
 
 export const register = async (
   data: RegisterRequest,
 ): Promise<AuthResponse> => {
-  const response = await axios.post<AuthResponse>(`${BASE_URL}/register`, data);
+  const response = await apiClient.post<AuthResponse>("/auth/register", data);
   return response.data;
 };

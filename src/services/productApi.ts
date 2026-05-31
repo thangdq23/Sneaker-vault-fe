@@ -1,42 +1,50 @@
-import axios from "axios";
+import apiClient from "./apiClient";
 import type { Product } from "../types/product.type";
 
-const productApi = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+export interface ProductFilters {
+  search?: string;
+  category?: string;
+  brand?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  page?: number;
+  limit?: number;
+  sort?: string;
+  order?: string;
+}
 
-type ProductsResponse =
-  | Product[]
-  | { products: Product[] }
-  | { data: Product[] };
+export interface ProductsResponsePaginated {
+  products: Product[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
 
+type ProductsResponse = Product[] | ProductsResponsePaginated;
 type ProductResponse = Product | { product: Product } | { data: Product };
 
-export const getProducts = async (): Promise<Product[]> => {
-  const response = await productApi.get<ProductsResponse>("/products");
+export const getProducts = async (filters?: ProductFilters): Promise<ProductsResponsePaginated> => {
+  const response = await apiClient.get<ProductsResponse>("/products", {
+    params: filters,
+  });
   const payload = response.data;
 
   if (Array.isArray(payload)) {
-    return payload;
+    return {
+      products: payload,
+      total: payload.length,
+      page: 1,
+      limit: payload.length,
+      totalPages: 1,
+    };
   }
 
-  if (payload && typeof payload === "object") {
-    if (Array.isArray((payload as { products: Product[] }).products)) {
-      return (payload as { products: Product[] }).products;
-    }
-    if (Array.isArray((payload as { data: Product[] }).data)) {
-      return (payload as { data: Product[] }).data;
-    }
-  }
-
-  return [];
+  return payload;
 };
 
 export const getProductById = async (id: string): Promise<Product> => {
-  const response = await productApi.get<ProductResponse>(`/products/${id}`);
+  const response = await apiClient.get<ProductResponse>(`/products/${id}`);
   const payload = response.data;
 
   if (payload && typeof payload === "object") {
@@ -49,4 +57,19 @@ export const getProductById = async (id: string): Promise<Product> => {
   }
 
   return payload as Product;
+};
+
+export const createProduct = async (productData: Partial<Product>): Promise<Product> => {
+  const response = await apiClient.post<Product>("/products", productData);
+  return response.data;
+};
+
+export const updateProduct = async (id: string, productData: Partial<Product>): Promise<Product> => {
+  const response = await apiClient.put<Product>(`/products/${id}`, productData);
+  return response.data;
+};
+
+export const deleteProduct = async (id: string): Promise<{ message: string }> => {
+  const response = await apiClient.delete<{ message: string }>(`/products/${id}`);
+  return response.data;
 };

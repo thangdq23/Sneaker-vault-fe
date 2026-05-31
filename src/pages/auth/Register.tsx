@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { register } from "../../services/authApi";
+import { useAppDispatch } from "../../store/hooks";
+import { registerUser } from "../../store/authSlice";
 import type { RegisterRequest } from "../../types/auth.type";
 import AuthHero from "../../components/auth/AuthHero";
 import AuthToggle from "../../components/auth/AuthToggle";
@@ -10,6 +10,7 @@ import AuthFormLayout from "../../components/auth/AuthFormLayout";
 
 const Register = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [form, setForm] = useState<RegisterRequest>({
     name: "",
     email: "",
@@ -60,37 +61,20 @@ const Register = () => {
 
     try {
       setLoading(true);
-      const response = await register({
+      const resultAction = await dispatch(registerUser({
         ...form,
         confirmPassword,
-      });
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response.user ?? {}));
-      navigate("/");
+      }));
+      
+      if (registerUser.fulfilled.match(resultAction)) {
+        const searchParams = new URLSearchParams(window.location.search);
+        const redirectUrl = searchParams.get("redirect");
+        navigate(redirectUrl || "/");
+      } else {
+        setError((resultAction.payload as string) || "Đăng ký thất bại.");
+      }
     } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
-        const response = err.response;
-        const serverData = response?.data as
-          | { message?: string; error?: string }
-          | undefined;
-        const serverMessage = serverData?.message ?? serverData?.error;
-
-        if (response?.status === 409) {
-          setError("Tài khoản đã tồn tại.");
-        } else if (
-          serverMessage?.toLowerCase().includes("duplicate") ||
-          serverMessage?.toLowerCase().includes("already exists") ||
-          serverMessage?.toLowerCase().includes("đã tồn tại")
-        ) {
-          setError("Tài khoản đã tồn tại.");
-        } else {
-          setError(
-            serverMessage ??
-              err.message ??
-              "Đã có lỗi xảy ra. Vui lòng thử lại.",
-          );
-        }
-      } else if (err instanceof Error) {
+      if (err instanceof Error) {
         setError(err.message);
       } else {
         setError("Đã có lỗi xảy ra. Vui lòng thử lại.");
