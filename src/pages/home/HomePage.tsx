@@ -11,9 +11,6 @@ const HomePage = (): React.JSX.Element => {
     saleProducts,
     newProducts,
     allProductsPreview,
-    hasMoreNewProducts,
-    hasMoreAllProducts,
-    totalProducts,
   } = useHomeProducts();
 
   return (
@@ -28,13 +25,11 @@ const HomePage = (): React.JSX.Element => {
         products={newProducts}
         isLoading={isLoading}
         error={error}
-        showViewMore={hasMoreNewProducts}
       />
       <HomeAllProductsSection
         products={allProductsPreview}
         isLoading={isLoading}
         error={error}
-        showViewMore={hasMoreAllProducts && totalProducts > 0}
       />
     </main>
   );

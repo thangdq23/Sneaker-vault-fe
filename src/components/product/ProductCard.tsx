@@ -74,7 +74,7 @@ const ProductCard = ({ product }: ProductCardProps): React.JSX.Element => {
         <p className="mb-0.5 line-clamp-1 text-xs text-on-surface-variant">
           {product.brand}
         </p>
-        <h3 className="line-clamp-2 font-display text-[15px] font-semibold leading-snug text-on-surface sm:text-base">
+        <h3 className="line-clamp-2 h-[2.625rem] sm:h-[2.75rem] font-display text-[15px] font-semibold leading-snug text-on-surface sm:text-base overflow-hidden">
           {product.name}
         </h3>
         <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
@@ -88,7 +88,7 @@ const ProductCard = ({ product }: ProductCardProps): React.JSX.Element => {
               </p>
             </>
           ) : (
-            <p className="price-vnd text-sm font-bold text-on-surface sm:text-base">
+            <p className="price-vnd text-sm font-bold text-red-600 sm:text-base">
               {priceLabel}
             </p>
           )}

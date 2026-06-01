@@ -70,7 +70,9 @@ const ProductDetailPage = (): React.JSX.Element => {
         setAllProducts(productsRes.products);
         setSelectedImage(data.images?.[0] ?? "");
         const firstInStock = data.sizes?.find((s) => s.stock > 0);
-        setSelectedSize(firstInStock ? firstInStock.size : (data.sizes?.[0]?.size ?? null));
+        setSelectedSize(
+          firstInStock ? firstInStock.size : (data.sizes?.[0]?.size ?? null),
+        );
         setQuantity(1);
       } catch (error_) {
         const message =
@@ -97,7 +99,9 @@ const ProductDetailPage = (): React.JSX.Element => {
     }
     try {
       setIsAdding(true);
-      await dispatch(addCartItem({ productId: id!, size: selectedSize, quantity })).unwrap();
+      await dispatch(
+        addCartItem({ productId: id!, size: selectedSize, quantity }),
+      ).unwrap();
       alert("Đã thêm sản phẩm vào giỏ hàng!");
     } catch (err: any) {
       alert(err || "Lỗi khi thêm vào giỏ hàng.");
@@ -117,7 +121,9 @@ const ProductDetailPage = (): React.JSX.Element => {
     }
     try {
       setIsAdding(true);
-      await dispatch(addCartItem({ productId: id!, size: selectedSize, quantity })).unwrap();
+      await dispatch(
+        addCartItem({ productId: id!, size: selectedSize, quantity }),
+      ).unwrap();
       navigate("/cart");
     } catch (err: any) {
       alert(err || "Lỗi khi mua sản phẩm.");
@@ -218,7 +224,7 @@ const ProductDetailPage = (): React.JSX.Element => {
               <p className="text-sm font-medium text-on-surface-variant">
                 {product.brand}
               </p>
-              <h1 className="font-display text-3xl font-bold leading-tight tracking-tight text-balance text-on-surface sm:text-4xl md:text-[2.75rem]">
+              <h1 className="font-display text-2xl font-bold tracking-tight text-balance text-on-surface sm:text-8xl md:text-[2.2rem]">
                 {product.name}
               </h1>
               <ProductRating rating={5} />
@@ -235,7 +241,7 @@ const ProductDetailPage = (): React.JSX.Element => {
                   </span>
                 </>
               ) : (
-                <span className="price-vnd text-2xl font-bold text-on-surface sm:text-3xl">
+                <span className="price-vnd text-2xl font-bold text-red-600 sm:text-3xl">
                   {priceLabel}
                 </span>
               )}

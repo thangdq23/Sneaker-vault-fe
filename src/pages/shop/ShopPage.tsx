@@ -1,22 +1,34 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import ProductCard from "../../components/product/ProductCard";
 import { getProducts } from "../../services/productApi";
 import type { Product } from "../../types/product.type";
 import { formatVnd } from "../../utils/formatCurrency";
 
 const ShopPage = (): React.JSX.Element => {
+  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState<string>("");
-  const [brand, setBrand] = useState<string>("");
+  const [search, setSearch] = useState(() => searchParams.get("search") || "");
+  const [category, setCategory] = useState<string>(() => searchParams.get("category") || "");
+  const [brand, setBrand] = useState<string>(() => searchParams.get("brand") || "");
   const [maxPrice, setMaxPrice] = useState<number>(10000000);
-  const [sort, setSort] = useState("createdAt");
-  const [order, setOrder] = useState<"asc" | "desc">("desc");
-  const [isSaleOnly, setIsSaleOnly] = useState(false);
+  const [sort, setSort] = useState(() => searchParams.get("sort") || "createdAt");
+  const [order, setOrder] = useState<"asc" | "desc">(() => (searchParams.get("order") as "asc" | "desc") || "desc");
+  const [isSaleOnly, setIsSaleOnly] = useState(() => searchParams.get("sale") === "true");
   const [selectedSizes, setSelectedSizes] = useState<number[]>([]);
+
+  // Sync state with URL search params changes
+  useEffect(() => {
+    setSearch(searchParams.get("search") || "");
+    setCategory(searchParams.get("category") || "");
+    setBrand(searchParams.get("brand") || "");
+    setSort(searchParams.get("sort") || "createdAt");
+    setOrder((searchParams.get("order") as "asc" | "desc") || "desc");
+    setIsSaleOnly(searchParams.get("sale") === "true");
+  }, [searchParams]);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -178,7 +190,7 @@ const ShopPage = (): React.JSX.Element => {
                 { label: "Tất cả thương hiệu", value: "" },
                 { label: "Nike", value: "Nike" },
                 { label: "Adidas", value: "Adidas" },
-                { label: "New Balance", value: "New Balance" },
+                { label: "Puma", value: "Puma" },
                 { label: "Asics", value: "Asics" },
               ].map((item) => (
                 <label

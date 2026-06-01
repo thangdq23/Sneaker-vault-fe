@@ -6,14 +6,12 @@ interface HomeNewArrivalsSectionProps {
   products: Product[];
   isLoading: boolean;
   error: string | null;
-  showViewMore: boolean;
 }
 
 const HomeNewArrivalsSection = ({
   products,
   isLoading,
   error,
-  showViewMore,
 }: HomeNewArrivalsSectionProps): React.JSX.Element => {
   return (
     <section className="bg-background py-14">
@@ -32,7 +30,7 @@ const HomeNewArrivalsSection = ({
           isEmpty={products.length === 0}
           emptyMessage="Chưa có sản phẩm mới."
         >
-          <HomeProductGrid products={products} showViewMore={showViewMore} />
+          <HomeProductGrid products={products} />
         </HomeProductsStatus>
       </div>
     </section>
