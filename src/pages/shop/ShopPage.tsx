@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import Pagination from "../../components/common/Pagination";
 import ProductCard from "../../components/product/ProductCard";
 import { getProducts } from "../../services/productApi";
 import type { Product } from "../../types/product.type";
@@ -36,7 +37,6 @@ const ShopPage = (): React.JSX.Element => {
 
   const fetchFilteredProducts = async (
     currentPage: number,
-    append: boolean = false,
   ) => {
     setIsLoading(true);
     setError(null);
@@ -54,11 +54,7 @@ const ShopPage = (): React.JSX.Element => {
         limit: 12,
       });
 
-      if (append) {
-        setProducts((prev) => [...prev, ...res.products]);
-      } else {
-        setProducts(res.products);
-      }
+      setProducts(res.products);
       setTotalPages(res.totalPages);
       setTotalProducts(res.total);
     } catch (err: any) {
@@ -68,10 +64,9 @@ const ShopPage = (): React.JSX.Element => {
     }
   };
 
-  // Reset page to 1 and reload when filters change
+  // Reset page to 1 when filters change
   useEffect(() => {
     setPage(1);
-    void fetchFilteredProducts(1, false);
   }, [
     search,
     category,
@@ -83,18 +78,20 @@ const ShopPage = (): React.JSX.Element => {
     order,
   ]);
 
-  // Load more when page changes
+  // Fetch products when page or filters change
   useEffect(() => {
-    if (page > 1) {
-      void fetchFilteredProducts(page, true);
-    }
-  }, [page]);
-
-  const handleLoadMore = () => {
-    if (page < totalPages) {
-      setPage((prev) => prev + 1);
-    }
-  };
+    void fetchFilteredProducts(page);
+  }, [
+    page,
+    search,
+    category,
+    brand,
+    maxPrice,
+    isSaleOnly,
+    selectedSizes.join(","),
+    sort,
+    order,
+  ]);
 
   const handleSortChange = (value: string) => {
     if (value === "priceAsc") {
@@ -325,18 +322,15 @@ const ShopPage = (): React.JSX.Element => {
             </div>
           )}
 
-          {page < totalPages && (
-            <div className="mt-12 flex justify-center">
-              <button
-                type="button"
-                onClick={handleLoadMore}
-                disabled={isLoading}
-                className="btn btn-primary btn-pill px-8"
-              >
-                {isLoading ? "Đang tải..." : "Xem thêm"}
-              </button>
-            </div>
-          )}
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(p) => {
+              setPage(p);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            disabled={isLoading}
+          />
         </div>
       </div>
     </main>

@@ -9,8 +9,6 @@ const HomePage = (): React.JSX.Element => {
     isLoading,
     error,
     saleProducts,
-    newProducts,
-    allProductsPreview,
   } = useHomeProducts();
 
   return (
@@ -21,16 +19,8 @@ const HomePage = (): React.JSX.Element => {
         isLoading={isLoading}
         error={error}
       />
-      <HomeNewArrivalsSection
-        products={newProducts}
-        isLoading={isLoading}
-        error={error}
-      />
-      <HomeAllProductsSection
-        products={allProductsPreview}
-        isLoading={isLoading}
-        error={error}
-      />
+      <HomeNewArrivalsSection />
+      <HomeAllProductsSection />
     </main>
   );
 };

@@ -12,6 +12,7 @@ export interface ProductFilters {
   sort?: string;
   order?: string;
   isSale?: boolean;
+  isNewProduct?: boolean;
   "sizes.size"?: number | number[] | string | string[];
 }
 

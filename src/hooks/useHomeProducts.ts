@@ -29,36 +29,14 @@ export const useHomeProducts = () => {
     void loadProducts();
   }, []);
 
-  const newProducts = useMemo(
-    () => products.filter((product) => product.isNewProduct).slice(0, PREVIEW_LIMIT),
-    [products],
-  );
-
   const saleProducts = useMemo(
     () => products.filter((product) => product.isSale).slice(0, PREVIEW_LIMIT),
     [products],
   );
 
-  const allProductsPreview = useMemo(
-    () => products.slice(0, PREVIEW_LIMIT),
-    [products],
-  );
-
-  const hasMoreNewProducts = useMemo(
-    () => products.filter((product) => product.isNewProduct).length > PREVIEW_LIMIT,
-    [products],
-  );
-
-  const hasMoreAllProducts = products.length > PREVIEW_LIMIT;
-
   return {
     isLoading,
     error,
     saleProducts,
-    newProducts,
-    allProductsPreview,
-    hasMoreNewProducts,
-    hasMoreAllProducts,
-    totalProducts: products.length,
   };
 };
