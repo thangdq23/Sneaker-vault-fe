@@ -164,7 +164,7 @@ const ProductDetailPage = (): React.JSX.Element => {
 
   const relatedProducts = useMemo(() => {
     if (!product) return [];
-    return getRelatedProducts(product, allProducts, 4);
+    return getRelatedProducts(product, allProducts, 5);
   }, [product, allProducts]);
 
   if (isLoading) {
@@ -310,7 +310,7 @@ const ProductDetailPage = (): React.JSX.Element => {
             <p className="section-desc mb-6">
               Các mẫu cùng thương hiệu hoặc danh mục bạn có thể thích.
             </p>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
               {relatedProducts.map((related) => (
                 <ProductCard
                   key={related._id ?? related.id ?? related.name}

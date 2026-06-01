@@ -51,7 +51,7 @@ const ShopPage = (): React.JSX.Element => {
         sort,
         order,
         page: currentPage,
-        limit: 9,
+        limit: 12,
       });
 
       if (append) {
@@ -315,7 +315,7 @@ const ShopPage = (): React.JSX.Element => {
               Không tìm thấy sản phẩm nào khớp với bộ lọc của bạn.
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-gutter lg:grid-cols-3">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-gutter lg:grid-cols-4">
               {products.map((product) => (
                 <ProductCard
                   key={product._id ?? product.id ?? product.name}
