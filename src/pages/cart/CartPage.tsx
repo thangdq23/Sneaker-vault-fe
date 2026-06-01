@@ -111,7 +111,8 @@ const CartPage = () => {
               const price = hasSale ? product.salePrice! : product?.price ?? 0;
               const itemTotal = price * item.quantity;
               const img = product?.images?.[0] ?? "https://via.placeholder.com/150?text=Sneaker";
-              const stock = product?.stock ?? 10;
+              const sizeInfo = product?.sizes?.find((s) => s.size === item.size || Number(s.size) === Number(item.size));
+              const stock = sizeInfo ? sizeInfo.stock : (product?.stock ?? 10);
 
               return (
                 <div

@@ -1,3 +1,8 @@
+export interface ProductSizeInfo {
+  size: number | string;
+  stock: number;
+}
+
 export type Product = {
   _id?: string;
   id?: string;
@@ -7,7 +12,7 @@ export type Product = {
   price: number;
   description: string;
   images: string[];
-  sizes: string[];
+  sizes: ProductSizeInfo[];
   stock: number;
   isNewProduct: boolean;
   isSale: boolean;

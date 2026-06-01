@@ -69,7 +69,8 @@ const ProductDetailPage = (): React.JSX.Element => {
         setProduct(data);
         setAllProducts(productsRes.products);
         setSelectedImage(data.images?.[0] ?? "");
-        setSelectedSize(data.sizes?.[0] ?? null);
+        const firstInStock = data.sizes?.find((s) => s.stock > 0);
+        setSelectedSize(firstInStock ? firstInStock.size : (data.sizes?.[0]?.size ?? null));
         setQuantity(1);
       } catch (error_) {
         const message =
@@ -127,8 +128,14 @@ const ProductDetailPage = (): React.JSX.Element => {
 
   const maxQuantity = useMemo(() => {
     if (!product) return 1;
+    if (selectedSize !== null) {
+      const sizeInfo = product.sizes?.find((s) => s.size === selectedSize);
+      if (sizeInfo) {
+        return Math.max(1, sizeInfo.stock);
+      }
+    }
     return Math.max(1, product.stock);
-  }, [product]);
+  }, [product, selectedSize]);
 
   useEffect(() => {
     setQuantity((prev) => Math.min(prev, maxQuantity));
