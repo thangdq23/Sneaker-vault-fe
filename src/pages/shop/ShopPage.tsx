@@ -15,6 +15,8 @@ const ShopPage = (): React.JSX.Element => {
   const [maxPrice, setMaxPrice] = useState<number>(10000000);
   const [sort, setSort] = useState("createdAt");
   const [order, setOrder] = useState<"asc" | "desc">("desc");
+  const [isSaleOnly, setIsSaleOnly] = useState(false);
+  const [selectedSizes, setSelectedSizes] = useState<number[]>([]);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -32,6 +34,8 @@ const ShopPage = (): React.JSX.Element => {
         category: category || undefined,
         brand: brand || undefined,
         maxPrice: maxPrice || undefined,
+        isSale: isSaleOnly ? true : undefined,
+        "sizes.size": selectedSizes.length > 0 ? selectedSizes : undefined,
         sort,
         order,
         page: currentPage,
@@ -56,7 +60,16 @@ const ShopPage = (): React.JSX.Element => {
   useEffect(() => {
     setPage(1);
     void fetchFilteredProducts(1, false);
-  }, [search, category, brand, maxPrice, sort, order]);
+  }, [
+    search,
+    category,
+    brand,
+    maxPrice,
+    isSaleOnly,
+    selectedSizes.join(","),
+    sort,
+    order,
+  ]);
 
   // Load more when page changes
   useEffect(() => {
@@ -105,6 +118,25 @@ const ShopPage = (): React.JSX.Element => {
                 </span>
               </div>
             </div>
+          </section>
+
+          <section>
+            <h3 className="mb-3 text-sm font-bold text-on-surface">
+              Khuyến mãi
+            </h3>
+            <label className="group flex cursor-pointer items-center gap-3">
+              <input
+                className="rounded border-outline text-primary focus:ring-0 cursor-pointer h-4 w-4"
+                type="checkbox"
+                checked={isSaleOnly}
+                onChange={(e) => setIsSaleOnly(e.target.checked)}
+              />
+              <span
+                className={`text-sm leading-relaxed group-hover:text-primary ${isSaleOnly ? "font-semibold text-primary" : ""}`}
+              >
+                xem sản phẩm đang giảm giá
+              </span>
+            </label>
           </section>
 
           <section>
@@ -190,6 +222,46 @@ const ShopPage = (): React.JSX.Element => {
               </span>
             </div>
           </section>
+
+          <section>
+            <h3 className="mb-3 text-sm font-bold text-on-surface">Kích cỡ (Size)</h3>
+            <div className="max-h-32 overflow-y-auto pr-1 border border-outline-variant/20 rounded-xl p-2 bg-surface-container/20">
+              <div className="grid grid-cols-4 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedSizes([])}
+                  className={`rounded-lg border py-2 text-xs font-semibold smooth-transition cursor-pointer ${
+                    selectedSizes.length === 0
+                      ? "border-primary bg-primary text-on-primary"
+                      : "border-outline-variant bg-surface text-on-surface hover:border-primary"
+                  }`}
+                >
+                  Tất cả
+                </button>
+                {Array.from({ length: 11 }, (_, i) => 35 + i).map((size) => {
+                  const isSelected = selectedSizes.includes(size);
+                  return (
+                    <button
+                      key={size}
+                      type="button"
+                      onClick={() =>
+                        setSelectedSizes((prev) =>
+                          prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
+                        )
+                      }
+                      className={`rounded-lg border py-2 text-xs font-semibold smooth-transition cursor-pointer ${
+                        isSelected
+                          ? "border-primary bg-primary text-on-primary"
+                          : "border-outline-variant bg-surface text-on-surface hover:border-primary"
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
         </aside>
 
         <div className="min-w-0 grow">
@@ -203,6 +275,9 @@ const ShopPage = (): React.JSX.Element => {
             </div>
 
             <div className="flex items-center justify-between sm:justify-end gap-6">
+              <p className="text-sm text-on-surface-variant whitespace-nowrap">
+                {totalProducts} sản phẩm
+              </p>
               <select
                 aria-label="Sắp xếp sản phẩm"
                 onChange={(e) => handleSortChange(e.target.value)}

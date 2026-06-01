@@ -11,6 +11,8 @@ export interface ProductFilters {
   limit?: number;
   sort?: string;
   order?: string;
+  isSale?: boolean;
+  "sizes.size"?: number | number[] | string | string[];
 }
 
 export interface ProductsResponsePaginated {

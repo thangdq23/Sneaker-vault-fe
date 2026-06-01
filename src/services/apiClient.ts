@@ -7,9 +7,29 @@ const apiClient = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  paramsSerializer: {
+    serialize: (params) => {
+      const searchParams = new URLSearchParams();
+      for (const key in params) {
+        if (Object.prototype.hasOwnProperty.call(params, key)) {
+          const val = params[key];
+          if (val === undefined || val === null) {
+            continue;
+          }
+          if (Array.isArray(val)) {
+            for (const item of val) {
+              searchParams.append(key, String(item));
+            }
+          } else {
+            searchParams.append(key, String(val));
+          }
+        }
+      }
+      return searchParams.toString();
+    },
+  },
 });
 
-// Request interceptor for adding the token
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
