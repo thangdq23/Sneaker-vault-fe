@@ -53,11 +53,6 @@ const QuantitySelector = ({
           <span className="material-symbols-outlined text-[20px]">add</span>
         </button>
       </div>
-      {max > 0 ? (
-        <span className="text-xs text-on-surface-variant">
-          Tối đa {max}
-        </span>
-      ) : null}
     </div>
   );
 };

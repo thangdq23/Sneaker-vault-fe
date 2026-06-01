@@ -29,7 +29,11 @@ const CartPage = () => {
     void dispatch(updateCartItemQty({ itemId, quantity: currentQty - 1 }));
   };
 
-  const handleQtyIncrement = (itemId: string, currentQty: number, maxStock: number) => {
+  const handleQtyIncrement = (
+    itemId: string,
+    currentQty: number,
+    maxStock: number,
+  ) => {
     if (currentQty >= maxStock) {
       alert(`Chỉ còn ${maxStock} sản phẩm trong kho.`);
       return;
@@ -67,7 +71,7 @@ const CartPage = () => {
           <button
             type="button"
             onClick={handleClear}
-            className="btn btn-secondary text-error hover:bg-rose-50 border-outline-variant/30 btn-pill self-start sm:self-auto"
+            className="btn btn-secondary text-red-500! hover:bg-rose-50 border-outline-variant/30 btn-pill self-start sm:self-auto"
           >
             Làm trống giỏ hàng
           </button>
@@ -108,10 +112,17 @@ const CartPage = () => {
             {items.map((item) => {
               const product = item.product;
               const hasSale = product?.isSale && product?.salePrice != null;
-              const price = hasSale ? product.salePrice! : product?.price ?? 0;
+              const price = hasSale
+                ? product.salePrice!
+                : (product?.price ?? 0);
               const itemTotal = price * item.quantity;
-              const img = product?.images?.[0] ?? "https://via.placeholder.com/150?text=Sneaker";
-              const sizeInfo = product?.sizes?.find((s) => s.size === item.size || Number(s.size) === Number(item.size));
+              const img =
+                product?.images?.[0] ??
+                "https://via.placeholder.com/150?text=Sneaker";
+              const sizeInfo = product?.sizes?.find(
+                (s) =>
+                  s.size === item.size || Number(s.size) === Number(item.size),
+              );
               const stock = sizeInfo ? sizeInfo.stock : (product?.stock ?? 10);
 
               return (
@@ -132,12 +143,13 @@ const CartPage = () => {
                         {product?.name ?? "Sản phẩm Sneaker"}
                       </h3>
                       <p className="mt-1 text-xs leading-relaxed text-on-surface-variant sm:text-sm">
-                        Size: {item.size} | Thương hiệu: {product?.brand ?? "Sneaker Vault"}
+                        Size: {item.size} | Thương hiệu:{" "}
+                        {product?.brand ?? "Sneaker Vault"}
                       </p>
                       <button
                         type="button"
                         onClick={() => handleRemove(item._id)}
-                        className="mt-3 flex items-center gap-1 text-xs font-medium text-error hover:underline sm:text-sm cursor-pointer"
+                        className="mt-3 flex items-center gap-1 text-xs font-medium text-error hover:underline sm:text-sm cursor-pointer text-red-600"
                       >
                         <span className="material-symbols-outlined text-[18px]">
                           delete
@@ -149,16 +161,22 @@ const CartPage = () => {
                   <div className="flex w-full items-center justify-center gap-4 rounded-full bg-surface-container px-4 py-2 md:w-auto">
                     <button
                       type="button"
-                      onClick={() => handleQtyDecrement(item._id, item.quantity)}
+                      onClick={() =>
+                        handleQtyDecrement(item._id, item.quantity)
+                      }
                       disabled={item.quantity <= 1}
                       className="material-symbols-outlined text-on-surface-variant hover:text-on-surface cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                     >
                       remove
                     </button>
-                    <span className="w-6 text-center text-base font-bold">{item.quantity}</span>
+                    <span className="w-6 text-center text-base font-bold">
+                      {item.quantity}
+                    </span>
                     <button
                       type="button"
-                      onClick={() => handleQtyIncrement(item._id, item.quantity, stock)}
+                      onClick={() =>
+                        handleQtyIncrement(item._id, item.quantity, stock)
+                      }
                       className="material-symbols-outlined text-on-surface-variant hover:text-on-surface cursor-pointer"
                     >
                       add
@@ -198,12 +216,14 @@ const CartPage = () => {
                   </span>
                 </div>
                 <div className="flex justify-between gap-4">
-                  <span className="text-on-surface-variant">Phí vận chuyển</span>
+                  <span className="text-on-surface-variant">
+                    Phí vận chuyển
+                  </span>
                   <span className="font-semibold text-tertiary">Miễn phí</span>
                 </div>
                 <div className="flex justify-between gap-4 border-t border-outline-variant/30 pt-4">
                   <span className="font-bold text-on-surface">Tổng cộng</span>
-                  <span className="price-vnd text-lg font-bold text-on-surface">
+                  <span className="price-vnd text-lg font-bold text-on-surface text-red-600">
                     {formatVnd(totalPrice)}
                   </span>
                 </div>

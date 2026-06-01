@@ -9,7 +9,6 @@ const ShopPage = (): React.JSX.Element => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Filter States
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string>("");
   const [brand, setBrand] = useState<string>("");
@@ -17,12 +16,14 @@ const ShopPage = (): React.JSX.Element => {
   const [sort, setSort] = useState("createdAt");
   const [order, setOrder] = useState<"asc" | "desc">("desc");
 
-  // Pagination States
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
 
-  const fetchFilteredProducts = async (currentPage: number, append: boolean = false) => {
+  const fetchFilteredProducts = async (
+    currentPage: number,
+    append: boolean = false,
+  ) => {
     setIsLoading(true);
     setError(null);
     try {
@@ -86,9 +87,7 @@ const ShopPage = (): React.JSX.Element => {
   return (
     <main className="mx-auto max-w-container-max px-margin-mobile pb-16 pt-28 md:px-margin-desktop">
       <div className="flex flex-col gap-gutter lg:flex-row">
-        {/* Sidebar Filters */}
         <aside className="w-full shrink-0 space-y-8 lg:w-72">
-          {/* Search */}
           <section>
             <h3 className="mb-3 text-sm font-bold text-on-surface">Tìm kiếm</h3>
             <div className="relative">
@@ -100,13 +99,14 @@ const ShopPage = (): React.JSX.Element => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant">
-                search
-              </span>
+              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                <span className="material-symbols-outlined text-gray-400">
+                  search
+                </span>
+              </div>
             </div>
           </section>
 
-          {/* Gender / Category */}
           <section>
             <h3 className="mb-3 text-sm font-bold text-on-surface">Danh mục</h3>
             <div className="space-y-2.5">
@@ -127,7 +127,9 @@ const ShopPage = (): React.JSX.Element => {
                     checked={category === item.value}
                     onChange={() => setCategory(item.value)}
                   />
-                  <span className={`text-sm leading-relaxed group-hover:text-primary ${category === item.value ? "font-semibold text-primary" : ""}`}>
+                  <span
+                    className={`text-sm leading-relaxed group-hover:text-primary ${category === item.value ? "font-semibold text-primary" : ""}`}
+                  >
                     {item.label}
                   </span>
                 </label>
@@ -135,9 +137,10 @@ const ShopPage = (): React.JSX.Element => {
             </div>
           </section>
 
-          {/* Brand */}
           <section>
-            <h3 className="mb-3 text-sm font-bold text-on-surface">Thương hiệu</h3>
+            <h3 className="mb-3 text-sm font-bold text-on-surface">
+              Thương hiệu
+            </h3>
             <div className="space-y-2.5">
               {[
                 { label: "Tất cả thương hiệu", value: "" },
@@ -157,7 +160,9 @@ const ShopPage = (): React.JSX.Element => {
                     checked={brand === item.value}
                     onChange={() => setBrand(item.value)}
                   />
-                  <span className={`text-sm leading-relaxed group-hover:text-primary ${brand === item.value ? "font-semibold text-primary" : ""}`}>
+                  <span
+                    className={`text-sm leading-relaxed group-hover:text-primary ${brand === item.value ? "font-semibold text-primary" : ""}`}
+                  >
                     {item.label}
                   </span>
                 </label>
@@ -165,11 +170,12 @@ const ShopPage = (): React.JSX.Element => {
             </div>
           </section>
 
-          {/* Price Range */}
           <section>
-            <h3 className="mb-3 text-sm font-bold text-on-surface">Khoảng giá tối đa</h3>
+            <h3 className="mb-3 text-sm font-bold text-on-surface">
+              Khoảng giá tối đa
+            </h3>
             <input
-              className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-surface-container-highest accent-primary"
+              className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-gray-300 accent-gray-600"
               type="range"
               min="500000"
               max="15000000"
@@ -179,26 +185,24 @@ const ShopPage = (): React.JSX.Element => {
             />
             <div className="mt-3 flex justify-between text-xs text-on-surface-variant sm:text-sm">
               <span>500.000 ₫</span>
-              <span className="font-semibold text-primary">{formatVnd(maxPrice)}</span>
+              <span className="font-semibold text-primary">
+                {formatVnd(maxPrice)}
+              </span>
             </div>
           </section>
         </aside>
 
-        {/* Product Grid Area */}
         <div className="min-w-0 grow">
           <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h1 className="section-title text-primary">Cửa hàng sneaker</h1>
               <p className="section-desc">
-                Tìm kiếm và lựa chọn sneaker mới nhất với nhiều lựa chọn phong cách.
+                Tìm kiếm và lựa chọn sneaker mới nhất với nhiều lựa chọn phong
+                cách.
               </p>
             </div>
-            
-            {/* Sort Filter & Product Count */}
+
             <div className="flex items-center justify-between sm:justify-end gap-6">
-              <p className="text-sm text-on-surface-variant whitespace-nowrap">
-                {totalProducts} sản phẩm
-              </p>
               <select
                 aria-label="Sắp xếp sản phẩm"
                 onChange={(e) => handleSortChange(e.target.value)}

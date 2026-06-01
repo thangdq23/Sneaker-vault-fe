@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { fetchCartItems } from "../../../store/cartSlice";
@@ -38,13 +38,14 @@ const Header = () => {
       ? user.email.charAt(0).toUpperCase()
       : "U";
 
-  const cartCount = cart?.items?.reduce((acc, item) => acc + item.quantity, 0) ?? 0;
+  const cartCount =
+    cart?.items?.reduce((acc, item) => acc + item.quantity, 0) ?? 0;
 
   return (
     <nav className="fixed top-0 z-[100] w-full glass border-b border-black/5">
       <div className="mx-auto flex w-full max-w-container-max items-center justify-between gap-3 px-margin-mobile py-3 md:gap-4 md:px-margin-desktop md:py-4">
         <div className="flex min-w-0 flex-1 items-center gap-3 md:gap-6 lg:gap-10">
-          <Link
+          <NavLink
             to="/"
             className="flex shrink-0 items-center gap-2 font-display text-lg font-bold tracking-tight text-primary md:text-xl"
           >
@@ -52,18 +53,33 @@ const Header = () => {
               SV
             </span>
             <span className="hidden truncate sm:inline">SNEAKER VAULT</span>
-          </Link>
+          </NavLink>
 
           <div className="hidden min-w-0 items-center gap-4 overflow-x-auto no-scrollbar lg:flex lg:gap-6 xl:gap-8">
-            <Link to="/" className="nav-link nav-link-vi text-primary">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `nav-link nav-link-vi ${
+                  isActive
+                    ? "text-primary font-semibold border-b-2 border-primary"
+                    : "text-secondary hover:text-primary"
+                }`
+              }
+            >
               Trang chủ
-            </Link>
-            <Link
+            </NavLink>
+            <NavLink
               to="/shop"
-              className="nav-link nav-link-vi text-secondary hover:text-primary"
+              className={({ isActive }) =>
+                `nav-link nav-link-vi ${
+                  isActive
+                    ? "text-primary font-semibold border-b-2 border-primary"
+                    : "text-secondary hover:text-primary"
+                }`
+              }
             >
               Cửa hàng
-            </Link>
+            </NavLink>
             <a
               href="#"
               className="nav-link nav-link-vi text-secondary hover:text-primary"

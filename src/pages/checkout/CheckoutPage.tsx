@@ -69,7 +69,10 @@ const CheckoutPage = () => {
       setIsSuccess(true);
       void dispatch(clearCartItems());
     } catch (err: any) {
-      const message = err.response?.data?.message || err.message || "Đặt hàng thất bại. Vui lòng thử lại.";
+      const message =
+        err.response?.data?.message ||
+        err.message ||
+        "Đặt hàng thất bại. Vui lòng thử lại.";
       setError(message);
     } finally {
       setIsLoading(false);
@@ -90,24 +93,37 @@ const CheckoutPage = () => {
           </h1>
           <p className="text-sm text-on-surface-variant mb-6 leading-relaxed">
             Cảm ơn bạn đã mua sắm tại Sneaker Vault. Mã đơn hàng của bạn là{" "}
-            <span className="font-mono font-bold text-primary">#{createdOrder._id}</span>.
+            <span className="font-mono font-bold text-primary">
+              #{createdOrder._id}
+            </span>
+            .
           </p>
           <div className="space-y-3 mb-8 text-left text-sm border-t border-outline-variant/30 pt-6">
             <div className="flex justify-between">
               <span className="text-on-surface-variant">Tổng thanh toán:</span>
-              <span className="font-bold text-primary">{formatVnd(createdOrder.totalAmount)}</span>
+              <span className="font-bold text-primary">
+                {formatVnd(createdOrder.totalAmount)}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-on-surface-variant">Phương thức:</span>
-              <span className="font-semibold text-on-surface uppercase">{createdOrder.paymentMethod}</span>
+              <span className="font-semibold text-on-surface uppercase">
+                {createdOrder.paymentMethod}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-on-surface-variant">Số điện thoại:</span>
-              <span className="font-semibold text-on-surface">{createdOrder.phone}</span>
+              <span className="font-semibold text-on-surface">
+                {createdOrder.phone}
+              </span>
             </div>
             <div className="flex flex-col gap-1 border-t border-outline-variant/30 pt-3">
-              <span className="text-on-surface-variant">Địa chỉ nhận hàng:</span>
-              <span className="font-medium text-on-surface leading-relaxed">{createdOrder.shippingAddress}</span>
+              <span className="text-on-surface-variant">
+                Địa chỉ nhận hàng:
+              </span>
+              <span className="font-medium text-on-surface leading-relaxed">
+                {createdOrder.shippingAddress}
+              </span>
             </div>
           </div>
           <div className="flex flex-col gap-3">
@@ -138,11 +154,14 @@ const CheckoutPage = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 items-start gap-gutter lg:grid-cols-12">
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 items-start gap-gutter lg:grid-cols-12"
+      >
         <div className="space-y-10 lg:col-span-7">
           <section className="space-y-5">
             <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-on-surface text-sm font-bold text-surface">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-taupe-300 text-sm font-bold ">
                 1
               </span>
               <h2 className="text-lg font-bold leading-snug text-on-surface sm:text-xl">
@@ -209,7 +228,7 @@ const CheckoutPage = () => {
 
           <section className="space-y-5">
             <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-container-highest text-sm font-bold text-on-surface-variant">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-taupe-300 text-sm font-bold text-on-surface-variant">
                 2
               </span>
               <h2 className="text-lg font-bold leading-snug text-on-surface sm:text-xl">
@@ -242,7 +261,7 @@ const CheckoutPage = () => {
 
           <section className="space-y-5">
             <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-container-highest text-sm font-bold text-on-surface-variant">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-taupe-300 text-sm font-bold text-on-surface-variant">
                 3
               </span>
               <h2 className="text-lg font-bold leading-snug text-on-surface sm:text-xl">
@@ -254,10 +273,10 @@ const CheckoutPage = () => {
                 <button
                   type="button"
                   onClick={() => setPaymentMethod("cod")}
-                  className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 p-5 smooth-transition ${
+                  className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 p-5 transition-all ${
                     paymentMethod === "cod"
-                      ? "border-on-surface bg-on-surface text-surface"
-                      : "border-transparent bg-surface-container text-on-surface-variant hover:border-outline-variant"
+                      ? "border-black bg-gray-100 text-black"
+                      : "border-gray-200 bg-white text-gray-700 hover:border-gray-400"
                   }`}
                 >
                   <span className="material-symbols-outlined">payments</span>
@@ -268,10 +287,10 @@ const CheckoutPage = () => {
                 <button
                   type="button"
                   onClick={() => setPaymentMethod("card")}
-                  className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 p-5 smooth-transition ${
+                  className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 p-5 transition-all ${
                     paymentMethod === "card"
-                      ? "border-on-surface bg-on-surface text-surface"
-                      : "border-transparent bg-surface-container text-on-surface-variant hover:border-outline-variant"
+                      ? "border-black bg-gray-100 text-black"
+                      : "border-gray-200 bg-white text-gray-700 hover:border-gray-400"
                   }`}
                 >
                   <span className="material-symbols-outlined">credit_card</span>
@@ -307,7 +326,11 @@ const CheckoutPage = () => {
                     </div>
                     <div>
                       <label className="form-label">CVV</label>
-                      <input className="form-input" placeholder="123" type="text" />
+                      <input
+                        className="form-input"
+                        placeholder="123"
+                        type="text"
+                      />
                     </div>
                   </div>
                 </div>
@@ -325,8 +348,12 @@ const CheckoutPage = () => {
               {items.map((item) => {
                 const product = item.product;
                 const hasSale = product?.isSale && product?.salePrice != null;
-                const price = hasSale ? product.salePrice! : product?.price ?? 0;
-                const img = product?.images?.[0] ?? "https://via.placeholder.com/150?text=Sneaker";
+                const price = hasSale
+                  ? product.salePrice!
+                  : (product?.price ?? 0);
+                const img =
+                  product?.images?.[0] ??
+                  "https://via.placeholder.com/150?text=Sneaker";
 
                 return (
                   <div key={item._id} className="flex gap-3 sm:gap-4">
@@ -365,8 +392,10 @@ const CheckoutPage = () => {
               </div>
             </div>
             <div className="flex items-center justify-between gap-4 py-5">
-              <span className="text-lg font-bold text-on-surface">Tổng cộng</span>
-              <span className="price-vnd text-lg font-bold text-on-surface sm:text-xl">
+              <span className="text-lg font-bold text-on-surface">
+                Tổng cộng
+              </span>
+              <span className="price-vnd text-lg font-bold text-on-surface sm:text-xl text-red-600">
                 {formatVnd(totalPrice)}
               </span>
             </div>
@@ -376,7 +405,9 @@ const CheckoutPage = () => {
               className="btn btn-primary flex w-full items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {isLoading ? "Đang xử lý..." : "Hoàn tất thanh toán"}
-              {!isLoading && <span className="material-symbols-outlined">arrow_forward</span>}
+              {!isLoading && (
+                <span className="material-symbols-outlined">arrow_forward</span>
+              )}
             </button>
             <p className="mt-5 text-center text-xs leading-relaxed text-on-surface-variant sm:text-sm">
               Bằng việc nhấn hoàn tất thanh toán, bạn đồng ý với{" "}
