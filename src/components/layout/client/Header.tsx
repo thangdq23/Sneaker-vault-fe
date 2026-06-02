@@ -2,6 +2,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { fetchCartItems } from "../../../store/cartSlice";
+import logo from "../../../assets/logo-sv.png";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -42,16 +43,19 @@ const Header = () => {
     cart?.items?.reduce((acc, item) => acc + item.quantity, 0) ?? 0;
 
   return (
-    <nav className="fixed top-0 z-[100] w-full glass border-b border-black/5">
+    <nav className="fixed top-0 z-100 w-full glass border-b border-black/5">
       <div className="mx-auto flex w-full max-w-container-max items-center justify-between gap-3 px-margin-mobile py-3 md:gap-4 md:px-margin-desktop md:py-4">
         <div className="flex min-w-0 flex-1 items-center gap-3 md:gap-6 lg:gap-10">
           <NavLink
             to="/"
             className="flex shrink-0 items-center gap-2 font-display text-lg font-bold tracking-tight text-primary md:text-xl"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded bg-primary text-xs text-white">
-              SV
-            </span>
+            <img
+              src={logo}
+              alt="Sneaker Vault Logo"
+              className="h-8 w-8 object-contain"
+            />
+
             <span className="hidden truncate sm:inline">SNEAKER VAULT</span>
           </NavLink>
 
