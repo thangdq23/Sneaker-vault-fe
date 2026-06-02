@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useToast } from "../../contexts/ToastContext";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   fetchCartItems,
@@ -15,6 +16,7 @@ const CartPage = () => {
 
   const { token } = useAppSelector((state) => state.auth);
   const { cart, isLoading, error } = useAppSelector((state) => state.cart);
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (!token) {
@@ -41,15 +43,39 @@ const CartPage = () => {
     void dispatch(updateCartItemQty({ itemId, quantity: currentQty + 1 }));
   };
 
+  const [itemToRemove, setItemToRemove] = useState<string | null>(null);
+
   const handleRemove = (itemId: string) => {
-    if (window.confirm("Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?")) {
-      void dispatch(removeCartItemById(itemId));
+    setItemToRemove(itemId);
+  };
+
+  const confirmRemove = async () => {
+    if (itemToRemove) {
+      try {
+        await dispatch(removeCartItemById(itemToRemove)).unwrap();
+        showToast("Đã xóa sản phẩm khỏi giỏ hàng", "success");
+      } catch {
+        showToast("Không thể xóa sản phẩm", "error");
+      } finally {
+        setItemToRemove(null);
+      }
     }
   };
 
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+
   const handleClear = () => {
-    if (window.confirm("Bạn có chắc muốn xóa tất cả sản phẩm khỏi giỏ hàng?")) {
-      void dispatch(clearCartItems());
+    setShowClearConfirm(true);
+  };
+
+  const confirmClear = async () => {
+    try {
+      await dispatch(clearCartItems()).unwrap();
+      showToast("Đã xóa toàn bộ giỏ hàng", "success");
+    } catch {
+      showToast("Không thể xóa giỏ hàng", "error");
+    } finally {
+      setShowClearConfirm(false);
     }
   };
 
@@ -266,6 +292,64 @@ const CartPage = () => {
               </div>
             </div>
           </aside>
+        </div>
+      )}
+
+      {showClearConfirm && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl border border-outline-variant/20 animate-scale-up">
+            <h3 className="font-display text-lg font-bold text-on-surface mb-2">
+              Xóa toàn bộ giỏ hàng
+            </h3>
+            <p className="text-sm text-secondary mb-6">
+              Bạn có chắc chắn muốn xóa toàn bộ sản phẩm khỏi giỏ hàng của mình? Hành động này không thể hoàn tác.
+            </p>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setShowClearConfirm(false)}
+                className="btn btn-secondary flex-1 btn-pill text-sm cursor-pointer"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                onClick={confirmClear}
+                className="btn btn-primary flex-1 btn-pill bg-red-600 hover:bg-red-700 border-none text-white text-sm cursor-pointer"
+              >
+                Xác nhận xóa
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {itemToRemove && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl border border-outline-variant/20 animate-scale-up">
+            <h3 className="font-display text-lg font-bold text-on-surface mb-2">
+              Xóa sản phẩm khỏi giỏ
+            </h3>
+            <p className="text-sm text-secondary mb-6">
+              Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?
+            </p>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setItemToRemove(null)}
+                className="btn btn-secondary flex-1 btn-pill text-sm cursor-pointer"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                onClick={confirmRemove}
+                className="btn btn-primary flex-1 btn-pill bg-red-600 hover:bg-red-700 border-none text-white text-sm cursor-pointer"
+              >
+                Xác nhận xóa
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </main>

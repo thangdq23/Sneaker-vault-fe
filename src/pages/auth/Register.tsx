@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../../contexts/ToastContext";
 import { useAppDispatch } from "../../store/hooks";
 import { registerUser } from "../../store/authSlice";
 import type { RegisterRequest } from "../../types/auth.type";
@@ -11,6 +12,7 @@ import AuthFormLayout from "../../components/auth/AuthFormLayout";
 const Register = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { showToast } = useToast();
   const [form, setForm] = useState<RegisterRequest>({
     name: "",
     email: "",
@@ -20,9 +22,17 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const isValidEmail = (value: string) => /\S+@\S+\.\S+/.test(value);
-  const isValidName = (value: string) => value.trim().length >= 3;
-  const isValidPassword = (value: string) => value.trim().length >= 6;
+  const isValidName = (name: string) => name.trim().length >= 3;
+  const isValidEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const isValidPassword = (password: string) => {
+    return (
+      password.length >= 6 &&
+      /[A-Z]/.test(password) &&
+      /[a-z]/.test(password) &&
+      /[0-9]/.test(password)
+    );
+  };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -61,12 +71,15 @@ const Register = () => {
 
     try {
       setLoading(true);
-      const resultAction = await dispatch(registerUser({
-        ...form,
-        confirmPassword,
-      }));
-      
+      const resultAction = await dispatch(
+        registerUser({
+          ...form,
+          confirmPassword,
+        }),
+      );
+
       if (registerUser.fulfilled.match(resultAction)) {
+        showToast("Đăng ký thành công!", "success");
         const searchParams = new URLSearchParams(window.location.search);
         const redirectUrl = searchParams.get("redirect");
         navigate(redirectUrl || "/");

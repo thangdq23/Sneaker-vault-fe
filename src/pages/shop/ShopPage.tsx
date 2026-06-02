@@ -21,7 +21,6 @@ const ShopPage = (): React.JSX.Element => {
   const [isSaleOnly, setIsSaleOnly] = useState(() => searchParams.get("sale") === "true");
   const [selectedSizes, setSelectedSizes] = useState<number[]>([]);
 
-  // Sync state with URL search params changes
   useEffect(() => {
     setSearch(searchParams.get("search") || "");
     setCategory(searchParams.get("category") || "");
@@ -64,7 +63,6 @@ const ShopPage = (): React.JSX.Element => {
     }
   };
 
-  // Reset page to 1 when filters change
   useEffect(() => {
     setPage(1);
   }, [
@@ -78,7 +76,6 @@ const ShopPage = (): React.JSX.Element => {
     order,
   ]);
 
-  // Fetch products when page or filters change
   useEffect(() => {
     void fetchFilteredProducts(page);
   }, [

@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { logout, updateUserProfile } from "../../store/authSlice";
 import { resetCartState } from "../../store/cartSlice";
+import { useToast } from "../../contexts/ToastContext";
 import { getMyOrders } from "../../services/orderApi";
 import type { Order } from "../../types/order.type";
 import { formatVnd } from "../../utils/formatCurrency";
@@ -10,6 +11,7 @@ import { formatVnd } from "../../utils/formatCurrency";
 const ProfilePage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { showToast } = useToast();
 
   const { token, user, isLoading: authLoading } = useAppSelector((state) => state.auth);
   
@@ -47,9 +49,16 @@ const ProfilePage = () => {
     void loadOrders();
   }, [token, navigate, user]);
 
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
   const handleLogout = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const confirmLogout = () => {
     dispatch(logout());
     dispatch(resetCartState());
+    showToast("Đăng xuất thành công!", "success");
     navigate("/login");
   };
 
@@ -65,6 +74,7 @@ const ProfilePage = () => {
     try {
       const resultAction = await dispatch(updateUserProfile(newName.trim()));
       if (updateUserProfile.fulfilled.match(resultAction)) {
+        showToast("Cập nhật thông tin cá nhân thành công!", "success");
         setUpdateMsg({ type: "success", text: "Cập nhật thông tin cá nhân thành công!" });
         setIsEditing(false);
       } else {
@@ -295,6 +305,35 @@ const ProfilePage = () => {
           </div>
         </section>
       </div>
+
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl border border-outline-variant/20">
+            <h3 className="font-display text-lg font-bold text-on-surface mb-2">
+              Xác nhận đăng xuất
+            </h3>
+            <p className="text-sm text-secondary mb-6">
+              Bạn có chắc chắn muốn đăng xuất khỏi tài khoản của mình?
+            </p>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setShowLogoutConfirm(false)}
+                className="btn btn-secondary flex-1 btn-pill text-sm cursor-pointer"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                onClick={confirmLogout}
+                className="btn btn-primary flex-1 btn-pill bg-red-600 hover:bg-red-700 border-none text-white text-sm cursor-pointer"
+              >
+                Đăng xuất
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 };

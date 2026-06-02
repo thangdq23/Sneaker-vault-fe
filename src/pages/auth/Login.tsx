@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useToast } from "../../contexts/ToastContext";
 import { useAppDispatch } from "../../store/hooks";
 import { loginUser } from "../../store/authSlice";
 import type { LoginRequest } from "../../types/auth.type";
@@ -11,12 +12,13 @@ import AuthFormLayout from "../../components/auth/AuthFormLayout";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { showToast } = useToast();
   const [form, setForm] = useState<LoginRequest>({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const isValidEmail = (value: string) => /\S+@\S+\.\S+/.test(value);
-  const isValidPassword = (value: string) => value.trim().length >= 6;
+  const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const isValidPassword = (password: string) => password.length >= 6;
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [event.target.name]: event.target.value }));
@@ -40,6 +42,7 @@ const Login = () => {
       setLoading(true);
       const resultAction = await dispatch(loginUser(form));
       if (loginUser.fulfilled.match(resultAction)) {
+        showToast("Đăng nhập thành công!", "success");
         const searchParams = new URLSearchParams(window.location.search);
         const redirectUrl = searchParams.get("redirect");
         navigate(redirectUrl || "/");

@@ -13,6 +13,7 @@ import { formatVnd } from "../../utils/formatCurrency";
 import { getRelatedProducts } from "../../utils/getRelatedProducts";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { addCartItem } from "../../store/cartSlice";
+import { useToast } from "../../contexts/ToastContext";
 
 const getDiscountPercent = (product: Product): number | null => {
   if (!product.isSale) return null;
@@ -37,6 +38,7 @@ const ProductDetailPage = (): React.JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const token = useAppSelector((state) => state.auth.token);
+  const { showToast } = useToast();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -102,9 +104,9 @@ const ProductDetailPage = (): React.JSX.Element => {
       await dispatch(
         addCartItem({ productId: id!, size: selectedSize, quantity }),
       ).unwrap();
-      alert("Đã thêm sản phẩm vào giỏ hàng!");
+      showToast("Đã thêm sản phẩm vào giỏ hàng!", "success");
     } catch (err: any) {
-      alert(err || "Lỗi khi thêm vào giỏ hàng.");
+      showToast(err || "Lỗi khi thêm vào giỏ hàng.", "error");
     } finally {
       setIsAdding(false);
     }
@@ -116,7 +118,7 @@ const ProductDetailPage = (): React.JSX.Element => {
       return;
     }
     if (selectedSize === null) {
-      alert("Vui lòng chọn size giày.");
+      showToast("Vui lòng chọn size giày.", "error");
       return;
     }
     try {
@@ -124,9 +126,10 @@ const ProductDetailPage = (): React.JSX.Element => {
       await dispatch(
         addCartItem({ productId: id!, size: selectedSize, quantity }),
       ).unwrap();
+      showToast("Đã thêm sản phẩm vào giỏ hàng!", "success");
       navigate("/cart");
     } catch (err: any) {
-      alert(err || "Lỗi khi mua sản phẩm.");
+      showToast(err || "Lỗi khi mua sản phẩm.", "error");
     } finally {
       setIsAdding(false);
     }

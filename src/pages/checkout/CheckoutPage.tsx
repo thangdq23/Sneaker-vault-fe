@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { clearCartItems } from "../../store/cartSlice";
+import { useToast } from "../../contexts/ToastContext";
 import { createOrder } from "../../services/orderApi";
 import { formatVnd } from "../../utils/formatCurrency";
 
@@ -23,6 +24,7 @@ const CheckoutPage = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [createdOrder, setCreatedOrder] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   useEffect(() => {
     if (!token) {
@@ -67,6 +69,7 @@ const CheckoutPage = () => {
 
       setCreatedOrder(order);
       setIsSuccess(true);
+      showToast("Đặt hàng thành công!", "success");
       void dispatch(clearCartItems());
     } catch (err: any) {
       const message =
