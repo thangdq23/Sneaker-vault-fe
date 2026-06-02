@@ -24,21 +24,21 @@ const QuantitySelector = ({
 
   return (
     <div className="flex items-center gap-3">
-      <span className="text-sm font-semibold text-on-surface-variant">
+      <span className="text-xs font-bold text-on-surface-variant">
         Số lượng
       </span>
-      <div className="inline-flex items-center rounded-full border border-outline-variant/40 bg-surface-container">
+      <div className="inline-flex items-center rounded-full border border-outline-variant/40 bg-surface-container/60">
         <button
           type="button"
           onClick={decrease}
           disabled={atMin}
           aria-label="Giảm số lượng"
-          className="flex h-10 w-10 items-center justify-center rounded-l-full text-on-surface-variant transition hover:bg-surface-container-highest disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex h-8 w-8 items-center justify-center rounded-l-full text-on-surface-variant transition hover:bg-surface-container-highest disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
         >
-          <span className="material-symbols-outlined text-[20px]">remove</span>
+          <span className="material-symbols-outlined text-[16px]">remove</span>
         </button>
         <span
-          className="min-w-[2.5rem] px-2 text-center text-base font-bold text-on-surface"
+          className="min-w-[2rem] px-1.5 text-center text-sm font-bold text-on-surface"
           aria-live="polite"
         >
           {value}
@@ -48,9 +48,9 @@ const QuantitySelector = ({
           onClick={increase}
           disabled={atMax}
           aria-label="Tăng số lượng"
-          className="flex h-10 w-10 items-center justify-center rounded-r-full text-on-surface-variant transition hover:bg-surface-container-highest disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex h-8 w-8 items-center justify-center rounded-r-full text-on-surface-variant transition hover:bg-surface-container-highest disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
         >
-          <span className="material-symbols-outlined text-[20px]">add</span>
+          <span className="material-symbols-outlined text-[16px]">add</span>
         </button>
       </div>
     </div>

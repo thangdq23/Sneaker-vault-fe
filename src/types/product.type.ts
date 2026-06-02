@@ -14,6 +14,7 @@ export type Product = {
   images: string[];
   sizes: ProductSizeInfo[];
   stock: number;
+  sku: string;
   isNewProduct: boolean;
   isSale: boolean;
   salePrice?: number;
