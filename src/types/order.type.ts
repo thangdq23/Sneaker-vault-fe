@@ -10,6 +10,7 @@ export interface OrderItem {
 
 export interface Order {
   _id: string;
+  orderCode: string;
   user: string;
   items: OrderItem[];
   shippingAddress: string;

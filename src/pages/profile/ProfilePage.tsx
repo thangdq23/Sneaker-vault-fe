@@ -13,11 +13,18 @@ const ProfilePage = () => {
   const dispatch = useAppDispatch();
   const { showToast } = useToast();
 
-  const { token, user, isLoading: authLoading } = useAppSelector((state) => state.auth);
-  
+  const {
+    token,
+    user,
+    isLoading: authLoading,
+  } = useAppSelector((state) => state.auth);
+
   const [newName, setNewName] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-  const [updateMsg, setUpdateMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [updateMsg, setUpdateMsg] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
@@ -40,7 +47,11 @@ const ProfilePage = () => {
         const res = await getMyOrders();
         setOrders(res.data);
       } catch (err: any) {
-        setOrdersError(err.response?.data?.message || err.message || "Không thể tải danh sách đơn hàng.");
+        setOrdersError(
+          err.response?.data?.message ||
+            err.message ||
+            "Không thể tải danh sách đơn hàng.",
+        );
       } finally {
         setOrdersLoading(false);
       }
@@ -75,12 +86,17 @@ const ProfilePage = () => {
       const resultAction = await dispatch(updateUserProfile(newName.trim()));
       if (updateUserProfile.fulfilled.match(resultAction)) {
         showToast("Cập nhật thông tin cá nhân thành công!", "success");
-        setUpdateMsg({ type: "success", text: "Cập nhật thông tin cá nhân thành công!" });
+        setUpdateMsg({
+          type: "success",
+          text: "Cập nhật thông tin cá nhân thành công!",
+        });
         setIsEditing(false);
       } else {
         setUpdateMsg({
           type: "error",
-          text: (resultAction.payload as string) || "Cập nhật thất bại. Vui lòng thử lại.",
+          text:
+            (resultAction.payload as string) ||
+            "Cập nhật thất bại. Vui lòng thử lại.",
         });
       }
     } catch (err: any) {
@@ -131,11 +147,17 @@ const ProfilePage = () => {
         <aside className="lg:col-span-4 rounded-3xl border border-outline-variant/20 bg-surface-container p-6 shadow-sm text-center">
           <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-primary text-2xl font-bold text-white uppercase shadow-md">
             {user.name
-              ? user.name.split(" ").map((s) => s[0]).join("").slice(0, 2)
+              ? user.name
+                  .split(" ")
+                  .map((s) => s[0])
+                  .join("")
+                  .slice(0, 2)
               : user.email.charAt(0)}
           </div>
-          
-          <h2 className="font-display text-xl font-bold text-on-surface">{user.name}</h2>
+
+          <h2 className="font-display text-xl font-bold text-on-surface">
+            {user.name}
+          </h2>
           <p className="text-sm text-on-surface-variant mb-6">{user.email}</p>
           <span className="inline-block rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-bold text-primary uppercase mb-8">
             {user.role} Account
@@ -151,7 +173,10 @@ const ProfilePage = () => {
                 Chỉnh sửa tên
               </button>
             ) : (
-              <form onSubmit={handleUpdateProfile} className="space-y-3 text-left">
+              <form
+                onSubmit={handleUpdateProfile}
+                className="space-y-3 text-left"
+              >
                 <div>
                   <label className="form-label">Họ và tên mới</label>
                   <input
@@ -163,7 +188,9 @@ const ProfilePage = () => {
                   />
                 </div>
                 {updateMsg && (
-                  <p className={`text-xs font-semibold ${updateMsg.type === "success" ? "text-emerald-600" : "text-rose-600"}`}>
+                  <p
+                    className={`text-xs font-semibold ${updateMsg.type === "success" ? "text-emerald-600" : "text-rose-600"}`}
+                  >
                     {updateMsg.text}
                   </p>
                 )}
@@ -200,7 +227,6 @@ const ProfilePage = () => {
           </div>
         </aside>
 
-        {/* Right Area: Order History */}
         <section className="lg:col-span-8 space-y-6">
           <div className="rounded-3xl border border-outline-variant/20 bg-surface-container-lowest p-6 shadow-sm md:p-8">
             <h2 className="font-display text-xl font-bold text-on-surface mb-6">
@@ -220,7 +246,9 @@ const ProfilePage = () => {
                 <span className="material-symbols-outlined text-5xl text-outline-variant mb-3">
                   shopping_cart
                 </span>
-                <p className="font-medium text-base mb-1">Chưa có đơn hàng nào</p>
+                <p className="font-medium text-base mb-1">
+                  Chưa có đơn hàng nào
+                </p>
                 <p className="text-sm text-on-surface-variant mb-6">
                   Bạn chưa thực hiện bất kỳ đơn hàng nào tại cửa hàng.
                 </p>
@@ -242,7 +270,17 @@ const ProfilePage = () => {
                           Mã đơn hàng
                         </span>
                         <span className="font-mono text-sm font-bold text-primary">
-                          #{order._id}
+                          {order.orderCode}
+                        </span>
+                        <span className="block text-[11px] text-on-surface-variant/80 mt-0.5">
+                          Ngày đặt:{" "}
+                          {new Date(order.createdAt).toLocaleDateString(
+                            "vi-VN",
+                          )}{" "}
+                          {new Date(order.createdAt).toLocaleTimeString(
+                            "vi-VN",
+                            { hour: "2-digit", minute: "2-digit" },
+                          )}
                         </span>
                       </div>
                       <div className="flex flex-wrap gap-2">
@@ -251,7 +289,7 @@ const ProfilePage = () => {
                         </span>
                         <span
                           className={`inline-block rounded-full border px-2.5 py-0.5 text-xs font-bold leading-normal uppercase ${getStatusBadgeClass(
-                            order.status
+                            order.status,
                           )}`}
                         >
                           {getStatusText(order.status)}
@@ -259,13 +297,15 @@ const ProfilePage = () => {
                       </div>
                     </div>
 
-                    {/* Order Items */}
                     <div className="py-4 space-y-3">
                       {order.items?.map((item: any, idx) => {
-                        // Sometimes product can be ID string or fully populated product object. Let's handle both
                         const isPopulated = typeof item.product === "object";
-                        const productName = isPopulated ? item.product.name : `Sản phẩm #${item.product}`;
-                        const brand = isPopulated ? item.product.brand : "Sneaker Vault";
+                        const productName = isPopulated
+                          ? item.product.name
+                          : `Sản phẩm ${item.product}`;
+                        const brand = isPopulated
+                          ? item.product.brand
+                          : "Sneaker Vault";
 
                         return (
                           <div key={idx} className="flex items-center gap-3">
@@ -274,7 +314,8 @@ const ProfilePage = () => {
                                 {productName}
                               </h4>
                               <p className="text-xs text-on-surface-variant">
-                                Size: {item.size} | Thương hiệu: {brand} | Số lượng: {item.quantity}
+                                Size: {item.size} | Thương hiệu: {brand} | Số
+                                lượng: {item.quantity}
                               </p>
                             </div>
                             <span className="price-vnd text-sm font-bold text-on-surface whitespace-nowrap">
@@ -288,11 +329,17 @@ const ProfilePage = () => {
                     {/* Order Foot */}
                     <div className="flex flex-col gap-3 border-t border-outline-variant/30 pt-4 sm:flex-row sm:items-center sm:justify-between">
                       <div>
-                        <span className="block text-xs text-on-surface-variant">Giao tới:</span>
-                        <span className="text-xs font-medium text-on-surface line-clamp-1">{order.shippingAddress}</span>
+                        <span className="block text-xs text-on-surface-variant">
+                          Giao tới:
+                        </span>
+                        <span className="text-xs font-medium text-on-surface line-clamp-1">
+                          {order.shippingAddress}
+                        </span>
                       </div>
                       <div className="text-right sm:shrink-0">
-                        <span className="block text-xs text-on-surface-variant">Tổng tiền</span>
+                        <span className="block text-xs text-on-surface-variant">
+                          Tổng tiền
+                        </span>
                         <span className="price-vnd text-base font-bold text-primary sm:text-lg">
                           {formatVnd(order.totalAmount)}
                         </span>

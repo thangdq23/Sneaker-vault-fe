@@ -97,7 +97,7 @@ const CheckoutPage = () => {
           <p className="text-sm text-on-surface-variant mb-6 leading-relaxed">
             Cảm ơn bạn đã mua sắm tại Sneaker Vault. Mã đơn hàng của bạn là{" "}
             <span className="font-mono font-bold text-primary">
-              #{createdOrder._id}
+              {createdOrder.orderCode}
             </span>
             .
           </p>
