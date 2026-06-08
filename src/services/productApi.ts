@@ -77,3 +77,16 @@ export const deleteProduct = async (id: string): Promise<{ message: string }> =>
   const response = await apiClient.delete<{ message: string }>(`/products/${id}`);
   return response.data;
 };
+
+export const uploadProductImages = async (files: File[]): Promise<string[]> => {
+  const formData = new FormData();
+  files.forEach((file) => {
+    formData.append("images", file);
+  });
+  const response = await apiClient.post<{ urls: string[] }>("/products/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data.urls;
+};

@@ -45,7 +45,6 @@ const SizeGuideModal = ({
         className="w-full max-h-[90vh] overflow-y-auto rounded-2xl sm:rounded-3xl bg-surface-container p-4 sm:p-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* HEADER */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h2 className="text-lg sm:text-xl font-bold text-on-surface">
@@ -64,9 +63,7 @@ const SizeGuideModal = ({
           </button>
         </div>
 
-        {/* GRID TABLES */}
         <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-          {/* MALE */}
           <div>
             <h3 className="mb-3 text-base font-semibold text-on-surface">
               Bảng size giày nam
@@ -99,7 +96,6 @@ const SizeGuideModal = ({
             </div>
           </div>
 
-          {/* FEMALE */}
           <div>
             <h3 className="mb-3 text-base font-semibold text-on-surface">
               Bảng size giày nữ

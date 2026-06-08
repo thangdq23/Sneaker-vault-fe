@@ -46,7 +46,6 @@ const DashboardPage = (): React.JSX.Element => {
         <p className="text-sm text-secondary">Chào mừng bạn trở lại! Dưới đây là hoạt động bán hàng của cửa hàng hôm nay.</p>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, idx) => (
           <div key={idx} className="bg-white p-6 rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-md transition-shadow duration-300">
@@ -68,7 +67,6 @@ const DashboardPage = (): React.JSX.Element => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Recent Orders Table */}
         <div className="bg-white p-6 rounded-2xl border border-outline-variant/20 shadow-sm lg:col-span-2">
           <div className="flex justify-between items-center mb-6">
             <h2 className="font-display text-lg font-bold text-on-background">Đơn hàng gần đây</h2>
@@ -107,7 +105,6 @@ const DashboardPage = (): React.JSX.Element => {
           </div>
         </div>
 
-        {/* Quick Actions Panel */}
         <div className="bg-white p-6 rounded-2xl border border-outline-variant/20 shadow-sm flex flex-col justify-between">
           <div>
             <h2 className="font-display text-lg font-bold text-on-background mb-6">Thao tác nhanh</h2>
