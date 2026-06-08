@@ -3,7 +3,6 @@ import type { Product } from "../types/product.type";
 
 export interface ProductFilters {
   search?: string;
-  category?: string;
   brand?: string;
   minPrice?: number;
   maxPrice?: number;

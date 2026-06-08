@@ -19,20 +19,12 @@ export const getRelatedProducts = (
       product.brand.toLowerCase() === current.brand.toLowerCase(),
   );
 
-  const sameCategory = others.filter(
-    (product) =>
-      product.category.toLowerCase() === current.category.toLowerCase() &&
-      !sameBrand.some((p) => getProductId(p) === getProductId(product)),
-  );
-
-  const merged = [...sameBrand, ...sameCategory];
-
-  if (merged.length >= limit) {
-    return merged.slice(0, limit);
+  if (sameBrand.length >= limit) {
+    return sameBrand.slice(0, limit);
   }
 
-  const usedIds = new Set(merged.map(getProductId));
+  const usedIds = new Set(sameBrand.map(getProductId));
   const filler = others.filter((product) => !usedIds.has(getProductId(product)));
 
-  return [...merged, ...filler].slice(0, limit);
+  return [...sameBrand, ...filler].slice(0, limit);
 };

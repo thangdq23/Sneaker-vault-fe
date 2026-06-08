@@ -13,7 +13,6 @@ const ShopPage = (): React.JSX.Element => {
   const [error, setError] = useState<string | null>(null);
 
   const [search, setSearch] = useState(() => searchParams.get("search") || "");
-  const [category, setCategory] = useState<string>(() => searchParams.get("category") || "");
   const [brand, setBrand] = useState<string>(() => searchParams.get("brand") || "");
   const [maxPrice, setMaxPrice] = useState<number>(10000000);
   const [sort, setSort] = useState(() => searchParams.get("sort") || "createdAt");
@@ -23,7 +22,6 @@ const ShopPage = (): React.JSX.Element => {
 
   useEffect(() => {
     setSearch(searchParams.get("search") || "");
-    setCategory(searchParams.get("category") || "");
     setBrand(searchParams.get("brand") || "");
     setSort(searchParams.get("sort") || "createdAt");
     setOrder((searchParams.get("order") as "asc" | "desc") || "desc");
@@ -42,7 +40,6 @@ const ShopPage = (): React.JSX.Element => {
     try {
       const res = await getProducts({
         search: search.trim() || undefined,
-        category: category || undefined,
         brand: brand || undefined,
         maxPrice: maxPrice || undefined,
         isSale: isSaleOnly ? true : undefined,
@@ -67,7 +64,6 @@ const ShopPage = (): React.JSX.Element => {
     setPage(1);
   }, [
     search,
-    category,
     brand,
     maxPrice,
     isSaleOnly,
@@ -81,7 +77,6 @@ const ShopPage = (): React.JSX.Element => {
   }, [
     page,
     search,
-    category,
     brand,
     maxPrice,
     isSaleOnly,
@@ -145,35 +140,7 @@ const ShopPage = (): React.JSX.Element => {
             </label>
           </section>
 
-          <section>
-            <h3 className="mb-3 text-sm font-bold text-on-surface">Danh mục</h3>
-            <div className="space-y-2.5">
-              {[
-                { label: "Tất cả", value: "" },
-                { label: "Giày Sneaker", value: "sneakers" },
-                { label: "Chạy bộ", value: "running" },
-                { label: "Bóng rổ", value: "basketball" },
-              ].map((item) => (
-                <label
-                  key={item.label}
-                  className="group flex cursor-pointer items-center gap-3"
-                >
-                  <input
-                    className="rounded-full border-outline text-primary focus:ring-0 cursor-pointer h-4 w-4"
-                    type="radio"
-                    name="category"
-                    checked={category === item.value}
-                    onChange={() => setCategory(item.value)}
-                  />
-                  <span
-                    className={`text-sm leading-relaxed group-hover:text-primary ${category === item.value ? "font-semibold text-primary" : ""}`}
-                  >
-                    {item.label}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </section>
+
 
           <section>
             <h3 className="mb-3 text-sm font-bold text-on-surface">

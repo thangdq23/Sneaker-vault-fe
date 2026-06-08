@@ -12,7 +12,6 @@ const SideBar = () => {
   ];
 
   const disabledItems = [
-    { label: "Danh mục", icon: "category" },
     { label: "Thương hiệu", icon: "sell" },
     { label: "Đánh giá", icon: "rate_review" },
     { label: "Banners", icon: "ad_units" },
