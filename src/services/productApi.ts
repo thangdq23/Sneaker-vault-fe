@@ -12,6 +12,8 @@ export interface ProductFilters {
   order?: string;
   isSale?: boolean;
   isNewProduct?: boolean;
+  stockMin?: number;
+  stockMax?: number;
   "sizes.size"?: number | number[] | string | string[];
 }
 
