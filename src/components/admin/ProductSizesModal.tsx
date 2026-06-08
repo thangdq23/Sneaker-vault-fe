@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { createPortal } from "react-dom";
 import type { Product } from "../../types/product.type";
 
 interface ProductSizesModalProps {
@@ -12,6 +13,17 @@ const ProductSizesModal = ({
   onClose,
   product,
 }: ProductSizesModalProps): React.JSX.Element | null => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   if (!isOpen || !product) return null;
 
   const availableSizes = Array.from({ length: 11 }, (_, i) => 35 + i); // 35 to 45
@@ -23,8 +35,8 @@ const ProductSizesModal = ({
     });
   }
 
-  return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+  return createPortal(
+    <div className="fixed inset-0 bg-zinc-950/50 backdrop-blur-[3px] z-50 flex items-center justify-center p-4 overflow-y-auto">
       <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden border border-outline-variant/10 flex flex-col animate-fade-in-up font-body">
         <div className="px-6 py-5 border-b border-outline-variant/20 flex justify-between items-center bg-surface-container-low">
           <div>
@@ -95,7 +107,8 @@ const ProductSizesModal = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

@@ -28,7 +28,7 @@ const ProductForm = ({
   const [brand, setBrand] = useState("");
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
-  
+
   const [imagesList, setImagesList] = useState<ImageItem[]>([]);
   const [thumbnailId, setThumbnailId] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -51,7 +51,7 @@ const ProductForm = ({
       setBrand(product.brand || "");
       setPrice(product.price || 0);
       setDescription(product.description || "");
-      
+
       const initialImages = (product.images || []).map((url, idx) => ({
         id: `existing-${idx}-${url}`,
         url,
@@ -185,7 +185,7 @@ const ProductForm = ({
         URL.revokeObjectURL(itemToDelete.url);
       }
       const filtered = prev.filter((item) => item.id !== idToDelete);
-      
+
       if (thumbnailId === idToDelete) {
         if (filtered.length > 0) {
           setThumbnailId(filtered[0].id);
@@ -254,11 +254,15 @@ const ProductForm = ({
         }
       });
 
-      const thumbItemIndex = imagesList.findIndex((item) => item.id === thumbnailId);
+      const thumbItemIndex = imagesList.findIndex(
+        (item) => item.id === thumbnailId,
+      );
       let finalUrls = combinedUrls;
       if (thumbItemIndex !== -1) {
         const thumbnailUrl = combinedUrls[thumbItemIndex];
-        const restUrls = combinedUrls.filter((_, idx) => idx !== thumbItemIndex);
+        const restUrls = combinedUrls.filter(
+          (_, idx) => idx !== thumbItemIndex,
+        );
         finalUrls = [thumbnailUrl, ...restUrls];
       }
 
@@ -305,7 +309,9 @@ const ProductForm = ({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="md:col-span-2">
-            <label className="form-label font-semibold text-on-background">Tên sản phẩm *</label>
+            <label className="form-label font-semibold text-on-background">
+              Tên sản phẩm *
+            </label>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -317,17 +323,24 @@ const ProductForm = ({
             />
           </div>
           <div>
-            <label className="form-label font-semibold text-on-background">Mã SKU</label>
+            <label className="form-label font-semibold text-on-background">
+              Giá gốc (₫) *
+            </label>
             <input
-              value={product ? sku : ""}
-              disabled
-              placeholder="Tự động phát sinh"
-              className="form-input text-sm font-mono uppercase bg-zinc-50 border-zinc-200 text-zinc-400 cursor-not-allowed mt-1.5"
-              type="text"
+              value={price === 0 ? "" : price}
+              onChange={(e) => setPrice(Number(e.target.value))}
+              placeholder="Nhập giá bán gốc..."
+              className="form-input text-sm mt-1.5"
+              type="number"
+              min="0"
+              required
+              disabled={loading}
             />
           </div>
           <div>
-            <label className="form-label font-semibold text-on-background">Thương hiệu *</label>
+            <label className="form-label font-semibold text-on-background">
+              Thương hiệu *
+            </label>
             <select
               value={brand}
               onChange={(e) => setBrand(e.target.value)}
@@ -342,19 +355,6 @@ const ProductForm = ({
                 </option>
               ))}
             </select>
-          </div>
-          <div>
-            <label className="form-label font-semibold text-on-background">Giá gốc (₫) *</label>
-            <input
-              value={price === 0 ? "" : price}
-              onChange={(e) => setPrice(Number(e.target.value))}
-              placeholder="Nhập giá bán gốc..."
-              className="form-input text-sm mt-1.5"
-              type="number"
-              min="0"
-              required
-              disabled={loading}
-            />
           </div>
 
           <div className="md:col-span-2 space-y-3">
@@ -410,8 +410,10 @@ const ProductForm = ({
         </div>
 
         <div className="space-y-3">
-          <label className="form-label font-bold text-on-background">Ảnh sản phẩm *</label>
-          
+          <label className="form-label font-bold text-on-background">
+            Ảnh sản phẩm *
+          </label>
+
           <div
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
@@ -421,7 +423,9 @@ const ProductForm = ({
                 ? "border-primary bg-primary/[0.02] scale-[0.99] shadow-inner"
                 : "border-outline-variant/40 hover:border-outline-variant/80"
             } ${loading ? "opacity-50 pointer-events-none" : ""}`}
-            onClick={() => !loading && document.getElementById("file-upload-input")?.click()}
+            onClick={() =>
+              !loading && document.getElementById("file-upload-input")?.click()
+            }
           >
             <input
               id="file-upload-input"
@@ -443,8 +447,12 @@ const ProductForm = ({
               >
                 Chọn ảnh
               </button>
-              <span className="text-xs text-secondary mt-1">hoặc kéo thả ảnh vào đây</span>
-              <span className="text-[10px] text-secondary/60 mt-1">Chấp nhận JPG, PNG, WEBP (Tối đa 5MB/ảnh)</span>
+              <span className="text-xs text-secondary mt-1">
+                hoặc kéo thả ảnh vào đây
+              </span>
+              <span className="text-[10px] text-secondary/60 mt-1">
+                Chấp nhận JPG, PNG, WEBP (Tối đa 5MB/ảnh)
+              </span>
             </div>
           </div>
 
@@ -466,10 +474,12 @@ const ProductForm = ({
                       alt="Preview"
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                    
+
                     {isThumbnail ? (
                       <span className="absolute top-2 left-2 px-2 py-0.5 bg-primary text-white text-[10px] font-bold rounded-full shadow-sm flex items-center gap-1 z-10">
-                        <span className="material-symbols-outlined text-[10px]">star</span>
+                        <span className="material-symbols-outlined text-[10px]">
+                          star
+                        </span>
                         Ảnh chính
                       </span>
                     ) : (
@@ -496,7 +506,9 @@ const ProductForm = ({
                       className="absolute top-2 right-2 p-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-all cursor-pointer flex items-center justify-center z-10 disabled:opacity-0"
                       title="Xóa ảnh"
                     >
-                      <span className="material-symbols-outlined text-xs">close</span>
+                      <span className="material-symbols-outlined text-xs">
+                        close
+                      </span>
                     </button>
                   </div>
                 );
@@ -506,7 +518,9 @@ const ProductForm = ({
         </div>
 
         <div>
-          <label className="form-label font-semibold text-on-background">Mô tả sản phẩm</label>
+          <label className="form-label font-semibold text-on-background">
+            Mô tả sản phẩm
+          </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -542,7 +556,9 @@ const ProductForm = ({
 
         {isSale && (
           <div className="animate-fade-in-up">
-            <label className="form-label font-semibold text-on-background">Giá khuyến mãi (₫) *</label>
+            <label className="form-label font-semibold text-on-background">
+              Giá khuyến mãi (₫) *
+            </label>
             <input
               value={salePrice === 0 ? "" : salePrice}
               onChange={(e) => setSalePrice(Number(e.target.value))}
