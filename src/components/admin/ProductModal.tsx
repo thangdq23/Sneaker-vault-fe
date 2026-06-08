@@ -15,16 +15,19 @@ const ProductModal = ({
   product,
   onSave,
 }: ProductModalProps): React.JSX.Element | null => {
+  const AVAILABLE_SIZES = Array.from({ length: 11 }, (_, i) => 35 + i); // 35 to 45
+
   const [name, setName] = useState("");
   const [sku, setSku] = useState("");
   const [brand, setBrand] = useState("");
   const [price, setPrice] = useState(0);
-  const [stock, setStock] = useState(0);
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [isSale, setIsSale] = useState(false);
   const [salePrice, setSalePrice] = useState(0);
   const [isNewProduct, setIsNewProduct] = useState(true);
+
+  const [sizes, setSizes] = useState<{ size: number; stock: number }[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +40,6 @@ const ProductModal = ({
         setSku(product.sku || "");
         setBrand(product.brand || "");
         setPrice(product.price || 0);
-        setStock(product.stock || 0);
         setDescription(product.description || "");
         setImageUrl(product.images ? product.images.join(", ") : "");
         setIsSale(product.isSale || false);
@@ -45,22 +47,49 @@ const ProductModal = ({
         setIsNewProduct(
           product.isNewProduct !== undefined ? product.isNewProduct : true,
         );
+
+        if (product.sizes) {
+          setSizes(
+            product.sizes.map((s) => ({
+              size: Number(s.size),
+              stock: s.stock,
+            })),
+          );
+        } else {
+          setSizes([]);
+        }
       } else {
         setName("");
         setSku("");
         setBrand("");
         setPrice(0);
-        setStock(0);
         setDescription("");
         setImageUrl("");
         setIsSale(false);
         setSalePrice(0);
         setIsNewProduct(true);
+        setSizes([]);
       }
     }
   }, [isOpen, product]);
 
   if (!isOpen) return null;
+
+  const handleSizeToggle = (size: number, checked: boolean) => {
+    if (checked) {
+      setSizes((prev) => [...prev, { size, stock: 0 }]);
+    } else {
+      setSizes((prev) => prev.filter((s) => s.size !== size));
+    }
+  };
+
+  const handleSizeStockChange = (size: number, value: number) => {
+    setSizes((prev) =>
+      prev.map((s) =>
+        s.size === size ? { ...s, stock: Math.max(0, value) } : s,
+      ),
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,7 +99,12 @@ const ProductModal = ({
     if (!sku.trim()) return setError("Mã SKU không được để trống.");
     if (!brand) return setError("Vui lòng chọn thương hiệu.");
     if (price <= 0) return setError("Giá sản phẩm phải lớn hơn 0.");
-    if (stock < 0) return setError("Số lượng tồn kho không được nhỏ hơn 0.");
+
+    if (sizes.length === 0) {
+      return setError(
+        "Vui lòng chọn và điền tồn kho cho ít nhất một kích cỡ (size).",
+      );
+    }
 
     if (isSale) {
       if (salePrice <= 0) {
@@ -80,6 +114,8 @@ const ProductModal = ({
         return setError("Giá khuyến mãi phải nhỏ hơn giá gốc.");
       }
     }
+
+    const calculatedTotalStock = sizes.reduce((sum, s) => sum + s.stock, 0);
 
     const imagesArray = imageUrl
       .split(",")
@@ -91,13 +127,13 @@ const ProductModal = ({
       sku: sku.trim().toUpperCase(),
       brand: brand.trim(),
       price: Number(price),
-      stock: Number(stock),
+      stock: calculatedTotalStock,
       description: description.trim(),
       images: imagesArray,
       isSale,
       salePrice: isSale ? Number(salePrice) : undefined,
       isNewProduct,
-      sizes: product?.sizes || [{ size: "40", stock: Number(stock) }],
+      sizes: sizes.map((s) => ({ size: Number(s.size), stock: s.stock })),
     };
 
     try {
@@ -193,17 +229,54 @@ const ProductModal = ({
                 required
               />
             </div>
-            <div>
-              <label className="form-label">Tồn kho (đôi) *</label>
-              <input
-                value={stock === 0 ? "" : stock}
-                onChange={(e) => setStock(Number(e.target.value))}
-                placeholder="Nhập số lượng nhập..."
-                className="form-input text-sm"
-                type="number"
-                min="0"
-                required
-              />
+
+            <div className="md:col-span-2 space-y-3">
+              <label className="form-label font-bold text-on-background">
+                Kích cỡ & Số lượng tồn kho *
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {AVAILABLE_SIZES.map((size) => {
+                  const sizeInfo = sizes.find((s) => Number(s.size) === size);
+                  const isChecked = !!sizeInfo;
+                  const stockValue = sizeInfo ? sizeInfo.stock : 0;
+
+                  return (
+                    <div
+                      key={size}
+                      className={`flex items-center justify-between p-3.5 rounded-xl border transition-all ${
+                        isChecked
+                          ? "border-primary bg-primary/[0.03] shadow-sm"
+                          : "border-outline-variant/30 bg-surface hover:border-outline-variant/60"
+                      }`}
+                    >
+                      <label className="flex items-center gap-2 text-sm font-semibold text-on-background cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={(e) =>
+                            handleSizeToggle(size, e.target.checked)
+                          }
+                          className="rounded text-primary focus:ring-primary h-4 w-4 cursor-pointer"
+                        />
+                        Size {size}
+                      </label>
+                      {isChecked && (
+                        <input
+                          type="number"
+                          min="0"
+                          value={stockValue === 0 ? "" : stockValue}
+                          onChange={(e) =>
+                            handleSizeStockChange(size, Number(e.target.value))
+                          }
+                          placeholder="SL"
+                          className="w-16 px-2 py-1 text-center bg-white border border-outline-variant/50 rounded-lg text-sm focus:outline-none focus:border-primary font-mono"
+                          required
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
 

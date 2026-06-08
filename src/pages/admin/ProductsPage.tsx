@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useToast } from "../../contexts/ToastContext";
-import { getProducts, createProduct, updateProduct, deleteProduct } from "../../services/productApi";
+import {
+  getProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from "../../services/productApi";
 import type { Product } from "../../types/product.type";
 import ProductFilterBar from "../../components/admin/ProductFilterBar";
 import ProductListTable from "../../components/admin/ProductListTable";
 import ProductModal from "../../components/admin/ProductModal";
+import ProductSizesModal from "../../components/admin/ProductSizesModal";
 import Pagination from "../../components/common/Pagination";
 
 const ProductsPage = (): React.JSX.Element => {
@@ -23,10 +29,14 @@ const ProductsPage = (): React.JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
+  const [isSizesModalOpen, setIsSizesModalOpen] = useState(false);
+  const [selectedProductForSizes, setSelectedProductForSizes] =
+    useState<Product | null>(null);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
-      setPage(1); 
+      setPage(1);
     }, 400);
 
     return () => clearTimeout(timer);
@@ -73,7 +83,10 @@ const ProductsPage = (): React.JSX.Element => {
           fetchProducts();
         }
       } catch (error: any) {
-        showToast(error.response?.data?.message || "Không thể xóa sản phẩm.", "error");
+        showToast(
+          error.response?.data?.message || "Không thể xóa sản phẩm.",
+          "error",
+        );
       }
     }
   };
@@ -86,6 +99,11 @@ const ProductsPage = (): React.JSX.Element => {
   const handleEditClick = (product: Product) => {
     setEditingProduct(product);
     setIsModalOpen(true);
+  };
+
+  const handleShowSizesClick = (product: Product) => {
+    setSelectedProductForSizes(product);
+    setIsSizesModalOpen(true);
   };
 
   const handleSave = async (productData: Partial<Product>) => {
@@ -106,8 +124,12 @@ const ProductsPage = (): React.JSX.Element => {
     <div className="space-y-6 animate-fade-in-up font-body">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-bold text-on-background">Quản lý sản phẩm</h1>
-          <p className="text-sm text-secondary">Xem, thêm mới, sửa đổi thông tin các mẫu giày trong cửa hàng.</p>
+          <h1 className="font-display text-2xl font-bold text-on-background">
+            Quản lý sản phẩm
+          </h1>
+          <p className="text-sm text-secondary">
+            Xem, thêm mới, sửa đổi thông tin các mẫu giày trong cửa hàng.
+          </p>
         </div>
         <button
           onClick={handleAddClick}
@@ -128,12 +150,12 @@ const ProductsPage = (): React.JSX.Element => {
         }}
       />
 
-      {/* Main Table grid */}
       <ProductListTable
         products={products}
         isLoading={isLoading}
         onEdit={handleEditClick}
         onDelete={handleDelete}
+        onShowSizes={handleShowSizesClick}
       />
 
       {!isLoading && (
@@ -149,6 +171,12 @@ const ProductsPage = (): React.JSX.Element => {
         onClose={() => setIsModalOpen(false)}
         product={editingProduct}
         onSave={handleSave}
+      />
+
+      <ProductSizesModal
+        isOpen={isSizesModalOpen}
+        onClose={() => setIsSizesModalOpen(false)}
+        product={selectedProductForSizes}
       />
     </div>
   );

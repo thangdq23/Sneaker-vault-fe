@@ -6,6 +6,7 @@ interface ProductListTableProps {
   isLoading: boolean;
   onEdit: (product: Product) => void;
   onDelete: (id: string) => void;
+  onShowSizes: (product: Product) => void;
 }
 
 const ProductListTable = ({
@@ -13,6 +14,7 @@ const ProductListTable = ({
   isLoading,
   onEdit,
   onDelete,
+  onShowSizes,
 }: ProductListTableProps): React.JSX.Element => {
   const formatPrice = (value: number) => {
     return value.toLocaleString("vi-VN") + " ₫";
@@ -31,14 +33,14 @@ const ProductListTable = ({
       return (
         <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100 flex items-center gap-1 w-fit">
           <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-          Sắp hết ({stock} đôi)
+          Sắp hết
         </span>
       );
     }
     return (
       <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center gap-1 w-fit">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-        Còn hàng ({stock} đôi)
+        Còn hàng
       </span>
     );
   };
@@ -163,7 +165,19 @@ const ProductListTable = ({
                       </span>
                     )}
                   </td>
-                  <td className="py-4 px-6">{getStockBadge(product.stock)}</td>
+                  <td className="py-4 px-6">
+                    <div className="flex items-center gap-2">
+                      {getStockBadge(product.stock)}
+                      <button
+                        onClick={() => onShowSizes(product)}
+                        className="p-1 hover:bg-surface-container-high rounded-lg text-secondary hover:text-primary transition-all cursor-pointer flex items-center"
+                        title="Xem chi tiết size"
+                        type="button"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">info</span>
+                      </button>
+                    </div>
+                  </td>
                   <td className="py-4 px-6">
                     <div className="flex items-center justify-center gap-2">
                       <button
