@@ -13,7 +13,6 @@ const ProductsPage = (): React.JSX.Element => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Search, Filters & Pagination state
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [sortValue, setSortValue] = useState("createdAt-desc");
@@ -21,21 +20,18 @@ const ProductsPage = (): React.JSX.Element => {
   const [totalPages, setTotalPages] = useState(1);
   const limit = 8;
 
-  // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
-  // Debounce search query
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
-      setPage(1); // Reset to first page on search
+      setPage(1); 
     }, 400);
 
     return () => clearTimeout(timer);
   }, [search]);
 
-  // Fetch products lists
   const fetchProducts = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -62,18 +58,15 @@ const ProductsPage = (): React.JSX.Element => {
     fetchProducts();
   }, [fetchProducts]);
 
-  // Handle pagination changes
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
 
-  // Delete product action
   const handleDelete = async (id: string) => {
     if (window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
       try {
         await deleteProduct(id);
         showToast("Xóa sản phẩm thành công!", "success");
-        // Reload list
         if (products.length === 1 && page > 1) {
           setPage((prev) => prev - 1);
         } else {
@@ -85,19 +78,16 @@ const ProductsPage = (): React.JSX.Element => {
     }
   };
 
-  // Add product click trigger
   const handleAddClick = () => {
     setEditingProduct(null);
     setIsModalOpen(true);
   };
 
-  // Edit product click trigger
   const handleEditClick = (product: Product) => {
     setEditingProduct(product);
     setIsModalOpen(true);
   };
 
-  // Save product (Insert or Edit) callback
   const handleSave = async (productData: Partial<Product>) => {
     if (editingProduct) {
       const id = editingProduct._id || editingProduct.id;
@@ -128,7 +118,6 @@ const ProductsPage = (): React.JSX.Element => {
         </button>
       </div>
 
-      {/* Filter and search bar */}
       <ProductFilterBar
         search={search}
         onSearchChange={setSearch}
@@ -147,7 +136,6 @@ const ProductsPage = (): React.JSX.Element => {
         onDelete={handleDelete}
       />
 
-      {/* Pagination control */}
       {!isLoading && (
         <Pagination
           currentPage={page}
@@ -156,7 +144,6 @@ const ProductsPage = (): React.JSX.Element => {
         />
       )}
 
-      {/* Create / Edit Modal popup */}
       <ProductModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

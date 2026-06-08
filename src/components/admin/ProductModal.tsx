@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import type { Product } from "../../types/product.type";
+import { BRANDS } from "../../utils/constants";
 
 interface ProductModalProps {
   isOpen: boolean;
@@ -28,7 +29,6 @@ const ProductModal = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Sync form state when product changes or modal opens
   useEffect(() => {
     if (isOpen) {
       setError(null);
@@ -42,7 +42,9 @@ const ProductModal = ({
         setImageUrl(product.images ? product.images.join(", ") : "");
         setIsSale(product.isSale || false);
         setSalePrice(product.salePrice || 0);
-        setIsNewProduct(product.isNewProduct !== undefined ? product.isNewProduct : true);
+        setIsNewProduct(
+          product.isNewProduct !== undefined ? product.isNewProduct : true,
+        );
       } else {
         setName("");
         setSku("");
@@ -64,10 +66,9 @@ const ProductModal = ({
     e.preventDefault();
     setError(null);
 
-    // Validation
     if (!name.trim()) return setError("Tên sản phẩm không được để trống.");
     if (!sku.trim()) return setError("Mã SKU không được để trống.");
-    if (!brand.trim()) return setError("Thương hiệu không được để trống.");
+    if (!brand) return setError("Vui lòng chọn thương hiệu.");
     if (price <= 0) return setError("Giá sản phẩm phải lớn hơn 0.");
     if (stock < 0) return setError("Số lượng tồn kho không được nhỏ hơn 0.");
 
@@ -104,7 +105,11 @@ const ProductModal = ({
       await onSave(productPayload);
       onClose();
     } catch (err: any) {
-      setError(err.response?.data?.message || err.message || "Đã xảy ra lỗi khi lưu sản phẩm.");
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Đã xảy ra lỗi khi lưu sản phẩm.",
+      );
     } finally {
       setLoading(false);
     }
@@ -113,7 +118,6 @@ const ProductModal = ({
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
       <div className="bg-white rounded-3xl w-full max-w-2xl shadow-2xl overflow-hidden border border-outline-variant/10 flex flex-col max-h-[90vh] animate-fade-in-up font-body">
-        {/* Modal Header */}
         <div className="px-6 py-5 border-b border-outline-variant/20 flex justify-between items-center bg-surface-container-low">
           <h2 className="font-display text-lg font-bold text-on-background">
             {product ? "Chỉnh sửa sản phẩm" : "Thêm sản phẩm mới"}
@@ -127,8 +131,10 @@ const ProductModal = ({
           </button>
         </div>
 
-        {/* Modal Form */}
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          className="flex-1 overflow-y-auto p-6 space-y-4"
+        >
           {error && (
             <div className="p-3.5 bg-rose-50 text-rose-600 rounded-xl text-xs font-semibold border border-rose-100 flex items-center gap-2">
               <span className="material-symbols-outlined text-sm">error</span>
@@ -136,7 +142,6 @@ const ProductModal = ({
             </div>
           )}
 
-          {/* Form Fields Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">
               <label className="form-label">Tên sản phẩm *</label>
@@ -162,14 +167,19 @@ const ProductModal = ({
             </div>
             <div>
               <label className="form-label">Thương hiệu *</label>
-              <input
+              <select
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
-                placeholder="Ví dụ: Nike, Adidas..."
-                className="form-input text-sm"
-                type="text"
+                className="form-input text-sm select-none cursor-pointer"
                 required
-              />
+              >
+                <option value="">Chọn thương hiệu</option>
+                {BRANDS.map((b) => (
+                  <option key={b} value={b}>
+                    {b}
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="form-label">Giá gốc (₫) *</label>
@@ -198,7 +208,9 @@ const ProductModal = ({
           </div>
 
           <div>
-            <label className="form-label">Đường dẫn hình ảnh (Các URL phân cách bằng dấu phẩy)</label>
+            <label className="form-label">
+              Đường dẫn hình ảnh (Các URL phân cách bằng dấu phẩy)
+            </label>
             <input
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
@@ -218,7 +230,6 @@ const ProductModal = ({
             />
           </div>
 
-          {/* Switch Options */}
           <div className="flex flex-wrap items-center gap-6 pt-2">
             <label className="flex items-center gap-2 text-sm text-secondary font-semibold cursor-pointer">
               <input
@@ -256,7 +267,6 @@ const ProductModal = ({
             </div>
           )}
 
-          {/* Modal Actions */}
           <div className="pt-4 border-t border-outline-variant/20 flex justify-end gap-3">
             <button
               onClick={onClose}
@@ -271,7 +281,9 @@ const ProductModal = ({
               className="px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors cursor-pointer flex items-center gap-2 disabled:opacity-50"
               type="submit"
             >
-              {loading && <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>}
+              {loading && (
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              )}
               Lưu thay thế
             </button>
           </div>

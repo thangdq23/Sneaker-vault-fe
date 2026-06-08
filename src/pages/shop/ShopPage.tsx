@@ -5,6 +5,7 @@ import ProductCard from "../../components/product/ProductCard";
 import { getProducts } from "../../services/productApi";
 import type { Product } from "../../types/product.type";
 import { formatVnd } from "../../utils/formatCurrency";
+import { BRANDS } from "../../utils/constants";
 
 const ShopPage = (): React.JSX.Element => {
   const [searchParams] = useSearchParams();
@@ -147,28 +148,36 @@ const ShopPage = (): React.JSX.Element => {
               Thương hiệu
             </h3>
             <div className="space-y-2.5">
-              {[
-                { label: "Tất cả thương hiệu", value: "" },
-                { label: "Nike", value: "Nike" },
-                { label: "Adidas", value: "Adidas" },
-                { label: "Puma", value: "Puma" },
-                { label: "Asics", value: "Asics" },
-              ].map((item) => (
+              <label className="group flex cursor-pointer items-center gap-3">
+                <input
+                  className="rounded-full border-outline text-primary focus:ring-0 cursor-pointer h-4 w-4"
+                  type="radio"
+                  name="brand"
+                  checked={brand === ""}
+                  onChange={() => setBrand("")}
+                />
+                <span
+                  className={`text-sm leading-relaxed group-hover:text-primary ${brand === "" ? "font-semibold text-primary" : ""}`}
+                >
+                  Tất cả thương hiệu
+                </span>
+              </label>
+              {BRANDS.map((b) => (
                 <label
-                  key={item.label}
+                  key={b}
                   className="group flex cursor-pointer items-center gap-3"
                 >
                   <input
                     className="rounded-full border-outline text-primary focus:ring-0 cursor-pointer h-4 w-4"
                     type="radio"
                     name="brand"
-                    checked={brand === item.value}
-                    onChange={() => setBrand(item.value)}
+                    checked={brand === b}
+                    onChange={() => setBrand(b)}
                   />
                   <span
-                    className={`text-sm leading-relaxed group-hover:text-primary ${brand === item.value ? "font-semibold text-primary" : ""}`}
+                    className={`text-sm leading-relaxed group-hover:text-primary ${brand === b ? "font-semibold text-primary" : ""}`}
                   >
-                    {item.label}
+                    {b}
                   </span>
                 </label>
               ))}

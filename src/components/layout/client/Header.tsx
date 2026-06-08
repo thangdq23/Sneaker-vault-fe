@@ -1,12 +1,15 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { fetchCartItems } from "../../../store/cartSlice";
+import { BRANDS } from "../../../utils/constants";
 import logo from "../../../assets/logo-sv.png";
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const [isBrandOpen, setIsBrandOpen] = useState(false);
 
   const { token, user } = useAppSelector((state) => state.auth);
   const { cart } = useAppSelector((state) => state.cart);
@@ -59,7 +62,7 @@ const Header = () => {
             <span className="hidden truncate sm:inline">SNEAKER VAULT</span>
           </NavLink>
 
-          <div className="hidden min-w-0 items-center gap-4 overflow-x-auto no-scrollbar lg:flex lg:gap-6 xl:gap-8">
+          <div className="hidden min-w-0 items-center gap-4 lg:flex lg:gap-6 xl:gap-8">
             <NavLink
               to="/"
               className={({ isActive }) =>
@@ -84,12 +87,43 @@ const Header = () => {
             >
               Cửa hàng
             </NavLink>
-            <a
-              href="#"
-              className="nav-link nav-link-vi text-secondary hover:text-primary"
+            <div
+              className="relative"
+              onMouseEnter={() => setIsBrandOpen(true)}
+              onMouseLeave={() => setIsBrandOpen(false)}
             >
-              Thương hiệu
-            </a>
+              <button
+                type="button"
+                onClick={() => setIsBrandOpen((prev) => !prev)}
+                className="nav-link nav-link-vi text-secondary hover:text-primary flex items-center gap-0.5 cursor-pointer"
+              >
+                Thương hiệu
+                <span className={`material-symbols-outlined text-[16px] transition-transform duration-200 ${isBrandOpen ? "rotate-180" : ""}`}>
+                  keyboard_arrow_down
+                </span>
+              </button>
+
+              <div
+                className={`absolute left-0 mt-2 w-48 bg-white border border-outline-variant/35 rounded-2xl shadow-xl transition-all duration-200 z-50 ${
+                  isBrandOpen
+                    ? "opacity-100 visible translate-y-0"
+                    : "opacity-0 invisible -translate-y-2"
+                }`}
+              >
+                <div className="py-2.5 px-2 space-y-0.5">
+                  {BRANDS.map((b) => (
+                    <Link
+                      key={b}
+                      to={`/shop?brand=${encodeURIComponent(b)}`}
+                      onClick={() => setIsBrandOpen(false)}
+                      className="flex items-center px-4 py-2 text-sm text-secondary hover:text-primary hover:bg-surface-container rounded-xl transition-colors font-medium"
+                    >
+                      {b}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
             <a
               href="#"
               className="nav-link nav-link-vi text-secondary hover:text-primary"

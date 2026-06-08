@@ -15,7 +15,6 @@ const ProductFilterBar = ({
 }: ProductFilterBarProps): React.JSX.Element => {
   return (
     <div className="bg-white p-4 rounded-2xl border border-outline-variant/20 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
-      {/* Search Input */}
       <div className="flex items-center bg-surface-container-low px-4 py-2 rounded-full w-full md:w-96 border border-outline-variant/30 transition-all focus-within:border-primary/50">
         <span className="material-symbols-outlined text-secondary text-base">search</span>
         <input
@@ -36,7 +35,6 @@ const ProductFilterBar = ({
         )}
       </div>
 
-      {/* Sort Select */}
       <div className="flex flex-wrap items-center gap-3 w-full md:w-auto font-body">
         <select
           value={sortValue}
