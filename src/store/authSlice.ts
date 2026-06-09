@@ -127,6 +127,9 @@ const authSlice = createSlice({
           name: action.payload.user.name,
           email: action.payload.user.email,
           role: action.payload.user.role as "user" | "admin",
+          avatar: action.payload.user.avatar || "",
+          phone: action.payload.user.phone || "",
+          addresses: action.payload.user.addresses || [],
         };
         state.user = mappedUser;
         localStorage.setItem("token", action.payload.token);
@@ -150,6 +153,9 @@ const authSlice = createSlice({
           name: action.payload.user.name,
           email: action.payload.user.email,
           role: action.payload.user.role as "user" | "admin",
+          avatar: action.payload.user.avatar || "",
+          phone: action.payload.user.phone || "",
+          addresses: action.payload.user.addresses || [],
         };
         state.user = mappedUser;
         localStorage.setItem("token", action.payload.token);

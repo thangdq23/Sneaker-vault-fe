@@ -176,9 +176,17 @@ const Header = () => {
               type="button"
               onClick={handleAvatarClick}
               title={user?.email ?? "Tài khoản"}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-medium text-white cursor-pointer hover:opacity-90"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-medium text-white cursor-pointer hover:opacity-90 overflow-hidden"
             >
-              {initials}
+              {user?.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                initials
+              )}
             </button>
           )}
 

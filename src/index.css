@@ -1,31 +1,31 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Space Grotesk", "Be Vietnam Pro", ui-sans-serif, system-ui,
-    sans-serif;
+  --font-display:
+    "Space Grotesk", "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
 
-  --color-background: #F8F9FA;
-  --color-surface-alt: #F3F4F6;
+  --color-background: #f8f9fa;
+  --color-surface-alt: #f3f4f6;
   --color-on-background: #111111;
   --color-primary: #111111;
-  --color-on-primary: #FFFFFF;
+  --color-on-primary: #ffffff;
   --color-secondary: #5e5e5e;
   --color-tertiary: #ab3600;
-  --color-surface: #FFFFFF;
-  --color-surface-container-lowest: #FFFFFF;
-  --color-surface-container-low: #F7F9FB;
+  --color-surface: #ffffff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f7f9fb;
   --color-surface-container: #ebeef1;
-  --color-surface-container-high: #E6E9EC;
-  --color-surface-container-highest: #DEE1E5;
-  --color-on-surface: #1A1C1E;
-  --color-on-surface-variant: #43474E;
-  --color-surface-variant: #E0E2EC;
-  --color-outline: #73777F;
+  --color-surface-container-high: #e6e9ec;
+  --color-surface-container-highest: #dee1e5;
+  --color-on-surface: #1a1c1e;
+  --color-on-surface-variant: #43474e;
+  --color-surface-variant: #e0e2ec;
+  --color-outline: #73777f;
   --color-outline-variant: #c4c7c8;
-  --color-inverse-surface: #2F3033;
-  --color-primary-fixed: #D6E3FF;
-  --color-primary-fixed-dim: #ADC6FF;
+  --color-inverse-surface: #2f3033;
+  --color-primary-fixed: #d6e3ff;
+  --color-primary-fixed-dim: #adc6ff;
 }
 
 * {
@@ -41,7 +41,6 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Buttons — Vietnamese text needs normal case + flexible width */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -126,7 +125,6 @@ body {
   line-height: 1.5;
   border-radius: 0.5rem;
   background-color: #ebeef1;
-  border: none;
 }
 
 .form-input:focus {
