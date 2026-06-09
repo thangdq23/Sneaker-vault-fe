@@ -1,8 +1,19 @@
+export interface Address {
+  _id: string;
+  receiverName: string;
+  phone: string;
+  addressDetail: string;
+  isDefault: boolean;
+}
+
 export interface UserProfile {
   _id: string;
   name: string;
   email: string;
   role: "user" | "admin";
+  avatar?: string;
+  phone?: string;
+  addresses?: Address[];
   createdAt?: string;
   updatedAt?: string;
 }
@@ -14,6 +25,9 @@ export interface UpdateProfileResponse {
     name: string;
     email: string;
     role: "user" | "admin";
+    avatar?: string;
+    phone?: string;
+    addresses?: Address[];
   };
 }
 

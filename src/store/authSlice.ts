@@ -3,7 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { login, register } from "../services/authApi";
 import { getCurrentProfile, updateProfile } from "../services/userApi";
 import type { LoginRequest, RegisterRequest, AuthResponse } from "../types/auth.type";
-import type { UserProfile } from "../types/user.type";
+import type { UserProfile, Address } from "../types/user.type";
 
 interface AuthState {
   token: string | null;
@@ -71,9 +71,12 @@ export const fetchProfile = createAsyncThunk(
 
 export const updateUserProfile = createAsyncThunk(
   "auth/updateProfile",
-  async (name: string, { rejectWithValue }) => {
+  async (
+    data: { name?: string; phone?: string; avatar?: string },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await updateProfile(name);
+      const response = await updateProfile(data);
       return response;
     } catch (error: any) {
       const message = error.response?.data?.message || error.message || "Cập nhật thất bại.";
@@ -96,9 +99,20 @@ const authSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    updateUserAddresses: (state, action: PayloadAction<Address[]>) => {
+      if (state.user) {
+        state.user.addresses = action.payload;
+        localStorage.setItem("user", JSON.stringify(state.user));
+      }
+    },
+    updateUserAvatar: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user.avatar = action.payload;
+        localStorage.setItem("user", JSON.stringify(state.user));
+      }
+    },
   },
   extraReducers: (builder) => {
-    // Login
     builder
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
@@ -123,7 +137,6 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       });
 
-    // Register
     builder
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
@@ -147,7 +160,6 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       });
 
-    // Fetch Profile
     builder
       .addCase(fetchProfile.pending, (state) => {
         state.isLoading = true;
@@ -162,7 +174,6 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       });
 
-    // Update Profile
     builder
       .addCase(updateUserProfile.pending, (state) => {
         state.isLoading = true;
@@ -172,6 +183,9 @@ const authSlice = createSlice({
         state.isLoading = false;
         if (state.user) {
           state.user.name = action.payload.user.name;
+          state.user.phone = action.payload.user.phone;
+          state.user.avatar = action.payload.user.avatar;
+          state.user.addresses = action.payload.user.addresses;
           localStorage.setItem("user", JSON.stringify(state.user));
         }
       })
@@ -182,5 +196,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, clearError } = authSlice.actions;
+export const { logout, clearError, updateUserAddresses, updateUserAvatar } = authSlice.actions;
 export default authSlice.reducer;

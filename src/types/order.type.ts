@@ -16,7 +16,7 @@ export interface Order {
   shippingAddress: string;
   phone: string;
   totalAmount: number;
-  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled" | "returned";
   paymentMethod: "cod" | "card";
   paymentStatus: "pending" | "paid" | "failed";
   createdAt: string;
