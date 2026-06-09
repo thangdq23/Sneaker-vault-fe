@@ -10,7 +10,7 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const { token } = useAppSelector((state) => state.auth);
+  const { token, user } = useAppSelector((state) => state.auth);
   const { cart } = useAppSelector((state) => state.cart);
 
   const [fullName, setFullName] = useState("");
@@ -32,6 +32,30 @@ const CheckoutPage = () => {
       return;
     }
   }, [token, navigate]);
+
+  useEffect(() => {
+    if (user) {
+      const defaultAddress = user.addresses?.find((a) => a.isDefault);
+      if (defaultAddress) {
+        setFullName(defaultAddress.receiverName || user.name || "");
+        setPhone(defaultAddress.phone || user.phone || "");
+        
+        const parts = defaultAddress.addressDetail.split(",");
+        if (parts.length > 1) {
+          const cityPart = parts[parts.length - 1].trim();
+          const addressPart = parts.slice(0, parts.length - 1).join(",").trim();
+          setAddress(addressPart);
+          setCity(cityPart);
+        } else {
+          setAddress(defaultAddress.addressDetail);
+          setCity("");
+        }
+      } else {
+        setFullName(user.name || "");
+        setPhone(user.phone || "");
+      }
+    }
+  }, [user]);
 
   const items = cart?.items ?? [];
   const totalPrice = cart?.totalPrice ?? 0;
