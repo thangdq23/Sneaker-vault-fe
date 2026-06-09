@@ -99,12 +99,12 @@ const Login = () => {
         </AuthFormLayout>
 
         <div className="mt-12 flex flex-col items-center gap-2 text-center">
-          <a
+          <Link
             className="text-on-surface underline hover:text-primary transition-colors font-label-sm"
-            href="#"
+            to="/forgot-password"
           >
             Quên mật khẩu?
-          </a>
+          </Link>
 
           <p className="font-label-sm text-label-sm text-on-surface-variant">
             Chưa có tài khoản?{" "}
