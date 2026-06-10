@@ -7,6 +7,7 @@ import EditProductPage from "../pages/admin/EditProductPage";
 import OrdersPage from "../pages/admin/OrdersPage";
 import OrderDetailsPage from "../pages/admin/OrderDetailsPage";
 import UsersPage from "../pages/admin/UsersPage";
+import UserDetailsPage from "../pages/admin/UserDetailsPage";
 
 const AdminRoutes = {
   path: "/admin",
@@ -42,6 +43,10 @@ const AdminRoutes = {
         {
           path: "users",
           element: <UsersPage />,
+        },
+        {
+          path: "users/:id",
+          element: <UserDetailsPage />,
         },
       ],
     },

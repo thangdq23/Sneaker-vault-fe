@@ -14,8 +14,16 @@ export interface UserProfile {
   avatar?: string;
   phone?: string;
   addresses?: Address[];
+  isActive?: boolean;
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface UserDetailsResponse {
+  user: UserProfile;
+  totalOrders: number;
+  totalSpent: number;
+  orders: any[]; // Order list array
 }
 
 export interface UpdateProfileResponse {

@@ -1,5 +1,5 @@
 import apiClient from "./apiClient";
-import type { UserProfile, UpdateProfileResponse, UserListResponse, Address } from "../types/user.type";
+import type { UserProfile, UpdateProfileResponse, UserListResponse, Address, UserDetailsResponse } from "../types/user.type";
 
 export const getCurrentProfile = async (): Promise<UserProfile> => {
   const response = await apiClient.get<UserProfile>("/users/me");
@@ -90,5 +90,20 @@ export const listUsers = async (params?: {
   search?: string;
 }): Promise<UserListResponse> => {
   const response = await apiClient.get<UserListResponse>("/users", { params });
+  return response.data;
+};
+
+export const getUserById = async (id: string): Promise<UserDetailsResponse> => {
+  const response = await apiClient.get<UserDetailsResponse>(`/users/${id}`);
+  return response.data;
+};
+
+export const blockUser = async (id: string): Promise<{ message: string; user: UserProfile }> => {
+  const response = await apiClient.patch<{ message: string; user: UserProfile }>(`/users/${id}/block`);
+  return response.data;
+};
+
+export const unblockUser = async (id: string): Promise<{ message: string; user: UserProfile }> => {
+  const response = await apiClient.patch<{ message: string; user: UserProfile }>(`/users/${id}/unblock`);
   return response.data;
 };
