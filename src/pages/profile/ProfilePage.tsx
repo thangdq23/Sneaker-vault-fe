@@ -26,7 +26,9 @@ type TabType = "info" | "addresses" | "password" | "orders";
 type OrderFilterType =
   | "all"
   | "pending"
+  | "confirmed"
   | "processing"
+  | "shipping"
   | "shipped"
   | "delivered"
   | "cancelled"
@@ -303,9 +305,15 @@ const ProfilePage = () => {
 
   if (!token || !user) return null;
 
-  // Filters orders based on selected state
+  // Filters orders based on selected state (supports new states and handles backward compatibility)
   const filteredOrders = orders.filter((order) => {
     if (orderFilter === "all") return true;
+    if (orderFilter === "confirmed") {
+      return order.status === "confirmed" || order.status === "processing";
+    }
+    if (orderFilter === "shipping") {
+      return order.status === "shipping" || order.status === "shipped";
+    }
     return order.status === orderFilter;
   });
 
@@ -313,8 +321,10 @@ const ProfilePage = () => {
     switch (status) {
       case "pending":
         return "bg-amber-500/10 text-amber-500 border-amber-500/20";
+      case "confirmed":
       case "processing":
         return "bg-blue-500/10 text-blue-500 border-blue-500/20";
+      case "shipping":
       case "shipped":
         return "bg-indigo-500/10 text-indigo-500 border-indigo-500/20";
       case "delivered":
@@ -332,12 +342,14 @@ const ProfilePage = () => {
     switch (status) {
       case "pending":
         return "Chờ xử lý";
+      case "confirmed":
       case "processing":
         return "Đã xác nhận";
+      case "shipping":
       case "shipped":
-        return "Đang giao hàng";
+        return "Đang giao";
       case "delivered":
-        return "Đã giao hàng";
+        return "Hoàn thành";
       case "cancelled":
         return "Đã hủy";
       case "returned":
@@ -786,9 +798,9 @@ const ProfilePage = () => {
                   [
                     { id: "all", label: "Tất cả" },
                     { id: "pending", label: "Chờ xử lý" },
-                    { id: "processing", label: "Đã xác nhận" },
-                    { id: "shipped", label: "Đang giao" },
-                    { id: "delivered", label: "Đã giao" },
+                    { id: "confirmed", label: "Đã xác nhận" },
+                    { id: "shipping", label: "Đang giao" },
+                    { id: "delivered", label: "Hoàn thành" },
                     { id: "cancelled", label: "Đã hủy" },
                     { id: "returned", label: "Hoàn trả" },
                   ] as const
@@ -876,7 +888,7 @@ const ProfilePage = () => {
                               : "Thẻ ngân hàng"}
                           </span>
                           <span
-                            className={`inline-block rounded-full border px-2.5 py-0.5 text-[10px] font-bold leading-normal uppercase ${getStatusBadgeClass(
+                            className={`inline-block rounded-full border px-2.5 py-0.5 text-[10px] font-bold leading-normal uppercase whitespace-nowrap ${getStatusBadgeClass(
                               order.status,
                             )}`}
                           >
@@ -960,7 +972,7 @@ const ProfilePage = () => {
 
       {showLogoutConfirm && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-sm rounded-3xl bg-surface-container-lowest p-6 shadow-2xl border border-outline-variant/20">
+          <div className="w-full max-w-sm rounded-3xl bg-surface-container-lowest p-6 shadow-2xl">
             <h3 className="font-display text-lg font-bold text-on-surface mb-2">
               Xác nhận đăng xuất
             </h3>
@@ -991,7 +1003,7 @@ const ProfilePage = () => {
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 p-4">
           <form
             onSubmit={handleSaveAddress}
-            className="w-full max-w-md rounded-3xl bg-surface-container-lowest p-6 shadow-2xl border border-outline-variant/20 space-y-4"
+            className="w-full max-w-md rounded-3xl bg-surface-container-lowest p-6 shadow-2xl space-y-4"
           >
             <div>
               <h3 className="font-display text-lg font-bold text-on-surface mb-1">
@@ -1081,7 +1093,7 @@ const ProfilePage = () => {
 
       {addressToDeleteId && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-sm rounded-3xl bg-surface-container-lowest p-6 shadow-2xl border border-outline-variant/20">
+          <div className="w-full max-w-sm rounded-3xl bg-surface-container-lowest p-6 shadow-2xl">
             <h3 className="font-display text-lg font-bold text-on-surface mb-2">
               Xác nhận xóa địa chỉ
             </h3>

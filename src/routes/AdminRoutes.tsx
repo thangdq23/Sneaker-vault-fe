@@ -5,6 +5,7 @@ import ProductsPage from "../pages/admin/ProductsPage";
 import CreateProductPage from "../pages/admin/CreateProductPage";
 import EditProductPage from "../pages/admin/EditProductPage";
 import OrdersPage from "../pages/admin/OrdersPage";
+import OrderDetailsPage from "../pages/admin/OrderDetailsPage";
 import UsersPage from "../pages/admin/UsersPage";
 
 const AdminRoutes = {
@@ -33,6 +34,10 @@ const AdminRoutes = {
         {
           path: "orders",
           element: <OrdersPage />,
+        },
+        {
+          path: "orders/:id",
+          element: <OrderDetailsPage />,
         },
         {
           path: "users",

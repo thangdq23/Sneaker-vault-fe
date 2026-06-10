@@ -37,7 +37,7 @@ const ProductSizesModal = ({
 
   return createPortal(
     <div className="fixed inset-0 bg-zinc-950/50 backdrop-blur-[3px] z-50 flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden border border-outline-variant/10 flex flex-col animate-fade-in-up font-body">
+      <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col animate-fade-in-up font-body">
         <div className="px-6 py-5 border-b border-outline-variant/20 flex justify-between items-center bg-surface-container-low">
           <div>
             <h2 className="font-display text-base font-bold text-on-background">

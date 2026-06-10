@@ -16,9 +16,12 @@ export interface Order {
   shippingAddress: string;
   phone: string;
   totalAmount: number;
-  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled" | "returned";
+  status: "pending" | "confirmed" | "processing" | "shipping" | "shipped" | "delivered" | "cancelled" | "returned";
   paymentMethod: "cod" | "card";
   paymentStatus: "pending" | "paid" | "failed";
+  cancelReason?: string;
+  cancelNote?: string;
+  cancelledAt?: string;
   createdAt: string;
   updatedAt: string;
 }

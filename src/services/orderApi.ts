@@ -18,7 +18,12 @@ export const getOrderById = async (id: string): Promise<Order> => {
   return response.data;
 };
 
-export const listAllOrders = async (params?: { page?: number; limit?: number }): Promise<OrderListResponse> => {
+export const listAllOrders = async (params?: {
+  page?: number;
+  limit?: number;
+  status?: string;
+  search?: string;
+}): Promise<OrderListResponse> => {
   const response = await apiClient.get<OrderListResponse>("/orders", {
     params,
   });
@@ -29,9 +34,20 @@ export const updateOrderStatus = async (
   id: string,
   statusData: { status?: string; paymentStatus?: string }
 ): Promise<{ message: string; order: Order }> => {
-  const response = await apiClient.put<{ message: string; order: Order }>(
+  const response = await apiClient.patch<{ message: string; order: Order }>(
     `/orders/${id}/status`,
     statusData
+  );
+  return response.data;
+};
+
+export const cancelOrder = async (
+  id: string,
+  cancelData: { cancelReason: string; cancelNote?: string }
+): Promise<{ message: string; order: Order }> => {
+  const response = await apiClient.patch<{ message: string; order: Order }>(
+    `/orders/${id}/cancel`,
+    cancelData
   );
   return response.data;
 };
