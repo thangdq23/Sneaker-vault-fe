@@ -19,7 +19,7 @@ const OrdersPage = (): React.JSX.Element => {
   const [totalOrders, setTotalOrders] = useState(0);
 
   const [cancelOrderId, setCancelOrderId] = useState<string | null>(null);
-  const [cancelOrderCode, setCancelOrderCode] = useState<string>("");
+  const [cancelOrderCode] = useState<string>("");
   const [isCancelling, setIsCancelling] = useState(false);
 
   const handleConfirmCancel = async (reason: string, note: string) => {
