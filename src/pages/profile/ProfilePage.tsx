@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   logout,
@@ -38,10 +38,13 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { showToast } = useToast();
+  const location = useLocation();
 
   const { token, user } = useAppSelector((state) => state.auth);
 
-  const [activeTab, setActiveTab] = useState<TabType>("info");
+  const [activeTab, setActiveTab] = useState<TabType>(
+    (location.state as any)?.activeTab || "info"
+  );
   const [orderFilter, setOrderFilter] = useState<OrderFilterType>("all");
 
   const [name, setName] = useState("");
@@ -82,6 +85,12 @@ const ProfilePage = () => {
       setPhone(user.phone || "");
     }
   }, [token, navigate, user]);
+
+  useEffect(() => {
+    if (location.state && (location.state as any).activeTab) {
+      setActiveTab((location.state as any).activeTab);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (!token || activeTab !== "orders") return;
@@ -305,7 +314,6 @@ const ProfilePage = () => {
 
   if (!token || !user) return null;
 
-  // Filters orders based on selected state (supports new states and handles backward compatibility)
   const filteredOrders = orders.filter((order) => {
     if (orderFilter === "all") return true;
     if (orderFilter === "confirmed") {

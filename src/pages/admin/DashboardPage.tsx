@@ -23,7 +23,7 @@ ChartJS.register(
   Title,
   ChartTooltip,
   Filler,
-  Legend
+  Legend,
 );
 import { getDashboardData } from "../../services/dashboardApi";
 import type { DashboardData } from "../../types/dashboard.type";
@@ -60,9 +60,12 @@ const DashboardPage = (): React.JSX.Element => {
 
     const diffTime = Math.abs(endDateObj.getTime() - startDateObj.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays > 730) {
-      showToast("Khoảng thời gian chọn không được vượt quá 2 năm (730 ngày).", "error");
+      showToast(
+        "Khoảng thời gian chọn không được vượt quá 2 năm (730 ngày).",
+        "error",
+      );
       return false;
     }
 
@@ -77,8 +80,10 @@ const DashboardPage = (): React.JSX.Element => {
       setData(res);
     } catch (err: any) {
       showToast(
-        err.response?.data?.message || err.message || "Không thể tải số liệu thống kê.",
-        "error"
+        err.response?.data?.message ||
+          err.message ||
+          "Không thể tải số liệu thống kê.",
+        "error",
       );
     } finally {
       setLoading(false);
@@ -180,7 +185,10 @@ const DashboardPage = (): React.JSX.Element => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="bg-white p-6 rounded-2xl border border-outline-variant/20 shadow-sm h-32"></div>
+            <div
+              key={i}
+              className="bg-white p-6 rounded-2xl border border-outline-variant/20 shadow-sm h-32"
+            ></div>
           ))}
         </div>
 
@@ -213,7 +221,12 @@ const DashboardPage = (): React.JSX.Element => {
           const chart = context.chart;
           const { ctx, chartArea } = chart;
           if (!chartArea) return undefined;
-          const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+          const gradient = ctx.createLinearGradient(
+            0,
+            chartArea.top,
+            0,
+            chartArea.bottom,
+          );
           gradient.addColorStop(0, "rgba(16, 185, 129, 0.2)");
           gradient.addColorStop(1, "rgba(16, 185, 129, 0.0)");
           return gradient;
@@ -297,10 +310,10 @@ const DashboardPage = (): React.JSX.Element => {
 
   const totalPeriodOrders =
     data.orderStatuses.pending +
-    data.orderStatuses.confirmed +
-    data.orderStatuses.shipping +
-    data.orderStatuses.delivered +
-    data.orderStatuses.cancelled || 1;
+      data.orderStatuses.confirmed +
+      data.orderStatuses.shipping +
+      data.orderStatuses.delivered +
+      data.orderStatuses.cancelled || 1;
 
   const getPercentage = (value: number) => {
     return Math.round((value / totalPeriodOrders) * 100);
@@ -308,14 +321,15 @@ const DashboardPage = (): React.JSX.Element => {
 
   return (
     <div className="space-y-6 animate-fade-in-up text-on-surface">
-      <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 pb-2">
+      <div className="flex flex-col items-center justify-center gap-4 pb-2 text-center w-full">
         <div>
-          <h1 className="font-display text-2xl font-bold text-on-background">Tổng quan hệ thống</h1>
-          <p className="text-sm text-secondary font-body">Xem các chỉ số kinh doanh quan trọng và quản trị cửa hàng Sneaker Vault.</p>
+          <h1 className="font-display text-2xl font-bold text-on-background">
+            Tổng quan hệ thống
+          </h1>
         </div>
 
-        <div className="flex flex-col lg:flex-row lg:items-center gap-4 bg-white p-4 rounded-3xl border border-outline-variant/20 shadow-sm shrink-0">
-          <div className="flex flex-wrap items-center gap-2 border-b lg:border-b-0 lg:border-r border-outline-variant/20 pb-3 lg:pb-0 lg:pr-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-center gap-4 bg-white p-4 rounded-3xl border border-outline-variant/20 shadow-sm shrink-0">
+          <div className="flex flex-wrap items-center justify-center gap-2 border-b lg:border-b-0 lg:border-r border-outline-variant/20 pb-3 lg:pb-0 lg:pr-4">
             {[
               { label: "Hôm nay", value: "today" },
               { label: "7 ngày", value: "week" },
@@ -337,7 +351,7 @@ const DashboardPage = (): React.JSX.Element => {
             ))}
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 font-body">
+          <div className="flex flex-wrap items-center justify-center gap-3 font-body">
             <div className="flex items-center gap-2">
               <label className="text-xs font-bold text-secondary">Từ</label>
               <input
@@ -366,7 +380,7 @@ const DashboardPage = (): React.JSX.Element => {
 
             <button
               onClick={handleViewStats}
-              className="bg-primary hover:bg-primary-hover text-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 transition-colors shadow-sm ml-auto lg:ml-0 cursor-pointer"
+              className="bg-primary hover:bg-primary-hover text-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer"
             >
               <span className="material-symbols-outlined text-sm">search</span>
               Xem thống kê
@@ -379,30 +393,39 @@ const DashboardPage = (): React.JSX.Element => {
         <div className="bg-white p-6 rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-md transition-all duration-300 group">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-outline">Doanh thu</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-outline">
+                Doanh thu
+              </p>
               <h3 className="text-2xl font-extrabold font-display mt-2 text-emerald-600">
                 {formatVnd(data.periodRevenue.currentRevenue)}
               </h3>
             </div>
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-emerald-50 text-emerald-600 shrink-0 group-hover:scale-110 transition-transform">
-              <span className="material-symbols-outlined text-2xl">payments</span>
+              <span className="material-symbols-outlined text-2xl">
+                payments
+              </span>
             </div>
           </div>
           <p className="text-[10px] text-secondary font-semibold mt-4">
-            Doanh thu từ ngày {new Date(startDate).toLocaleDateString("vi-VN")} đến ngày {new Date(endDate).toLocaleDateString("vi-VN")}
+            Doanh thu từ ngày {new Date(startDate).toLocaleDateString("vi-VN")}{" "}
+            đến ngày {new Date(endDate).toLocaleDateString("vi-VN")}
           </p>
         </div>
 
         <div className="bg-white p-6 rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-md transition-all duration-300 group">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-outline">Đơn hàng</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-outline">
+                Đơn hàng
+              </p>
               <h3 className="text-2xl font-extrabold font-display mt-2 text-on-background">
                 {data.overview.totalOrders} đơn
               </h3>
             </div>
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-blue-50 text-blue-600 shrink-0 group-hover:scale-110 transition-transform">
-              <span className="material-symbols-outlined text-2xl">shopping_bag</span>
+              <span className="material-symbols-outlined text-2xl">
+                shopping_bag
+              </span>
             </div>
           </div>
           <p className="text-[10px] text-secondary font-semibold mt-4">
@@ -413,7 +436,9 @@ const DashboardPage = (): React.JSX.Element => {
         <div className="bg-white p-6 rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-md transition-all duration-300 group">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-outline">Khách hàng mới</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-outline">
+                Khách hàng mới
+              </p>
               <h3 className="text-2xl font-extrabold font-display mt-2 text-on-background">
                 {data.overview.totalUsers} tài khoản
               </h3>
@@ -430,13 +455,17 @@ const DashboardPage = (): React.JSX.Element => {
         <div className="bg-white p-6 rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-md transition-all duration-300 group">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-outline">Tổng sản phẩm</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-outline">
+                Tổng sản phẩm
+              </p>
               <h3 className="text-2xl font-extrabold font-display mt-2 text-on-background">
                 {data.overview.totalProducts} mẫu
               </h3>
             </div>
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-purple-50 text-purple-600 shrink-0 group-hover:scale-110 transition-transform">
-              <span className="material-symbols-outlined text-2xl">inventory_2</span>
+              <span className="material-symbols-outlined text-2xl">
+                inventory_2
+              </span>
             </div>
           </div>
           <p className="text-[10px] text-secondary font-semibold mt-4">
@@ -446,11 +475,14 @@ const DashboardPage = (): React.JSX.Element => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
         <div className="bg-white p-6 rounded-3xl border border-outline-variant/20 shadow-sm lg:col-span-2 space-y-4">
           <div className="flex justify-between items-center pb-2 border-b border-outline-variant/20">
-            <h2 className="font-display text-base font-bold text-on-background">Biểu đồ doanh thu</h2>
-            <span className="text-xs font-semibold text-secondary font-mono">Đơn vị: VNĐ</span>
+            <h2 className="font-display text-base font-bold text-on-background">
+              Biểu đồ doanh thu
+            </h2>
+            <span className="text-xs font-semibold text-secondary font-mono">
+              Đơn vị: VNĐ
+            </span>
           </div>
 
           <div className="h-72 w-full font-mono text-xs">
@@ -474,50 +506,90 @@ const DashboardPage = (): React.JSX.Element => {
               <div className="space-y-1">
                 <div className="flex justify-between text-xs font-semibold">
                   <span className="text-amber-700">🟡 Chờ xử lý</span>
-                  <span className="text-secondary">{data.orderStatuses.pending} đơn ({getPercentage(data.orderStatuses.pending)}%)</span>
+                  <span className="text-secondary">
+                    {data.orderStatuses.pending} đơn (
+                    {getPercentage(data.orderStatuses.pending)}%)
+                  </span>
                 </div>
                 <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div className="bg-amber-500 h-full rounded-full" style={{ width: `${getPercentage(data.orderStatuses.pending)}%` }}></div>
+                  <div
+                    className="bg-amber-500 h-full rounded-full"
+                    style={{
+                      width: `${getPercentage(data.orderStatuses.pending)}%`,
+                    }}
+                  ></div>
                 </div>
               </div>
 
               <div className="space-y-1">
                 <div className="flex justify-between text-xs font-semibold">
                   <span className="text-blue-700">🔵 Đã xác nhận</span>
-                  <span className="text-secondary">{data.orderStatuses.confirmed} đơn ({getPercentage(data.orderStatuses.confirmed)}%)</span>
+                  <span className="text-secondary">
+                    {data.orderStatuses.confirmed} đơn (
+                    {getPercentage(data.orderStatuses.confirmed)}%)
+                  </span>
                 </div>
                 <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div className="bg-blue-500 h-full rounded-full" style={{ width: `${getPercentage(data.orderStatuses.confirmed)}%` }}></div>
+                  <div
+                    className="bg-blue-500 h-full rounded-full"
+                    style={{
+                      width: `${getPercentage(data.orderStatuses.confirmed)}%`,
+                    }}
+                  ></div>
                 </div>
               </div>
 
               <div className="space-y-1">
                 <div className="flex justify-between text-xs font-semibold">
                   <span className="text-purple-700">🟣 Đang giao</span>
-                  <span className="text-secondary">{data.orderStatuses.shipping} đơn ({getPercentage(data.orderStatuses.shipping)}%)</span>
+                  <span className="text-secondary">
+                    {data.orderStatuses.shipping} đơn (
+                    {getPercentage(data.orderStatuses.shipping)}%)
+                  </span>
                 </div>
                 <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div className="bg-purple-500 h-full rounded-full" style={{ width: `${getPercentage(data.orderStatuses.shipping)}%` }}></div>
+                  <div
+                    className="bg-purple-500 h-full rounded-full"
+                    style={{
+                      width: `${getPercentage(data.orderStatuses.shipping)}%`,
+                    }}
+                  ></div>
                 </div>
               </div>
 
               <div className="space-y-1">
                 <div className="flex justify-between text-xs font-semibold">
                   <span className="text-emerald-700">🟢 Hoàn thành</span>
-                  <span className="text-secondary">{data.orderStatuses.delivered} đơn ({getPercentage(data.orderStatuses.delivered)}%)</span>
+                  <span className="text-secondary">
+                    {data.orderStatuses.delivered} đơn (
+                    {getPercentage(data.orderStatuses.delivered)}%)
+                  </span>
                 </div>
                 <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${getPercentage(data.orderStatuses.delivered)}%` }}></div>
+                  <div
+                    className="bg-emerald-500 h-full rounded-full"
+                    style={{
+                      width: `${getPercentage(data.orderStatuses.delivered)}%`,
+                    }}
+                  ></div>
                 </div>
               </div>
 
               <div className="space-y-1">
                 <div className="flex justify-between text-xs font-semibold">
                   <span className="text-rose-700">🔴 Đã hủy</span>
-                  <span className="text-secondary">{data.orderStatuses.cancelled} đơn ({getPercentage(data.orderStatuses.cancelled)}%)</span>
+                  <span className="text-secondary">
+                    {data.orderStatuses.cancelled} đơn (
+                    {getPercentage(data.orderStatuses.cancelled)}%)
+                  </span>
                 </div>
                 <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div className="bg-rose-500 h-full rounded-full" style={{ width: `${getPercentage(data.orderStatuses.cancelled)}%` }}></div>
+                  <div
+                    className="bg-rose-500 h-full rounded-full"
+                    style={{
+                      width: `${getPercentage(data.orderStatuses.cancelled)}%`,
+                    }}
+                  ></div>
                 </div>
               </div>
             </div>
@@ -530,7 +602,6 @@ const DashboardPage = (): React.JSX.Element => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
         <div className="bg-white p-6 rounded-3xl border border-outline-variant/20 shadow-sm space-y-4">
           <h2 className="font-display text-base font-bold text-on-background pb-3 border-b border-outline-variant/20">
             Top sản phẩm bán chạy
@@ -543,20 +614,43 @@ const DashboardPage = (): React.JSX.Element => {
           ) : (
             <div className="divide-y divide-slate-100 max-h-80 overflow-y-auto no-scrollbar font-body">
               {data.topProducts.map((p, idx) => (
-                <div key={p.productId} className="py-3.5 flex gap-3 first:pt-0 last:pb-0 items-center">
-                  <span className="font-display font-extrabold text-secondary w-5 text-center shrink-0">#{idx + 1}</span>
+                <div
+                  key={p.productId}
+                  className="py-3.5 flex gap-3 first:pt-0 last:pb-0 items-center"
+                >
+                  <span className="font-display font-extrabold text-secondary w-5 text-center shrink-0">
+                    #{idx + 1}
+                  </span>
                   <div className="h-10 w-10 overflow-hidden rounded-xl border border-outline-variant/20 bg-surface-alt flex items-center justify-center shrink-0">
                     {p.image ? (
-                      <img src={p.image} alt={p.name} className="h-full w-full object-cover" />
+                      <img
+                        src={p.image}
+                        alt={p.name}
+                        className="h-full w-full object-cover"
+                      />
                     ) : (
-                      <span className="material-symbols-outlined text-outline text-lg">image</span>
+                      <span className="material-symbols-outlined text-outline text-lg">
+                        image
+                      </span>
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h4 className="line-clamp-1 text-xs font-bold text-on-surface">{p.name}</h4>
-                    <p className="text-[10px] text-secondary mt-0.5 font-medium">Đã bán: <strong className="text-on-surface">{p.quantitySold} đôi</strong></p>
+                    <h4 
+                      className="line-clamp-2 text-xs font-bold text-on-surface"
+                      title={p.name}
+                    >
+                      {p.name}
+                    </h4>
+                    <p className="text-[10px] text-secondary mt-0.5 font-medium">
+                      Đã bán:{" "}
+                      <strong className="text-on-surface">
+                        {p.quantitySold} đôi
+                      </strong>
+                    </p>
                   </div>
-                  <span className="text-xs font-bold text-emerald-600 shrink-0">{formatVnd(p.revenue)}</span>
+                  <span className="text-xs font-bold text-emerald-600 shrink-0">
+                    {formatVnd(p.revenue)}
+                  </span>
                 </div>
               ))}
             </div>
@@ -565,7 +659,9 @@ const DashboardPage = (): React.JSX.Element => {
 
         <div className="bg-white p-6 rounded-3xl border border-outline-variant/20 shadow-sm space-y-4">
           <div className="flex justify-between items-center pb-3 border-b border-outline-variant/20">
-            <h2 className="font-display text-base font-bold text-on-background">Đơn hàng mới</h2>
+            <h2 className="font-display text-base font-bold text-on-background">
+              Đơn hàng mới
+            </h2>
             <Link
               to="/admin/orders"
               className="text-xs font-bold text-primary hover:underline"
@@ -581,7 +677,10 @@ const DashboardPage = (): React.JSX.Element => {
           ) : (
             <div className="divide-y divide-slate-100 max-h-80 overflow-y-auto no-scrollbar font-body">
               {data.recentOrders.map((o) => (
-                <div key={o._id} className="py-3.5 flex justify-between items-center gap-3 first:pt-0 last:pb-0">
+                <div
+                  key={o._id}
+                  className="py-3.5 flex justify-between items-center gap-3 first:pt-0 last:pb-0"
+                >
                   <div className="min-w-0 flex-1 space-y-1">
                     <div className="flex items-center gap-1.5">
                       <Link
@@ -590,14 +689,23 @@ const DashboardPage = (): React.JSX.Element => {
                       >
                         {o.orderCode}
                       </Link>
-                      <span className={`inline-block border px-1.5 py-0.2 rounded-full text-[9px] font-bold uppercase whitespace-nowrap scale-90 origin-left ${getOrderStatusBadge(o.status)}`}>
+                      <span
+                        className={`inline-block border px-1.5 py-0.2 rounded-full text-[9px] font-bold uppercase whitespace-nowrap scale-90 origin-left ${getOrderStatusBadge(o.status)}`}
+                      >
                         {getOrderStatusText(o.status)}
                       </span>
                     </div>
-                    <p className="text-[10px] text-secondary font-medium">Khách: <strong className="text-on-surface">{o.customerName}</strong></p>
+                    <p className="text-[10px] text-secondary font-medium">
+                      Khách:{" "}
+                      <strong className="text-on-surface">
+                        {o.customerName}
+                      </strong>
+                    </p>
                   </div>
                   <div className="text-right shrink-0">
-                    <span className="text-xs font-bold text-on-surface block">{formatVnd(o.totalAmount)}</span>
+                    <span className="text-xs font-bold text-on-surface block">
+                      {formatVnd(o.totalAmount)}
+                    </span>
                     <span className="text-[9px] text-secondary block font-mono">
                       {new Date(o.createdAt).toLocaleDateString("vi-VN")}
                     </span>
@@ -611,7 +719,9 @@ const DashboardPage = (): React.JSX.Element => {
         <div className="bg-white p-6 rounded-3xl border border-outline-variant/20 shadow-sm space-y-4">
           <div className="flex justify-between items-center pb-3 border-b border-outline-variant/20">
             <h2 className="font-display text-base font-bold text-rose-700 flex items-center gap-1">
-              <span className="material-symbols-outlined text-base leading-none">warning</span>
+              <span className="material-symbols-outlined text-base leading-none">
+                warning
+              </span>
               Sản phẩm sắp hết hàng
             </h2>
             <span className="inline-block rounded-full bg-rose-50 text-rose-700 text-[10px] font-bold px-2 py-0.5 border border-rose-100 uppercase">
@@ -626,16 +736,30 @@ const DashboardPage = (): React.JSX.Element => {
           ) : (
             <div className="divide-y divide-slate-100 max-h-80 overflow-y-auto no-scrollbar font-body">
               {data.lowStockProducts.map((p) => (
-                <div key={p._id} className="py-3 flex gap-3 first:pt-0 last:pb-0 items-center justify-between">
-                  <div className="flex gap-2.5 items-center min-w-0">
+                <div
+                  key={p._id}
+                  className="py-3 flex gap-3 first:pt-0 last:pb-0 items-center justify-between"
+                >
+                  <div className="flex gap-2.5 items-center min-w-0 flex-1">
                     <div className="h-9 w-9 overflow-hidden rounded-xl border border-outline-variant/20 bg-surface-alt flex items-center justify-center shrink-0">
                       {p.image ? (
-                        <img src={p.image} alt={p.name} className="h-full w-full object-cover" />
+                        <img
+                          src={p.image}
+                          alt={p.name}
+                          className="h-full w-full object-cover"
+                        />
                       ) : (
-                        <span className="material-symbols-outlined text-outline text-sm">image</span>
+                        <span className="material-symbols-outlined text-outline text-sm">
+                          image
+                        </span>
                       )}
                     </div>
-                    <span className="line-clamp-1 text-xs font-bold text-on-surface">{p.name}</span>
+                    <span 
+                      className="line-clamp-2 text-xs font-bold text-on-surface"
+                      title={p.name}
+                    >
+                      {p.name}
+                    </span>
                   </div>
                   <span className="text-xs font-mono font-extrabold text-rose-600 bg-rose-50 border border-rose-100 rounded-full px-2.5 py-0.5 shrink-0">
                     Còn {p.stock}

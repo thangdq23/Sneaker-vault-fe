@@ -1,8 +1,32 @@
-import { NavLink } from "react-router-dom";
-import { useAppSelector } from "../../../store/hooks";
+import { useState, useRef, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { logout } from "../../../store/authSlice";
+import { resetCartState } from "../../../store/cartSlice";
 
 const SideBar = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
+
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(resetCartState());
+    navigate("/login");
+  };
 
   const navItems = [
     { to: "/admin", label: "Tổng quan", icon: "dashboard", end: true },
@@ -77,22 +101,63 @@ const SideBar = () => {
         ))}
       </nav>
 
-      <div className="px-6 mt-auto pt-6 border-t border-zinc-900">
-        <div className="flex items-center space-x-3">
-          <img
-            alt="Store Logo"
-            className="w-10 h-10 rounded-full border-2 border-zinc-800 object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-GBGoQWCiFVTHICIiz7Htrto2vDEHlk4G7_WJQ-9JwNFOsPvlF3uLMmS5Iwoc4leMCdwws2WnwnM0Od_foEaadNY445WB9dNTlBKnIaCnOqLLtmJJL18_v8CFTq3sWfQazWY4wt--MWXfBFaaJNXIMRSrS_eRxphm6hdWlEygHdlI8BlilzTuof8Shq8HyryfPwOk-Boe7wGgJPZO73Y0qsaMavpuV040KImSejUTo8cf8wPJzP1UbHtiy0IAWW6gwG-XXed4Pdk"
-          />
-          <div className="overflow-hidden">
-            <p className="text-sm text-white font-semibold truncate">
-              {user?.name || "Quản trị viên"}
-            </p>
-            <p className="text-[10px] text-emerald-500 font-medium flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              Đang hoạt động
-            </p>
+      <div className="px-4 mt-auto pt-6 border-t border-zinc-900 relative" ref={menuRef}>
+        {menuOpen && (
+          <div className="absolute bottom-20 left-4 right-4 bg-zinc-900 border border-zinc-800 rounded-2xl shadow-xl py-2 px-1 flex flex-col space-y-1 z-50">
+            <button
+              onClick={() => {
+                setMenuOpen(false);
+                navigate("/profile", { state: { activeTab: "info" } });
+              }}
+              className="flex items-center space-x-3 px-4 py-2.5 rounded-xl hover:bg-zinc-800 text-sm font-medium text-zinc-300 hover:text-white transition-colors cursor-pointer w-full text-left"
+            >
+              <span className="material-symbols-outlined text-lg">person</span>
+              <span>Thông tin cá nhân</span>
+            </button>
+            <button
+              onClick={() => {
+                setMenuOpen(false);
+                navigate("/profile", { state: { activeTab: "password" } });
+              }}
+              className="flex items-center space-x-3 px-4 py-2.5 rounded-xl hover:bg-zinc-800 text-sm font-medium text-zinc-300 hover:text-white transition-colors cursor-pointer w-full text-left"
+            >
+              <span className="material-symbols-outlined text-lg">lock</span>
+              <span>Đổi mật khẩu</span>
+            </button>
+            <div className="border-t border-zinc-800 my-1 mx-2"></div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center space-x-3 px-4 py-2.5 rounded-xl hover:bg-rose-950/30 text-sm font-medium text-rose-400 hover:text-rose-300 transition-colors cursor-pointer w-full text-left"
+            >
+              <span className="material-symbols-outlined text-lg">logout</span>
+              <span>Đăng xuất</span>
+            </button>
           </div>
+        )}
+
+        <div
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="flex items-center justify-between p-2 rounded-2xl hover:bg-zinc-900/50 cursor-pointer transition-colors group select-none"
+        >
+          <div className="flex items-center space-x-3 min-w-0">
+            <img
+              alt="Store Logo"
+              className="w-9 h-9 rounded-full border border-zinc-800 object-cover shrink-0"
+              src={user?.avatar || "https://lh3.googleusercontent.com/aida-public/AB6AXuC-GBGoQWCiFVTHICIiz7Htrto2vDEHlk4G7_WJQ-9JwNFOsPvlF3uLMmS5Iwoc4leMCdwws2WnwnM0Od_foEaadNY445WB9dNTlBKnIaCnOqLLtmJJL18_v8CFTq3sWfQazWY4wt--MWXfBFaaJNXIMRSrS_eRxphm6hdWlEygHdlI8BlilzTuof8Shq8HyryfPwOk-Boe7wGgJPZO73Y0qsaMavpuV040KImSejUTo8cf8wPJzP1UbHtiy0IAWW6gwG-XXed4Pdk"}
+            />
+            <div className="overflow-hidden min-w-0">
+              <p className="text-xs text-white font-bold truncate">
+                {user?.name || "Quản trị viên"}
+              </p>
+              <p className="text-[9px] text-emerald-500 font-medium flex items-center gap-1 mt-0.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                Đang hoạt động
+              </p>
+            </div>
+          </div>
+          <span className="material-symbols-outlined text-zinc-500 group-hover:text-zinc-300 text-lg transition-colors shrink-0">
+            unfold_more
+          </span>
         </div>
       </div>
     </aside>
