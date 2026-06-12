@@ -33,11 +33,11 @@ const SideBar = () => {
     { to: "/admin/products", label: "Sản phẩm", icon: "inventory_2" },
     { to: "/admin/orders", label: "Đơn hàng", icon: "shopping_cart" },
     { to: "/admin/users", label: "Khách hàng", icon: "group" },
+    { to: "/admin/reviews", label: "Đánh giá", icon: "rate_review" },
   ];
 
   const disabledItems = [
     { label: "Thương hiệu", icon: "sell" },
-    { label: "Đánh giá", icon: "rate_review" },
     { label: "Banners", icon: "ad_units" },
     { label: "Bình luận", icon: "forum" },
     { label: "Tin tức", icon: "newspaper" },

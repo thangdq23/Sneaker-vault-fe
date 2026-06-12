@@ -18,4 +18,6 @@ export type Product = {
   isSale: boolean;
   salePrice?: number;
   discountPercent?: number;
+  rating?: number;
+  numReviews?: number;
 };
