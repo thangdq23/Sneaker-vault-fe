@@ -1,10 +1,18 @@
 import apiClient from "./apiClient";
 import type { Order, CreateOrderRequest, OrderListResponse } from "../types/order.type";
 
-export const createOrder = async (orderData: CreateOrderRequest): Promise<Order> => {
-  const response = await apiClient.post<Order>("/orders", orderData);
+export const createOrder = async (orderData: CreateOrderRequest): Promise<any> => {
+  const response = await apiClient.post<any>("/orders", orderData);
   return response.data;
 };
+
+export const verifyVnpayPayment = async (queryParams: Record<string, string>): Promise<any> => {
+  const response = await apiClient.get<any>("/orders/vnpay-return", {
+    params: queryParams,
+  });
+  return response.data;
+};
+
 
 export const getMyOrders = async (params?: { page?: number; limit?: number }): Promise<OrderListResponse> => {
   const response = await apiClient.get<OrderListResponse>("/orders/me", {

@@ -5,6 +5,7 @@ import HomePage from "../pages/home/HomePage";
 import ProductDetailPage from "../pages/product/ProductDetailPage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import ShopPage from "../pages/shop/ShopPage";
+import VnPayReturnPage from "../pages/payment/VnPayReturnPage";
 
 const ClientRoutes = {
   path: "/",
@@ -29,6 +30,10 @@ const ClientRoutes = {
     {
       path: "checkout",
       element: <CheckoutPage />,
+    },
+    {
+      path: "payment/vnpay-return",
+      element: <VnPayReturnPage />,
     },
     {
       path: "profile",

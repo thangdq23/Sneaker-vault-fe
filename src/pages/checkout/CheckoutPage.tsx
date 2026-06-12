@@ -85,13 +85,18 @@ const CheckoutPage = () => {
 
     try {
       setIsLoading(true);
-      const order = await createOrder({
+      const response = await createOrder({
         shippingAddress,
         phone,
         paymentMethod,
       });
 
-      setCreatedOrder(order);
+      if (paymentMethod === "card" && response.paymentUrl) {
+        window.location.href = response.paymentUrl;
+        return;
+      }
+
+      setCreatedOrder(response);
       setIsSuccess(true);
       showToast("Đặt hàng thành công!", "success");
       void dispatch(clearCartItems());
@@ -320,46 +325,22 @@ const CheckoutPage = () => {
                       : "border-gray-200 bg-white text-gray-700 hover:border-gray-400"
                   }`}
                 >
-                  <span className="material-symbols-outlined">credit_card</span>
+                  <span className="material-symbols-outlined text-primary">qr_code_scanner</span>
                   <span className="text-xs font-semibold sm:text-sm">
-                    Thẻ tín dụng
+                    Thanh toán qua VNPAY
                   </span>
                 </button>
               </div>
 
               {paymentMethod === "card" && (
-                <div className="space-y-4 rounded-xl bg-surface-container-low p-5 sm:p-6 transition-all duration-300">
-                  <div>
-                    <label className="form-label">Số thẻ</label>
-                    <div className="relative">
-                      <input
-                        className="form-input pr-10"
-                        placeholder="0000 0000 0000 0000"
-                        type="text"
-                      />
-                      <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant">
-                        credit_card
-                      </span>
-                    </div>
+                <div className="rounded-xl bg-blue-50/50 border border-blue-100/50 p-5 text-sm text-blue-800 leading-relaxed font-body shadow-sm">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="material-symbols-outlined text-blue-600 text-lg leading-none">info</span>
+                    <strong className="text-blue-900 font-bold">Thanh toán qua VNPAY</strong>
                   </div>
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="form-label">Ngày hết hạn</label>
-                      <input
-                        className="form-input"
-                        placeholder="MM/YY"
-                        type="text"
-                      />
-                    </div>
-                    <div>
-                      <label className="form-label">CVV</label>
-                      <input
-                        className="form-input"
-                        placeholder="123"
-                        type="text"
-                      />
-                    </div>
-                  </div>
+                  <p className="text-xs text-on-surface-variant">
+                    Hệ thống sẽ chuyển hướng bạn đến cổng thanh toán VNPAY để thực hiện giao dịch an toàn bằng ứng dụng ngân hàng quét mã QR hoặc thẻ ATM nội địa, thẻ quốc tế Visa/Mastercard.
+                  </p>
                 </div>
               )}
             </div>
