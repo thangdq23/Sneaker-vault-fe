@@ -232,7 +232,7 @@ const ReviewsPage = (): React.JSX.Element => {
                           {rev.user?.avatar ? (
                             <img
                               src={rev.user.avatar}
-                              alt={rev.user.name}
+                              alt={rev.user?.name || "Khách hàng"}
                               className="h-full w-full object-cover"
                             />
                           ) : (
