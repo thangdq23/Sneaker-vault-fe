@@ -907,10 +907,12 @@ const ProfilePage = () => {
 
                       <div className="py-4 space-y-3">
                         {order.items?.map((item: any, idx) => {
-                          const isPopulated = typeof item.product === "object";
+                          const isPopulated = item.product && typeof item.product === "object";
                           const productName = isPopulated
                             ? item.product.name
-                            : `Sản phẩm ${item.product}`;
+                            : item.product
+                              ? `Sản phẩm ${item.product}`
+                              : "Sản phẩm đã bị xóa khỏi hệ thống";
                           const brand = isPopulated
                             ? item.product.brand
                             : "Sneaker Vault";

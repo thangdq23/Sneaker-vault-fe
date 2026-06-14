@@ -220,8 +220,12 @@ const OrderDetailsPage = () => {
 
             <div className="divide-y divide-outline-variant/20">
               {order.items?.map((item: any, idx) => {
-                const isPopulated = typeof item.product === "object";
-                const productName = isPopulated ? item.product.name : `Sản phẩm ID: ${item.product}`;
+                const isPopulated = item.product && typeof item.product === "object";
+                const productName = isPopulated 
+                  ? item.product.name 
+                  : item.product 
+                    ? `Sản phẩm ID: ${item.product}` 
+                    : "Sản phẩm đã bị xóa khỏi hệ thống";
                 const brand = isPopulated ? item.product.brand : "Sneaker Vault";
                 const sku = isPopulated ? item.product.sku : "N/A";
                 const image = isPopulated && item.product.images?.length > 0 ? item.product.images[0] : null;
