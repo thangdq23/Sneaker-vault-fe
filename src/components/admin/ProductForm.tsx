@@ -316,7 +316,7 @@ const ProductForm = ({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Nhập tên giày..."
-              className="form-input text-sm mt-1.5"
+              className="sv-form-input text-sm mt-1.5"
               type="text"
               required
               disabled={loading}
@@ -330,7 +330,7 @@ const ProductForm = ({
               value={price === 0 ? "" : price}
               onChange={(e) => setPrice(Number(e.target.value))}
               placeholder="Nhập giá bán gốc..."
-              className="form-input text-sm mt-1.5"
+              className="sv-form-input text-sm mt-1.5"
               type="number"
               min="0"
               required
@@ -344,7 +344,7 @@ const ProductForm = ({
             <select
               value={brand}
               onChange={(e) => setBrand(e.target.value)}
-              className="form-input text-sm select-none cursor-pointer mt-1.5"
+              className="sv-form-input text-sm select-none cursor-pointer mt-1.5"
               required
               disabled={loading}
             >
@@ -525,7 +525,7 @@ const ProductForm = ({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Nhập mô tả sản phẩm chi tiết..."
-            className="form-input text-sm h-32 resize-none mt-1.5"
+            className="sv-form-input text-sm h-32 resize-none mt-1.5"
             disabled={loading}
           />
         </div>
@@ -563,7 +563,7 @@ const ProductForm = ({
               value={salePrice === 0 ? "" : salePrice}
               onChange={(e) => setSalePrice(Number(e.target.value))}
               placeholder="Nhập giá đã giảm..."
-              className="form-input text-sm border-tertiary/30 focus:shadow-[0_0_0_1px_#ab3600] mt-1.5"
+              className="sv-form-input text-sm border-tertiary/30 focus:shadow-[0_0_0_1px_#ab3600] mt-1.5"
               type="number"
               min="0"
               required

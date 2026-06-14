@@ -258,7 +258,7 @@ const CartPage = () => {
                 <label className="form-label">Nhập mã giảm giá</label>
                 <div className="flex flex-col gap-2 sm:flex-row">
                   <input
-                    className="form-input min-w-0 flex-1 bg-surface-container-lowest"
+                    className="sv-form-input min-w-0 flex-1 bg-surface-container-lowest"
                     placeholder="SNEAKERNEW"
                     type="text"
                   />

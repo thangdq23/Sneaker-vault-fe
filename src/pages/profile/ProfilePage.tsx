@@ -514,7 +514,7 @@ const ProfilePage = () => {
                       type="email"
                       disabled
                       value={user.email}
-                      className="form-input bg-surface-container/40 border border-outline-variant/20 text-on-surface-variant cursor-not-allowed pr-10"
+                      className="sv-form-input bg-surface-container/40 border border-outline-variant/20 text-on-surface-variant cursor-not-allowed pr-10"
                     />
                     <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-lg text-outline">
                       lock
@@ -534,7 +534,7 @@ const ProfilePage = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Nhập họ và tên"
-                    className="form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface"
+                    className="sv-form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface"
                   />
                 </div>
 
@@ -545,7 +545,7 @@ const ProfilePage = () => {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="Nhập số điện thoại"
-                    className="form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface"
+                    className="sv-form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface"
                   />
                 </div>
 
@@ -742,7 +742,7 @@ const ProfilePage = () => {
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
                     placeholder="Nhập mật khẩu hiện tại"
-                    className="form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface"
+                    className="sv-form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface"
                   />
                 </div>
 
@@ -754,7 +754,7 @@ const ProfilePage = () => {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="Mật khẩu mới ít nhất 6 ký tự"
-                    className="form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface"
+                    className="sv-form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface"
                   />
                 </div>
 
@@ -766,7 +766,7 @@ const ProfilePage = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Nhập lại mật khẩu mới"
-                    className="form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface"
+                    className="sv-form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface"
                   />
                 </div>
 
@@ -1033,7 +1033,7 @@ const ProfilePage = () => {
                   value={receiverName}
                   onChange={(e) => setReceiverName(e.target.value)}
                   placeholder="Nhập tên người nhận"
-                  className="form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface"
+                  className="sv-form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface"
                 />
               </div>
 
@@ -1045,7 +1045,7 @@ const ProfilePage = () => {
                   value={addressPhone}
                   onChange={(e) => setAddressPhone(e.target.value)}
                   placeholder="Nhập số điện thoại liên lạc"
-                  className="form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface"
+                  className="sv-form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface"
                 />
               </div>
 
@@ -1059,7 +1059,7 @@ const ProfilePage = () => {
                   value={addressDetail}
                   onChange={(e) => setAddressDetail(e.target.value)}
                   placeholder="Nhập địa chỉ nhận hàng chi tiết"
-                  className="form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface resize-none p-3"
+                  className="sv-form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface resize-none p-3"
                 ></textarea>
               </div>
 

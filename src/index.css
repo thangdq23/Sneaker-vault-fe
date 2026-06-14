@@ -118,7 +118,7 @@ body {
   color: #5e5e5e;
 }
 
-.form-input {
+.sv-form-input {
   width: 100%;
   padding: 0.875rem 1rem;
   font-size: 0.9375rem;
@@ -127,7 +127,7 @@ body {
   background-color: #ebeef1;
 }
 
-.form-input:focus {
+.sv-form-input:focus {
   outline: none;
   box-shadow: 0 0 0 1px #111111;
 }

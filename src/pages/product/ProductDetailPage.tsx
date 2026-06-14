@@ -572,7 +572,7 @@ const ProductDetailPage = (): React.JSX.Element => {
                             onChange={(e) => setNameForm(e.target.value)}
                             placeholder="Nhập tên của bạn"
                             required
-                            className="form-input w-full px-4 py-2.5 rounded-xl border border-outline-variant/30 text-xs sm:text-sm font-body bg-slate-50/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                            className="sv-form-input w-full px-4 py-2.5 rounded-xl border border-outline-variant/30 text-xs sm:text-sm font-body bg-slate-50/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                           />
                         </div>
 
@@ -587,7 +587,7 @@ const ProductDetailPage = (): React.JSX.Element => {
                             onChange={(e) => setCommentForm(e.target.value)}
                             placeholder="Nhập nội dung nhận xét..."
                             required
-                            className="form-input w-full px-4 py-2.5 rounded-xl border border-outline-variant/30 text-xs sm:text-sm font-body resize-none bg-slate-50/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                            className="sv-form-input w-full px-4 py-2.5 rounded-xl border border-outline-variant/30 text-xs sm:text-sm font-body resize-none bg-slate-50/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                           />
                         </div>
 

@@ -204,7 +204,7 @@ const CheckoutPage = () => {
               <div className="md:col-span-2">
                 <label className="form-label">Họ và tên người nhận</label>
                 <input
-                  className="form-input"
+                  className="sv-form-input"
                   placeholder="Nguyễn Văn A"
                   type="text"
                   required
@@ -215,7 +215,7 @@ const CheckoutPage = () => {
               <div className="md:col-span-2">
                 <label className="form-label">Địa chỉ nhà, tên đường</label>
                 <input
-                  className="form-input"
+                  className="sv-form-input"
                   placeholder="Số 123 Đường ABC, Phường X, Quận Y"
                   type="text"
                   required
@@ -226,7 +226,7 @@ const CheckoutPage = () => {
               <div>
                 <label className="form-label">Tỉnh / Thành phố</label>
                 <input
-                  className="form-input"
+                  className="sv-form-input"
                   placeholder="Hà Nội"
                   type="text"
                   required
@@ -237,7 +237,7 @@ const CheckoutPage = () => {
               <div>
                 <label className="form-label">Mã bưu điện (tùy chọn)</label>
                 <input
-                  className="form-input"
+                  className="sv-form-input"
                   placeholder="100000"
                   type="text"
                   value={postcode}
@@ -247,7 +247,7 @@ const CheckoutPage = () => {
               <div className="md:col-span-2">
                 <label className="form-label">Số điện thoại liên hệ</label>
                 <input
-                  className="form-input"
+                  className="sv-form-input"
                   placeholder="0912345678"
                   type="tel"
                   required

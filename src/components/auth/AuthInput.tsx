@@ -35,7 +35,7 @@ const AuthInput = ({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`form-input bg-surface-container-lowest border-0 border-b border-outline-variant rounded-none px-0 focus:ring-0 focus:border-on-surface ${className}`}
+        className={`sv-form-input bg-surface-container-lowest border-0 border-b border-outline-variant rounded-none px-0 focus:ring-0 focus:border-on-surface ${className}`}
       />
     </div>
   );

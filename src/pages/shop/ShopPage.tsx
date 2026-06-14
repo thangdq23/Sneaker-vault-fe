@@ -108,7 +108,7 @@ const ShopPage = (): React.JSX.Element => {
             <div className="relative">
               <input
                 aria-label="Tìm kiếm sản phẩm"
-                className="form-input pr-10 bg-surface-container"
+                className="sv-form-input pr-10 bg-surface-container"
                 placeholder="Tìm mẫu giày..."
                 type="text"
                 value={search}

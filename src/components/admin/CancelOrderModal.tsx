@@ -130,7 +130,7 @@ const CancelOrderModal = ({
                     ? "Vui lòng nhập lý do cụ thể..."
                     : "Ghi chú thêm về lý do hủy đơn..."
                 }
-                className="form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface resize-none p-3 rounded-2xl w-full text-sm focus:outline-none"
+                className="sv-form-input bg-surface-container-lowest border border-outline-variant/30 text-on-surface resize-none p-3 rounded-2xl w-full text-sm focus:outline-none"
                 disabled={isSubmitting}
                 required={reason === "Khác"}
               />
