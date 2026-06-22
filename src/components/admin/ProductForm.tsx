@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import type { Product } from "../../types/product.type";
-import { BRANDS } from "../../utils/constants";
+import { getBrands } from "../../utils/brandHelper";
 import { uploadProductImages } from "../../services/productApi";
+import type { Product } from "../../types/product.type";
 
 interface ProductFormProps {
   product: Product | null;
@@ -14,6 +14,7 @@ const ProductForm = ({
   onSave,
   onCancel,
 }: ProductFormProps): React.JSX.Element => {
+  const brands = getBrands();
   const AVAILABLE_SIZES = Array.from({ length: 11 }, (_, i) => 35 + i); // 35 to 45
 
   interface ImageItem {
@@ -349,7 +350,7 @@ const ProductForm = ({
               disabled={loading}
             >
               <option value="">Chọn thương hiệu</option>
-              {BRANDS.map((b) => (
+              {brands.map((b) => (
                 <option key={b} value={b}>
                   {b}
                 </option>

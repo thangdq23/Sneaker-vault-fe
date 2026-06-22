@@ -5,9 +5,10 @@ import ProductCard from "../../components/product/ProductCard";
 import { getProducts } from "../../services/productApi";
 import type { Product } from "../../types/product.type";
 import { formatVnd } from "../../utils/formatCurrency";
-import { BRANDS } from "../../utils/constants";
+import { getBrands } from "../../utils/brandHelper";
 
 const ShopPage = (): React.JSX.Element => {
+  const brands = getBrands();
   const [searchParams] = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -99,12 +100,29 @@ const ShopPage = (): React.JSX.Element => {
     }
   };
 
+  const handleClearFilters = () => {
+    setSearch("");
+    setBrand("");
+    setMaxPrice(10000000);
+    setIsSaleOnly(false);
+    setSelectedSizes([]);
+  };
+
   return (
     <main className="mx-auto max-w-container-max px-margin-mobile pb-16 pt-28 md:px-margin-desktop">
       <div className="flex flex-col gap-gutter lg:flex-row">
         <aside className="w-full shrink-0 space-y-8 lg:w-72">
           <section>
-            <h3 className="mb-3 text-sm font-bold text-on-surface">Tìm kiếm</h3>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-bold text-on-surface">Tìm kiếm</h3>
+              <button
+                type="button"
+                onClick={handleClearFilters}
+                className="text-xs font-semibold text-rose-600 hover:text-rose-700 cursor-pointer transition-colors"
+              >
+                Xóa lọc
+              </button>
+            </div>
             <div className="relative">
               <input
                 aria-label="Tìm kiếm sản phẩm"
@@ -162,7 +180,7 @@ const ShopPage = (): React.JSX.Element => {
                   Tất cả thương hiệu
                 </span>
               </label>
-              {BRANDS.map((b) => (
+              {brands.map((b) => (
                 <label
                   key={b}
                   className="group flex cursor-pointer items-center gap-3"

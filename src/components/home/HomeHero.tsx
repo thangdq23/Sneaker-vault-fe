@@ -1,40 +1,30 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import banner1 from "../../assets/banner-sneaker.png";
-import banner2 from "../../assets/banner-sneaker2.png";
-
-const slides = [
-  {
-    image: banner1,
-    link: "/shop",
-    alt: "Sneaker Vault Banner 1",
-  },
-  {
-    image: banner2,
-    link: "/shop",
-    alt: "Sneaker Vault Banner 2",
-  },
-];
+import { getBanners } from "../../utils/bannerHelper";
 
 const HomeHero = (): React.JSX.Element => {
+  const slides = getBanners();
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
+    if (slides.length <= 1) return;
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
   const handlePrev = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (slides.length === 0) return;
     setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
   const handleNext = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (slides.length === 0) return;
     setCurrent((prev) => (prev + 1) % slides.length);
   };
 

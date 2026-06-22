@@ -31,15 +31,14 @@ const SideBar = () => {
   const navItems = [
     { to: "/admin", label: "Tổng quan", icon: "dashboard", end: true },
     { to: "/admin/products", label: "Sản phẩm", icon: "inventory_2" },
+    { to: "/admin/brands", label: "Thương hiệu", icon: "sell" },
+    { to: "/admin/banners", label: "Banners", icon: "ad_units" },
     { to: "/admin/orders", label: "Đơn hàng", icon: "shopping_cart" },
     { to: "/admin/users", label: "Khách hàng", icon: "group" },
     { to: "/admin/reviews", label: "Đánh giá", icon: "rate_review" },
   ];
 
   const disabledItems = [
-    { label: "Thương hiệu", icon: "sell" },
-    { label: "Banners", icon: "ad_units" },
-    { label: "Bình luận", icon: "forum" },
     { label: "Tin tức", icon: "newspaper" },
     { label: "Khuyến mãi", icon: "sell" },
     { label: "Cài đặt", icon: "settings" },
@@ -101,7 +100,10 @@ const SideBar = () => {
         ))}
       </nav>
 
-      <div className="px-4 mt-auto pt-6 border-t border-zinc-900 relative" ref={menuRef}>
+      <div
+        className="px-4 mt-auto pt-6 border-t border-zinc-900 relative"
+        ref={menuRef}
+      >
         {menuOpen && (
           <div className="absolute bottom-20 left-4 right-4 bg-zinc-900 border border-zinc-800 rounded-2xl shadow-xl py-2 px-1 flex flex-col space-y-1 z-50">
             <button
@@ -143,7 +145,10 @@ const SideBar = () => {
             <img
               alt="Store Logo"
               className="w-9 h-9 rounded-full border border-zinc-800 object-cover shrink-0"
-              src={user?.avatar || "https://lh3.googleusercontent.com/aida-public/AB6AXuC-GBGoQWCiFVTHICIiz7Htrto2vDEHlk4G7_WJQ-9JwNFOsPvlF3uLMmS5Iwoc4leMCdwws2WnwnM0Od_foEaadNY445WB9dNTlBKnIaCnOqLLtmJJL18_v8CFTq3sWfQazWY4wt--MWXfBFaaJNXIMRSrS_eRxphm6hdWlEygHdlI8BlilzTuof8Shq8HyryfPwOk-Boe7wGgJPZO73Y0qsaMavpuV040KImSejUTo8cf8wPJzP1UbHtiy0IAWW6gwG-XXed4Pdk"}
+              src={
+                user?.avatar ||
+                "https://lh3.googleusercontent.com/aida-public/AB6AXuC-GBGoQWCiFVTHICIiz7Htrto2vDEHlk4G7_WJQ-9JwNFOsPvlF3uLMmS5Iwoc4leMCdwws2WnwnM0Od_foEaadNY445WB9dNTlBKnIaCnOqLLtmJJL18_v8CFTq3sWfQazWY4wt--MWXfBFaaJNXIMRSrS_eRxphm6hdWlEygHdlI8BlilzTuof8Shq8HyryfPwOk-Boe7wGgJPZO73Y0qsaMavpuV040KImSejUTo8cf8wPJzP1UbHtiy0IAWW6gwG-XXed4Pdk"
+              }
             />
             <div className="overflow-hidden min-w-0">
               <p className="text-xs text-white font-bold truncate">

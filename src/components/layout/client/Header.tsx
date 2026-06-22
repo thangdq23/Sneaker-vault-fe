@@ -2,10 +2,11 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { fetchCartItems } from "../../../store/cartSlice";
-import { BRANDS } from "../../../utils/constants";
+import { getBrands } from "../../../utils/brandHelper";
 import logo from "../../../assets/logo-sv.png";
 
 const Header = () => {
+  const brands = getBrands();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -111,7 +112,7 @@ const Header = () => {
                 }`}
               >
                 <div className="py-2.5 px-2 space-y-0.5">
-                  {BRANDS.map((b) => (
+                  {brands.map((b) => (
                     <Link
                       key={b}
                       to={`/shop?brand=${encodeURIComponent(b)}`}

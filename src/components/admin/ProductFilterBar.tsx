@@ -1,5 +1,4 @@
-import React from "react";
-import { BRANDS } from "../../utils/constants";
+import { getBrands } from "../../utils/brandHelper";
 
 interface ProductFilterBarProps {
   search: string;
@@ -22,6 +21,7 @@ const ProductFilterBar = ({
   sortValue,
   onSortChange,
 }: ProductFilterBarProps): React.JSX.Element => {
+  const brands = getBrands();
   return (
     <div className="bg-white p-4 rounded-2xl border border-outline-variant/20 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
       {/* Search Input */}
@@ -54,7 +54,7 @@ const ProductFilterBar = ({
           className="bg-surface-container-low text-sm rounded-xl px-4 py-2.5 border border-outline-variant/30 text-on-surface focus:outline-none cursor-pointer focus:ring-1 focus:ring-primary/30"
         >
           <option value="">Tất cả thương hiệu</option>
-          {BRANDS.map((b) => (
+          {brands.map((b) => (
             <option key={b} value={b}>
               {b}
             </option>

@@ -9,6 +9,8 @@ import OrderDetailsPage from "../pages/admin/OrderDetailsPage";
 import UsersPage from "../pages/admin/UsersPage";
 import UserDetailsPage from "../pages/admin/UserDetailsPage";
 import ReviewsPage from "../pages/admin/ReviewsPage";
+import BrandsPage from "../pages/admin/BrandsPage";
+import BannersPage from "../pages/admin/BannersPage";
 
 const AdminRoutes = {
   path: "/admin",
@@ -32,6 +34,14 @@ const AdminRoutes = {
         {
           path: "products/:id/edit",
           element: <EditProductPage />,
+        },
+        {
+          path: "brands",
+          element: <BrandsPage />,
+        },
+        {
+          path: "banners",
+          element: <BannersPage />,
         },
         {
           path: "orders",
