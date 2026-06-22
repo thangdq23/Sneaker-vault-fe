@@ -17,7 +17,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const isValidEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const isValidPassword = (password: string) => password.length >= 6;
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +48,9 @@ const Login = () => {
         const redirectUrl = searchParams.get("redirect");
         navigate(redirectUrl || "/");
       } else {
-        setError((resultAction.payload as string) || "Sai email hoặc mật khẩu.");
+        setError(
+          (resultAction.payload as string) || "Sai email hoặc mật khẩu.",
+        );
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -73,8 +76,8 @@ const Login = () => {
         />
 
         <AuthFormLayout
-          title="Chào mừng trở lại"
-          subtitle="Nhập thông tin đăng nhập để truy cập tài khoản của bạn."
+          title="Đăng Nhập"
+          subtitle=""
           error={error}
           loading={loading}
           submitLabel="Đăng nhập"

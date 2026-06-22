@@ -109,7 +109,7 @@ const Register = () => {
 
         <AuthFormLayout
           title="Tạo tài khoản"
-          subtitle="Điền thông tin bên dưới để bắt đầu mua sắm tại Sneaker Vault."
+          subtitle=""
           error={error}
           loading={loading}
           submitLabel="Đăng ký"

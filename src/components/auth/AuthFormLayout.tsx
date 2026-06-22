@@ -1,5 +1,4 @@
 import type { FormEvent } from "react";
-import AuthSocials from "./AuthSocials";
 
 interface Props {
   title?: string;
@@ -52,17 +51,6 @@ const AuthFormLayout = ({
           {loading ? "Đang xử lý..." : submitLabel}
         </button>
       </form>
-
-      <div className="relative my-8">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-outline-variant/30" />
-        </div>
-        <div className="relative flex justify-center text-xs text-on-surface-variant">
-          <span className="bg-background px-3">Hoặc tiếp tục với</span>
-        </div>
-      </div>
-
-      <AuthSocials />
     </div>
   );
 };
