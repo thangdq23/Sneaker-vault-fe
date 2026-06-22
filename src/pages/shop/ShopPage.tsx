@@ -4,7 +4,6 @@ import Pagination from "../../components/common/Pagination";
 import ProductCard from "../../components/product/ProductCard";
 import { getProducts } from "../../services/productApi";
 import type { Product } from "../../types/product.type";
-import { formatVnd } from "../../utils/formatCurrency";
 import { getBrands } from "../../utils/brandHelper";
 
 const ShopPage = (): React.JSX.Element => {
@@ -16,7 +15,7 @@ const ShopPage = (): React.JSX.Element => {
 
   const [search, setSearch] = useState(() => searchParams.get("search") || "");
   const [brand, setBrand] = useState<string>(() => searchParams.get("brand") || "");
-  const [maxPrice, setMaxPrice] = useState<number>(10000000);
+  const [priceRange, setPriceRange] = useState<string>("all");
   const [sort, setSort] = useState(() => searchParams.get("sort") || "createdAt");
   const [order, setOrder] = useState<"asc" | "desc">(() => (searchParams.get("order") as "asc" | "desc") || "desc");
   const [isSaleOnly, setIsSaleOnly] = useState(() => searchParams.get("sale") === "true");
@@ -40,10 +39,29 @@ const ShopPage = (): React.JSX.Element => {
     setIsLoading(true);
     setError(null);
     try {
+      let minPrice: number | undefined = undefined;
+      let maxPrice: number | undefined = undefined;
+
+      if (priceRange === "under1m") {
+        maxPrice = 1000000;
+      } else if (priceRange === "1m_2m") {
+        minPrice = 1000000;
+        maxPrice = 2000000;
+      } else if (priceRange === "2m_3m") {
+        minPrice = 2000000;
+        maxPrice = 3000000;
+      } else if (priceRange === "3m_5m") {
+        minPrice = 3000000;
+        maxPrice = 5000000;
+      } else if (priceRange === "over5m") {
+        minPrice = 5000000;
+      }
+
       const res = await getProducts({
         search: search.trim() || undefined,
         brand: brand || undefined,
-        maxPrice: maxPrice || undefined,
+        minPrice,
+        maxPrice,
         isSale: isSaleOnly ? true : undefined,
         "sizes.size": selectedSizes.length > 0 ? selectedSizes : undefined,
         sort,
@@ -67,7 +85,7 @@ const ShopPage = (): React.JSX.Element => {
   }, [
     search,
     brand,
-    maxPrice,
+    priceRange,
     isSaleOnly,
     selectedSizes.join(","),
     sort,
@@ -80,7 +98,7 @@ const ShopPage = (): React.JSX.Element => {
     page,
     search,
     brand,
-    maxPrice,
+    priceRange,
     isSaleOnly,
     selectedSizes.join(","),
     sort,
@@ -103,7 +121,7 @@ const ShopPage = (): React.JSX.Element => {
   const handleClearFilters = () => {
     setSearch("");
     setBrand("");
-    setMaxPrice(10000000);
+    setPriceRange("all");
     setIsSaleOnly(false);
     setSelectedSizes([]);
   };
@@ -204,22 +222,35 @@ const ShopPage = (): React.JSX.Element => {
 
           <section>
             <h3 className="mb-3 text-sm font-bold text-on-surface">
-              Khoảng giá tối đa
+              Khoảng giá
             </h3>
-            <input
-              className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-gray-300 accent-gray-600"
-              type="range"
-              min="500000"
-              max="15000000"
-              step="50000"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(Number(e.target.value))}
-            />
-            <div className="mt-3 flex justify-between text-xs text-on-surface-variant sm:text-sm">
-              <span>500.000 ₫</span>
-              <span className="font-semibold text-primary">
-                {formatVnd(maxPrice)}
-              </span>
+            <div className="space-y-2.5">
+              {[
+                { id: "all", label: "Tất cả" },
+                { id: "under1m", label: "Dưới 1.000.000đ" },
+                { id: "1m_2m", label: "1.000.000đ - 2.000.000đ" },
+                { id: "2m_3m", label: "2.000.000đ - 3.000.000đ" },
+                { id: "3m_5m", label: "3.000.000đ - 5.000.000đ" },
+                { id: "over5m", label: "Trên 5.000.000đ" },
+              ].map((range) => (
+                <label
+                  key={range.id}
+                  className="group flex cursor-pointer items-center gap-3"
+                >
+                  <input
+                    className="rounded-full border-outline text-primary focus:ring-0 cursor-pointer h-4 w-4"
+                    type="radio"
+                    name="priceRange"
+                    checked={priceRange === range.id}
+                    onChange={() => setPriceRange(range.id)}
+                  />
+                  <span
+                    className={`text-sm leading-relaxed group-hover:text-primary ${priceRange === range.id ? "font-semibold text-primary" : ""}`}
+                  >
+                    {range.label}
+                  </span>
+                </label>
+              ))}
             </div>
           </section>
 
